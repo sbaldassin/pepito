@@ -18,7 +18,7 @@ class Player:
         self.date_of_birth = date_of_bith
         self.custom_int_1 = custom_int_1
         self.custom_int_2 = custom_int_2
-        self.custom_int_3 =  custom_int_3
+        self.custom_int_3 = custom_int_3
         self.custom_int_4 = custom_int_4
         self.custom_string = custom_string
         self.custom_string_2 = custom_string_2

@@ -3,7 +3,7 @@ import logging
 from unittest import TestCase
 import requests
 
-from tests.db.mssql_driver import MsSqlDriver
+# from tests.db.mssql_driver import MsSqlDriver
 from tests.factory.player_factory import create_random_player
 
 
@@ -19,4 +19,4 @@ class PlayersTestCase(TestCase):
 
         response = requests.post(API_URL, data=json.dumps(player.__dict__))
         self.assertTrue(response.status_code, 200)
-        self.assertIsNotNone(MsSqlDriver().get_player(player))
+        # self.assertIsNotNone(MsSqlDriver().get_player(player))
