@@ -12,7 +12,7 @@ def generate_random_int(length=5):
 
 
 def generate_random_country_code():
-    pass
+    return "IT"
 
 
 def generate_random_phone_number():
@@ -22,4 +22,5 @@ def generate_random_phone_number():
 
 def generate_random_date(years):
     dt = datetime.datetime.now() - datetime.timedelta(days=years * 365)
-    return "{year}-{month}-{day}".format(year=dt.year, month=dt.month, day=dt.day)
+    #return "{year}-{month}-{day}".format(year=dt.year, month=dt.month, day=dt.day)
+    return "2018-05-18 06:52:27"

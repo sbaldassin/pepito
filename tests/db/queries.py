@@ -1,2 +1,1 @@
-
-SELECT_PLAYER = 'select * from Q_net_dw_fact_signup where externalcustomerid=\'ADD_PLAYER_ID\''
+SELECT_PLAYER = 'SELECT TOP 1 * FROM Q_Net_Customer WHERE ExternalCustomerID =\'ADD_PLAYER_ID\';'

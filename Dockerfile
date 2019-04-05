@@ -1,6 +1,9 @@
-from ubuntu:16.04
+from mcr.microsoft.com/mssql/server:2017-latest
 
-RUN apt-get update && apt-get install -y python3 python3-pip
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Password1
+
+RUN apt-get update && apt-get install -y python3 python3-pip unixodbc-dev
 
 ADD . /source_tests
 WORKDIR /source_tests
