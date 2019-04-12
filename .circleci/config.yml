@@ -24,7 +24,7 @@ jobs:
               docker run -it test_runner script/api_tests.sh
 workflows:
   version: 2
-  build-and-deploy:
+  automated-tests:
     jobs:
       - build:
          filters:
