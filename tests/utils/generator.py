@@ -12,15 +12,20 @@ def generate_random_int(length=5):
 
 
 def generate_random_country_code():
-    return "IT"
+    valid_country_codes = ["IT", "EN"]
+    return random.choice(valid_country_codes)
 
+def generate_random_language_code():
+    languages = ["es","it", "en"]
+    return random.choice(languages)
 
 def generate_random_phone_number():
     return "{}-{}-{}".format(
         generate_random_int(2), generate_random_int(4), generate_random_int(5))
 
 
-def generate_random_date(years):
+def generate_random_date(years=None):
+    if not years:
+        years = random.choice(range(5))
     dt = datetime.datetime.now() - datetime.timedelta(days=years * 365)
-    #return "{year}-{month}-{day}".format(year=dt.year, month=dt.month, day=dt.day)
-    return "2018-05-18 06:52:27"
+    return dt.strftime('%Y-%m-%d')
