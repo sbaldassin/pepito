@@ -18,7 +18,7 @@ class QNetCustomer(Base):
     __tablename__ = 'Q_Net_Customer'
 
     CustomerID = Column(Integer, primary_key=True)
-    MechantID = Column(Integer)
+    MerchantID = Column(Integer)
     Name = Column(String(100))
 
     def to_dict(self):
