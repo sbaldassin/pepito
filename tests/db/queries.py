@@ -1,4 +1,0 @@
-SELECT_PLAYER_FROM_Q_NET_CUSTOMER = 'SELECT * FROM Q_Net_Customer WHERE ExternalCustomerID =\'ADD_PLAYER_ID\';'
-SELECT_PLAYER_FROM_Q_NET_CUSTOMER_BY_MAME_MERCHANT = 'SELECT * FROM Q_Net_Customer WHERE name =\'PLAYER_NAME\' and merchant_id =\'MERCHANT_ID\';'
-SELECT_PLAYER_FROM_Q_NET_DW_FACT_SIGNUP = 'SELECT * from Q_net_dw_fact_signup where ExternalCustomerID =\'ADD_PLAYER_ID\';'
-
