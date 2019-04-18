@@ -5,6 +5,7 @@ import requests
 
 from tests.db.mssql_driver import MsSqlDriver
 from tests.factory.player_factory import create_random_player
+from tests.db.respositories.q_net_customer_repository import QNetCustomerRepository
 from tests.utils.utils import get_api_headers, get_player_sign_up_resource
 
 logging.basicConfig(level=logging.INFO)
