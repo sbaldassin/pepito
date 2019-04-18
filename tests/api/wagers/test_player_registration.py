@@ -72,3 +72,37 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(body.get('Success'), True)
         self.assertIsNotNone(MsSqlDriver().get_player_from_customer(player))
         self.assertIsNotNone(MsSqlDriver().get_player_from_fact_signup(player))
+
+    def test_tc_6_player_registration_empty_surname(self):
+        player = create_random_player()
+        player.Surname = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 200)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertTrue(body.get('Success'), True)
+        self.assertIsNotNone(MsSqlDriver().get_player_from_customer(player))
+        self.assertIsNotNone(MsSqlDriver().get_player_from_fact_signup(player))
+
+    def test_tc_7_player_registration_empty_country_code(self):
+        player = create_random_player()
+        player.CountryCode = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertFalse(body['Success'])
+        self.assertEqual(body["Message"], "CountryCode not being passed or is invalid")
+
+    def test_tc_8_player_registration_empty_city(self):
+        player = create_random_player()
+        player.City = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertFalse(body['Success'])
+        self.assertEqual(body["Message"], "CountryCode not being passed or is invalid")
