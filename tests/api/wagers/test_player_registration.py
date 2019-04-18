@@ -104,5 +104,5 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(response.status_code, 500)
         body = response.json()
         logging.info("API response: {}".format(body))
-        self.assertFalse(body['Success'])
-        self.assertEqual(body["Message"], "CountryCode not being passed or is invalid")
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
