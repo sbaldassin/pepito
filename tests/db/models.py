@@ -33,3 +33,16 @@ class QNetCustomer(Base):
     def to_dict(self):
         return super(QNetCustomer, self).to_dict()
 
+
+class QNetDwFactSignup(Base):
+    __tablename__ = 'Q_net_dw_fact_signup'
+
+    SignUpID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    ExternalCustomerID = Column(String(50))
+    SignUpDate = Column(String(50))
+    TimeID = Column(Integer)
+    ChannelID = Column(Integer)
+
+    def to_dict(self):
+        return super(QNetDwFactSignup, self).to_dict()

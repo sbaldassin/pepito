@@ -4,8 +4,9 @@ from unittest import TestCase
 import requests
 
 from tests.db.mssql_driver import MsSqlDriver
+from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.factory.player_factory import create_random_player
-from tests.db.respositories.q_net_customer_repository import QNetCustomerRepository
 from tests.utils.utils import get_api_headers, get_player_sign_up_resource
 
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +14,11 @@ logging.basicConfig(level=logging.INFO)
 
 class PlayerRegistrationTestCase(TestCase):
 
+    def __init__(self, *args, **kwargs):
+        super(PlayerRegistrationTestCase, self).__init__(*args, **kwargs)
+        self.q_net_customer_repository = QNetCustomerRepository()
+        self.q_net_dw_fact_signup_repository = QNetDwFactSignupRepository()
+ 
     def test_tc_1_player_registration_id_40_chars(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
@@ -21,8 +27,10 @@ class PlayerRegistrationTestCase(TestCase):
         body = response.json()
         logging.info("API response: {}".format(body))
         self.assertTrue(body.get('Success'), True)
-        self.assertIsNotNone(MsSqlDriver().get_player_from_customer(player))
-        self.assertIsNotNone(MsSqlDriver().get_player_from_fact_signup(player))
+        q_net_customer = self.q_net_customer_repository.get_by_external_customer_id(player.PlayerID)[0]
+        q_net_dw_fact_signup = self.q_net_dw_fact_signup_repository.get_by_external_customer_id(player.PlayerID)[0]
+        self.assertIsNotNone(q_net_customer)
+        self.assertIsNotNone(q_net_dw_fact_signup)
 
     def test_tc_2_player_registration_id_41_chars(self):
         player = create_random_player(player_id_length=41)
