@@ -2,3 +2,4 @@ flake8==3.7.7
 pyodbc==4.0.26
 requests==2.21.0
 SQLAlchemy-Dao==1.2.5
+Flask
