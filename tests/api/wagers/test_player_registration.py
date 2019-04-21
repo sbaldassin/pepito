@@ -204,7 +204,6 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
 
-    @skip("Customers table does not have a state column yet")
     def test_tc_10_player_registration_empty_state(self):
         player = create_random_player()
         player.State = ''
@@ -465,6 +464,437 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(q_net_customer)
         self.assertTrue(q_net_dw_fact_signup)
         self.assertEquals(q_net_customer["CustomInt4"], 0)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_22_player_registration_empty_custom_string_1(self):
+        player = create_random_player()
+        player.CustomString1 = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["CustomString1"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_23_player_registration_empty_custom_string_2(self):
+        player = create_random_player()
+        player.CustomString2 = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["CustomString2"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_24_player_registration_empty_custom_string_3(self):
+        player = create_random_player()
+        player.CustomString3 = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["CustomString3"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_25_player_registration_empty_custom_string_4(self):
+        player = create_random_player()
+        player.CustomString4 = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["CustomString4"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_26_player_registration_empty_timezone(self):
+        player = create_random_player()
+        player.TimeZone = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["LastKnownTimezone"], "0")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_27_player_registration_zero_as_timezone(self):
+        player = create_random_player()
+        player.TimeZone = 0
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["LastKnownTimezone"], "0")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_28_player_registration_empty_language_code(self):
+        player = create_random_player()
+        player.LanguageCode = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["LastKnownLanguage"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_29_player_registration_zero_as_language_code(self):
+        player = create_random_player()
+        player.LanguageCode = 0
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["LastKnownLanguage"], "0")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_30_player_registration_empty_btag(self):
+        player = create_random_player()
+        player.Btag = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["BTag"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    @skip("No promo code column")
+    def test_tc_31_player_registration_empty_promo_code(self):
+        player = create_random_player()
+        player.PromoCode = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["PromoCode"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    @skip("No tracking code column")
+    def test_tc_32_player_registration_empty_tracking_code(self):
+        player = create_random_player()
+        player.TrackingCode = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["TrackingCode"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_33_player_registration_empty_optout_email(self):
+        player = create_random_player()
+        player.OptOutEmail = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutEmail"], False)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_34_player_registration_true_optout_email(self):
+        player = create_random_player()
+        player.OptOutEmail = True
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutEmail"], True)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_35_player_registration_empty_optout_sms(self):
+        player = create_random_player()
+        player.OptOutSms = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutSms"], False)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_36_player_registration_true_optout_sms(self):
+        player = create_random_player()
+        player.OptOutSms = True
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutSms"], True)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_37_player_registration_empty_optout_push(self):
+        player = create_random_player()
+        player.OptOutPush = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutPush"], False)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    def test_tc_38_player_registration_true_optout_email(self):
+        player = create_random_player()
+        player.OptOutPush = True
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptOutPush"], True)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    @skip("No OptoutMobilePush column")
+    def test_tc_39_player_registration_empty_optout_mobile_push(self):
+        player = create_random_player()
+        player.OptoutMobilePush = ""
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptoutMobilePush"], "")
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
+    @skip("No OptoutMobilePush column")
+    def test_tc_40_player_registration_true_optout_mobile_push(self):
+        player = create_random_player()
+        player.OptoutMobilePush = True
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["OptoutMobilePush"], True)
 
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")

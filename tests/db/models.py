@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -34,6 +34,19 @@ class QNetCustomer(Base):
     CustomInt2 = Column(Integer)
     CustomInt3 = Column(Integer)
     CustomInt4 = Column(Integer)
+    CustomString1 = Column(String(50))
+    CustomString2 = Column(String(50))
+    CustomString3 = Column(String(50))
+    CustomString4 = Column(String(50))
+    LastKnownTimezone = Column(String(50))
+    LastKnownLanguage = Column(String(50))
+    #PromoCode = Column(String(50))
+    BTag = Column(String(50))
+    OptOutEmail = Column(Boolean)
+    OptOutSms = Column(Boolean)
+    OptOutPush = Column(Boolean)
+    #OptOutMobilePush = Column(Boolean)
+
 
     def to_dict(self):
         return super(QNetCustomer, self).to_dict()
