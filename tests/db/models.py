@@ -24,11 +24,16 @@ class QNetCustomer(Base):
     Address = Column(String(200))
     ZipCode = Column(String(25))
     City = Column(String(50))
+    State = Column(String(50))
     CountryCode = Column(String(2))
     Email = Column(String(2))
     DateOfBirth = Column(String(50))
     PhoneNumber = Column(String(50))
     ExternalCustomerID = Column(String(50))
+    CustomInt1 = Column(Integer)
+    CustomInt2 = Column(Integer)
+    CustomInt3 = Column(Integer)
+    CustomInt4 = Column(Integer)
 
     def to_dict(self):
         return super(QNetCustomer, self).to_dict()
