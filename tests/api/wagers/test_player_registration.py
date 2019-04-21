@@ -152,7 +152,7 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertFalse(body['Success'])
 
         q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+            get_config().get("test_framework", "db"), player.PlayerID)).json()
 
         q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
             get_config().get("test_framework", "db"), player.PlayerID)).json()
