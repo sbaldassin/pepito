@@ -5,4 +5,6 @@ if [[ $? == 0 ]]; then
     else
         exit 1
     fi
-python3 -m unittest discover -s tests/api/ --verbose
+
+mkdir -p report
+nose2 --verbose --plugin nose2.plugins.junitxml -s tests/api -c unittest.cfg
