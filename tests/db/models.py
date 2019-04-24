@@ -64,3 +64,19 @@ class QNetDwFactSignup(Base):
 
     def to_dict(self):
         return super(QNetDwFactSignup, self).to_dict()
+
+
+class QNetDWFactWithdrawal(Base):
+    __tablename__ = 'q_net_dw_fact_withdrawal'
+
+    FactWithdrawalID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    TimeID = Column(Integer)
+    Amount = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalCustomerID = Column(Integer)
+    SignInID = Column(Integer)
+    ActivityDate = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDWFactWithdrawal, self).to_dict()
