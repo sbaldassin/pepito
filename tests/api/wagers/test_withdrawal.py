@@ -83,6 +83,15 @@ class WithdrawalTestCase(TestCase):
 
         self.assertTrue(result == [])
 
+    def test_tc_8_player_withdrawal_with_invalid_date(self):
+        withdrawal = create_withdrawal()
+        withdrawal.transaction_date = "hah"
+        player, withdrawal = self._create_player_with_withdrawal(withdrawal)
+        result = self.get_withdrawal_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
     @staticmethod
     def get_withdrawal_from_db(player):
         url = "http://{}/withdrawals?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
