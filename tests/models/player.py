@@ -17,7 +17,7 @@ class Player:
         self.SignUpDate = signup_date
         self.DateOfBirth = date_of_bith
         self.CustomInt1 = custom_int_1
-        self.CcustomInt2 = custom_int_2
+        self.CustomInt2 = custom_int_2
         self.CustomInt3 = custom_int_3
         self.CustomInt4 = custom_int_4
         self.CustomString1 = custom_string
@@ -32,4 +32,4 @@ class Player:
         self.OptOutEmail = optout_email
         self.OptOutSms = optout_sms
         self.OptOutPush = optout_push
-        self.OptoutMobilePush = optout_mobile_push
+        self.OptOutMobilePush = optout_mobile_push
