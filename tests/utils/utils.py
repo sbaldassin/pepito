@@ -9,6 +9,10 @@ def get_player_update_resource():
     return '{host}/player/update'.format(host=get_config().get("api", "host"))
 
 
+def get_withdrawal_resource():
+    return '{host}/player/withdrawal/'.format(host=get_config().get("api", "host"))
+
+    
 def get_api_headers():
     headers = {
         'Authorization': 'Bearer {token}'.format(token=get_config().get("api", "authorization_header")),

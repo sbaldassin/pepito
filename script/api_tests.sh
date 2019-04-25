@@ -7,4 +7,4 @@ if [[ $? == 0 ]]; then
     fi
 
 mkdir -p report
-nose2 --verbose --plugin nose2.plugins.junitxml -s tests/api -c unittest.cfg
+nose2 --verbose --plugin nose2.plugins.junitxml --plugin=nose2.plugins.mp -N20 -s tests/api -c unittest.cfg
