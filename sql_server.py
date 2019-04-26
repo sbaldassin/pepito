@@ -57,5 +57,13 @@ def get_withdrawals_by_customer_id():
     return json.dumps(withdrawals, default=str)
 
 
+@app.route('/deposits')
+def get_withdrawals_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    withdrawals = QNetDWFactWithdrawalRepository().get_by_external_customer_id(customer_id)
+    logging.info("Withdrawals: {}".format(withdrawals))
+    return json.dumps(withdrawals, default=str)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

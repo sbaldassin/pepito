@@ -80,3 +80,21 @@ class QNetDWFactWithdrawal(Base):
 
     def to_dict(self):
         return super(QNetDWFactWithdrawal, self).to_dict()
+
+
+class QNetDWFactRevenue(Base):
+    __tablename__ = 'Q_net_dw_fact_revenue'
+
+    FactRevenueID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    TimeID = Column(Integer)
+    EuroAmount = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalCustomerID = Column(Integer)
+    SignInID = Column(Integer)
+    ChannelID = Column(Integer)
+    PaymentMethodID = Column(Integer)
+    ActivityDate = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDWFactRevenue, self).to_dict()
