@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
@@ -46,6 +47,14 @@ def get_customer_by_name_and_merchant_id():
 def get_sign_up_by_customer_id():
     customer_id = request.args.get("customer_id")
     sign_up = QNetDwFactSignupRepository().get_by_external_customer_id(customer_id)
+    logging.info("Customers: {}".format(sign_up))
+    return json.dumps(sign_up, default=str)
+
+
+@app.route('/sign_in')
+def get_sign_in_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    sign_up = QNetDwFactSignInRepository().get_by_external_customer_id(customer_id)
     logging.info("Customers: {}".format(sign_up))
     return json.dumps(sign_up, default=str)
 

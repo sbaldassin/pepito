@@ -47,7 +47,6 @@ class QNetCustomer(Base):
     OptOutPush = Column(Boolean)
     #OptOutMobilePush = Column(Boolean)
 
-
     def to_dict(self):
         return super(QNetCustomer, self).to_dict()
 
@@ -64,6 +63,22 @@ class QNetDwFactSignup(Base):
 
     def to_dict(self):
         return super(QNetDwFactSignup, self).to_dict()
+
+
+class QNetDwFactSignIn(Base):
+    __tablename__ = 'Q_net_dw_fact_signin'
+
+    SignInID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    ExternalCustomerID = Column(String(50))
+    TimeID = Column(Integer)
+    GeoLocation = Column(Integer)
+    DateCreated = Column(String(50))
+    ActivityID = Column(String(50))
+    ChannelID = Column(Integer)
+
+    def to_dict(self):
+        return super(QNetDwFactSignIn, self).to_dict()
 
 
 class QNetDWFactWithdrawal(Base):
