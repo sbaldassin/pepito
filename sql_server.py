@@ -6,6 +6,7 @@ from flask import request
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
+from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
 
 logging.basicConfig(level=logging.INFO)
@@ -64,6 +65,14 @@ def get_withdrawals_by_customer_id():
     withdrawals = QNetDWFactWithdrawalRepository().get_by_external_customer_id(customer_id)
     logging.info("Withdrawals: {}".format(withdrawals))
     return json.dumps(withdrawals, default=str)
+
+
+@app.route('/deposits')
+def get_deposits_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    deposits = QNetDWFactRevenueRepository().get_by_external_customer_id(customer_id)
+    logging.info("Deposits: {}".format(deposits))
+    return json.dumps(deposits, default=str)
 
 
 if __name__ == '__main__':
