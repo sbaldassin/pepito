@@ -10,6 +10,10 @@ def get_player_sign_in_resource(player_id, channel=1):
                                                             channel=channel, player=player_id)
 
 
+def get_player_flush_resource(player_id):
+    return '{host}/player/flush/{player}'.format(host=get_config().get("api", "host"), player=player_id)
+
+
 def get_player_update_resource():
     return '{host}/player/update'.format(host=get_config().get("api", "host"))
 

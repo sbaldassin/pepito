@@ -5,8 +5,7 @@ import requests
 
 from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
-from tests.utils.utils import get_api_headers, get_player_sign_up_resource, get_player_update_resource,\
-    get_api_ok_message, get_player_sign_in_resource
+from tests.utils.utils import get_api_headers, get_player_sign_up_resource, get_api_ok_message, get_player_sign_in_resource
 
 logging.basicConfig(level=logging.INFO)
 
