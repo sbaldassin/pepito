@@ -11,10 +11,10 @@ from tests.utils.utils import get_api_headers, get_player_sign_up_resource, get_
 logging.basicConfig(level=logging.INFO)
 
 
-class PlayerUpdateTestCase(TestCase):
+class PlayerSignInTestCase(TestCase):
 
     def setUp(self):
-        super(PlayerUpdateTestCase, self)
+        super(PlayerSignInTestCase, self)
     
     def create_and_validate_player(self, player, channel=1):
         player_sign_up_response = requests.post(get_player_sign_up_resource(channel=channel), data=json.dumps(player.__dict__),
@@ -37,12 +37,12 @@ class PlayerUpdateTestCase(TestCase):
         self.assertTrue(player_sign_in_response.status_code, 200)
         body = player_sign_in_response.json()
         logging.info("API response: {}".format(body))
-        self.assertTrue(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
+        self.assertEqual(body.get('Result').get('Success'), True)
+        self.assertEqual(body.get('Result').get('Message'), get_api_ok_message())
         signin_id = body.get('ID')
         self.assertTrue(signin_id)
     
-        q_net_signin = self.get_signin(player)
+        q_net_signin = self.get_signin(player)[0]
         self.assertEqual(signin_id, q_net_signin['SignInID'])
 
     def get_signin(self, player):
@@ -89,7 +89,7 @@ class PlayerUpdateTestCase(TestCase):
                                                 headers=get_api_headers())
         self.assertTrue(player_sign_in_response.status_code, 404)
 
-    def test_tc_4_signin_without_player_id(self):
+    def test_tc_4_signin_without_channel(self):
         player = create_random_player(player_id_length=30)
         logging.info("Creating player: {}".format(player.__dict__))
     
