@@ -34,7 +34,6 @@ class PlayerUpdateTestCase(TestCase):
 
     def create_and_validate_signin(self, player, channel=1):
         player_sign_in_response = requests.post(get_player_sign_in_resource(player_id=player.PlayerID, channel=channel), headers=get_api_headers())
-        print(player_sign_in_response)
         self.assertTrue(player_sign_in_response.status_code, 200)
         body = player_sign_in_response.json()
         logging.info("API response: {}".format(body))
@@ -64,3 +63,43 @@ class PlayerUpdateTestCase(TestCase):
 
         # Siging_channel_1
         self.create_and_validate_signin(player, channel)
+
+    def test_tc_2_signin_channel_2(self):
+        player = create_random_player(player_id_length=30)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        channel = 2
+        self.create_and_validate_player(player, channel)
+    
+        # Siging_channel_1
+        self.create_and_validate_signin(player, channel)
+
+    def test_tc_3_signin_without_player_id(self):
+        player = create_random_player(player_id_length=30)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        channel = 2
+        self.create_and_validate_player(player, channel)
+    
+        # Signin_channel_1
+        player.PlayerID = ''
+        player_sign_in_response = requests.post(get_player_sign_in_resource(player_id=player.PlayerID, channel=channel),
+                                                headers=get_api_headers())
+        self.assertTrue(player_sign_in_response.status_code, 404)
+
+    def test_tc_4_signin_without_player_id(self):
+        player = create_random_player(player_id_length=30)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        channel = 2
+        self.create_and_validate_player(player, channel)
+    
+        # Signin_channel_1
+        channel = ''
+        player_sign_in_response = requests.post(get_player_sign_in_resource(player_id=player.PlayerID, channel=channel),
+                                                headers=get_api_headers())
+        self.assertTrue(player_sign_in_response.status_code, 404)
+
