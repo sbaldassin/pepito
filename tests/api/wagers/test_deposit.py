@@ -26,7 +26,7 @@ class DepositTestCase(TestCase):
         logging.info("DB result: {}".format(result))
 
         self.assertFalse(result == [])
-        self.assertEquals(deposit.amount, result[0]["Amount"])
+        self.assertTrue(result[0]["EuroAmount"] != 0)
 
 
     @staticmethod
