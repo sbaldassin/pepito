@@ -152,7 +152,7 @@ class PlayerUpdateTestCase(TestCase):
         player.MobilePhone = player.MobilePhone + player.MobilePhone[-1]
         self.update_and_validate_player(player, 'MobilePhone', 'PhoneNumber')
 
-    def test_tc_15_custom_string1_update(self):
+    def test_tc_9_custom_string1_update(self):
         player = create_random_player(player_id_length=30)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -164,7 +164,7 @@ class PlayerUpdateTestCase(TestCase):
         player.CustomString1 = player.CustomString1 + player.CustomString1[-1]
         self.update_and_validate_player(player, 'CustomString1', 'CustomString1')
 
-    def test_tc_16_custom_string2_update(self):
+    def test_tc_10_custom_string2_update(self):
         player = create_random_player(player_id_length=30)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -176,7 +176,7 @@ class PlayerUpdateTestCase(TestCase):
         player.CustomString2 = player.CustomString2 + player.CustomString2[-1]
         self.update_and_validate_player(player, 'CustomString2', 'CustomString2')
 
-    def test_tc_17_custom_string3_update(self):
+    def test_tc_11_custom_string3_update(self):
         player = create_random_player(player_id_length=30)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -188,27 +188,3 @@ class PlayerUpdateTestCase(TestCase):
         player.CustomString3 = player.CustomString3 + player.CustomString3[-1]
         self.update_and_validate_player(player, 'CustomString3', 'CustomString3')
 
-    def bug_tc_18_custom_string4_update(self):
-        # CUstomeString4 is not been saved
-        player = create_random_player(player_id_length=30)
-        logging.info("Creating player: {}".format(player.__dict__))
-    
-        # Create player
-        q_net_customer = self.create_and_validate_player(player)
-        self.assertEqual(q_net_customer['CustomString4'], player.CustomString4)
-    
-        # Update player
-        player.CustomString4 = player.CustomString4 + player.CustomString4[-1]
-        self.update_and_validate_player(player, 'CustomString4', 'CustomString4')
-
-    def tc_19_timezone_update(self):
-        player = create_random_player(player_id_length=30)
-        logging.info("Creating player: {}".format(player.__dict__))
-    
-        # Create player
-        q_net_customer = self.create_and_validate_player(player)
-        self.assertEqual(q_net_customer['LastKnownTimezone'], player.TimeZone)
-    
-        # Update player
-        player.TimeZone = player.TimeZone + player.TimeZone[-1]
-        self.update_and_validate_player(player, 'TimeZone', 'LastKnownTimezone')
