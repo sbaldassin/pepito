@@ -5,6 +5,11 @@ def get_player_sign_up_resource(channel=1):
     return '{host}/player/signup/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
+def get_player_sign_in_resource(player_id, channel=1):
+    return '{host}/player/{player}/signin/{channel}'.format(host=get_config().get("api", "host"),
+                                                            channel=channel, player=player_id)
+
+
 def get_player_update_resource():
     return '{host}/player/update'.format(host=get_config().get("api", "host"))
 
