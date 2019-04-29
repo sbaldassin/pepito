@@ -26,6 +26,10 @@ def get_deposit_resource():
     return '{host}/player/deposit/1'.format(host=get_config().get("api", "host"))
 
 
+def get_wagers_parimutuel_resource(channel=1):
+    return '{host}/wagers/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
 def get_api_headers():
     headers = {
         'Authorization': 'Bearer {token}'.format(token=get_config().get("api", "authorization_header")),

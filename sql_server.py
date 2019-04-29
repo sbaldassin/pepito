@@ -7,6 +7,7 @@ from tests.db.repositories.q_net_customer_repository import QNetCustomerReposito
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
+from tests.db.repositories.q_net_dw_fact_wager_repository import QNetDwFactWagerRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
 
 logging.basicConfig(level=logging.INFO)
@@ -73,6 +74,18 @@ def get_deposits_by_customer_id():
     deposits = QNetDWFactRevenueRepository().get_by_external_customer_id(customer_id)
     logging.info("Deposits: {}".format(deposits))
     return json.dumps(deposits, default=str)
+
+
+@app.route('/wagers/parimutuel')
+def get_wagers_parimutuel_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    wagercount = request.args.get("wagercount")
+    if wagercount:
+        wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount)
+    else:
+        wagers = QNetDwFactWagerRepository().get_by_external_customer_id(customer_id)
+    logging.info("Wagers: {}".format(wagers))
+    return json.dumps(wagers, default=str)
 
 
 if __name__ == '__main__':
