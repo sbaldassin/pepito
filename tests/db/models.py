@@ -113,7 +113,24 @@ class QNetDWFactRevenue(Base):
 
     def to_dict(self):
         return super(QNetDWFactRevenue, self).to_dict()
-    
+
+
+class QNetDWFactBonus(Base):
+    __tablename__ = 'q_net_dw_fact_bonus'
+
+    FactBonusID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    TimeID = Column(Integer)
+    BonusID = Column(Integer)
+    BonusEuroValue = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalCustomerID = Column(Integer)
+    SignInID = Column(Integer)
+    ActivityDate = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDWFactBonus, self).to_dict()
+
     
 class QNetDwFactWager(Base):
     __tablename__ = 'Q_Net_Dw_Fact_Wager'

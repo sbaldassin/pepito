@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
@@ -74,6 +75,22 @@ def get_deposits_by_customer_id():
     deposits = QNetDWFactRevenueRepository().get_by_external_customer_id(customer_id)
     logging.info("Deposits: {}".format(deposits))
     return json.dumps(deposits, default=str)
+
+
+@app.route('/bonuses')
+def get_bonuses_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    bonuses = QNetDwFactBonusRepository().get_by_external_customer_id(customer_id)
+    logging.info("Deposits: {}".format(bonuses))
+    return json.dumps(bonuses, default=str)
+
+
+@app.route('/wagers')
+def get_wagers_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    wagers = QNetDwFactWagerRepository().get_by_external_customer_id(customer_id)
+    logging.info("Deposits: {}".format(wagers))
+    return json.dumps(wagers, default=str)
 
 
 @app.route('/wagers/parimutuel')
