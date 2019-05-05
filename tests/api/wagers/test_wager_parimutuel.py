@@ -9,6 +9,7 @@ from tests.factory.wager_factory import create_parimutuel_wager
 from tests.factory.event_factory import create_parimutuel_event
 from tests.utils.utils import get_api_headers, get_player_sign_up_resource, get_api_ok_message, \
     get_player_sign_in_resource, get_wagers_parimutuel_resource
+from tests.utils.getters import get_until_not_empty
 
 logging.basicConfig(level=logging.INFO)
 
@@ -69,11 +70,6 @@ class PlayerSignInTestCase(TestCase):
         self.assertEqual(body.get('Message'), get_api_ok_message())
         request_id = body.get('RequestID')
         self.assertTrue(request_id)
-        
-        q_net_wager_list = self.get_wager_parimutuel(player)
-        # TODO: add timeout or related
-        #self.assertEqual(len(q_net_wager_list), len(wagers))
-        
         return data
     
     def cancel_wagers_parimutuel(self, data):
@@ -95,10 +91,10 @@ class PlayerSignInTestCase(TestCase):
             get_config().get("test_framework", "db"), player.PlayerID)).json()
     
     def get_wager_parimutuel(self, player):
-        return requests.get("http://{}/wagers/parimutuel?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()
+        url = "http://{}/wagers/parimutuel?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
+        return get_until_not_empty(url, timeout=40)
 
-    def test_tc_1_wager_creation_cancellation(self):
+    def test_tc_1_wager_parimutuel_example(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
         
@@ -110,5 +106,30 @@ class PlayerSignInTestCase(TestCase):
         # Create Wager
         data = self.create_and_validate_wager_parimutuel(player, signin_id, channel)
 
+        q_net_wager_list = self.get_wager_parimutuel(player)
+        self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
+        for wager in q_net_wager_list:
+            self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
+            self.assertEqual(signin_id, wager['SignInID'])
+            
         # Cancel Wager
-        self.cancel_wagers_parimutuel(data)
+        #self.cancel_wagers_parimutuel(data)
+
+    def test_tc_3_wager_parimutuel_without_initid(self):
+        player = create_random_player(player_id_length=40)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        channel = 1
+        self.create_and_validate_player(player, channel)
+        signin_id = None
+    
+        # Create Wager
+        data = self.create_and_validate_wager_parimutuel(player, signin_id, channel)
+        q_net_wager_list = self.get_wager_parimutuel(player)
+        self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
+        
+        for wager in q_net_wager_list:
+            self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
+            self.assertEqual(0, wager['SignInID'])
+

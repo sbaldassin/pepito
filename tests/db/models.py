@@ -150,3 +150,19 @@ class QNetDwFactWager(Base):
     
     def to_dict(self):
         return super(QNetDwFactWager, self).to_dict()
+
+
+class QNetDwDimGameParimutuel(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Game_Parimutuel'
+    
+    GameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Event = Column(String(250))
+    Breed = Column(String(250))
+    EventDate = Column(DateTime)
+    TimeID = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalEventID = Column(String(50))
+    
+    def to_dict(self):
+        return super(QNetDwDimGameParimutuel, self).to_dict()

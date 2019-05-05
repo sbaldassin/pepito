@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
@@ -103,6 +104,14 @@ def get_wagers_parimutuel_by_customer_id():
         wagers = QNetDwFactWagerRepository().get_by_external_customer_id(customer_id)
     logging.info("Wagers: {}".format(wagers))
     return json.dumps(wagers, default=str)
+
+
+@app.route('/games/parimutuel')
+def get_game_parimutuel_by_customer_id():
+    event_id = request.args.get("event_id")
+    games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id)
+    logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
 
 
 if __name__ == '__main__':
