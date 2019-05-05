@@ -9,3 +9,12 @@ class Wager:
         self.Value = value
         self.TransactionDate = transaction_date
         self.Count = count
+
+
+class ParimutuelWager:
+
+    def __init__(self, currency, value, transaction_date, count):
+        self.Currency = currency
+        self.Value = value
+        self.TransactionDate = transaction_date
+        self.Count = count

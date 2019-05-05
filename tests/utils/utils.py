@@ -35,7 +35,7 @@ def get_wager_casino_resource(channel=1):
 
 
 def get_wagers_parimutuel_resource(channel=1):
-    return '{host}/wagers/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+    return '{host}/player/wager/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
 def get_api_headers():

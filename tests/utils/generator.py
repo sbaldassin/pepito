@@ -45,3 +45,7 @@ def generate_random_state():
 
 def generate_random_boolean():
     return random.choice([True, False])
+
+
+def generate_random_currency():
+    return random.choice(['USD', 'EUR'])
