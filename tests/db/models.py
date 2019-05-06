@@ -181,4 +181,4 @@ class QNetTaskApx(Base):
     Error = Column(String(200))
     
     def to_dict(self):
-        return super(Q_Net_Task_Apx, self).to_dict()
+        return super(QNetTaskApx, self).to_dict()
