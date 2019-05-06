@@ -116,7 +116,7 @@ def get_game_parimutuel_by_customer_id():
 
 
 @app.route('/tasks')
-def get_game_parimutuel_by_customer_id():
+def get_task_by_task_id():
     task_id = request.args.get("task_id")
     games = QNetTaskApxRepository().get_by_task_id(task_id)
     logging.info("Task: {}".format(games))
