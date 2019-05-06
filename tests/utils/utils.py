@@ -50,7 +50,21 @@ def get_api_headers():
 def get_api_ok_message():
     return 'OK'
 
+# API ERROR messages
+
 
 def get_api_error_player_id_not_passed():
     return 'PlayerID not being passed'
 
+
+def get_api_error_wager_list_empty():
+    return 'Wager list is empty'
+
+
+# API Tasks error messages
+def get_task_error_invalid_event():
+    return 'Invalid event name on record number 1. No data saved.'
+
+
+def get_task_error_invalid_currency():
+    return 'Invalid currency code on record number 1. No data saved.'
