@@ -166,3 +166,19 @@ class QNetDwDimGameParimutuel(Base):
     
     def to_dict(self):
         return super(QNetDwDimGameParimutuel, self).to_dict()
+
+
+class QNetTaskApx(Base):
+    __tablename__ = 'Q_Net_Task_Apx'
+    
+    TaskID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Type = Column(Integer)
+    State = Column(Integer)
+    Attempts = Column(Integer)
+    DateCreated = Column(DateTime)
+    Data = Column(String(250))
+    Error = Column(String(200))
+    
+    def to_dict(self):
+        return super(Q_Net_Task_Apx, self).to_dict()

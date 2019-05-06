@@ -11,6 +11,7 @@ from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSign
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
 from tests.db.repositories.q_net_dw_fact_wager_repository import QNetDwFactWagerRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
+from tests.db.repositories.q_net_task_apx_repository import QNetTaskApxRepository
 
 logging.basicConfig(level=logging.INFO)
 
@@ -111,6 +112,14 @@ def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
     games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id)
     logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
+
+
+@app.route('/tasks')
+def get_game_parimutuel_by_customer_id():
+    task_id = request.args.get("task_id")
+    games = QNetTaskApxRepository().get_by_task_id(task_id)
+    logging.info("Task: {}".format(games))
     return json.dumps(games, default=str)
 
 

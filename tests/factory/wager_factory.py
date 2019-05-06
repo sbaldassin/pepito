@@ -18,5 +18,5 @@ def create_parimutuel_wager():
         value=generate_random_int(),
         currency=generate_random_currency(),
         transaction_date=generate_random_date(include_time=True),
-        count=4)
+        count=generate_random_int(length=1))
     return wager

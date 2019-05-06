@@ -49,3 +49,8 @@ def get_api_headers():
 
 def get_api_ok_message():
     return 'OK'
+
+
+def get_api_error_player_id_not_passed():
+    return 'PlayerID not being passed'
+

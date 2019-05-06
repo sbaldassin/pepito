@@ -7,7 +7,8 @@ from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
 from tests.factory.wager_factory import create_parimutuel_wager
 from tests.factory.event_factory import create_parimutuel_event
-from tests.utils.utils import get_api_headers, get_player_sign_up_resource, get_api_ok_message, \
+
+from tests.utils.utils import get_api_headers, get_api_error_player_id_not_passed, get_api_ok_message, get_player_sign_up_resource, \
     get_player_sign_in_resource, get_wagers_parimutuel_resource
 from tests.utils.getters import get_until_not_empty
 
@@ -115,6 +116,17 @@ class PlayerSignInTestCase(TestCase):
         # Cancel Wager
         #self.cancel_wagers_parimutuel(data)
 
+    def test_tc_2_wager_parimutuel_without_player_id(self):
+        data = {"PlayerID": None, "Wagers": []}
+
+        wager_parimutuel_response = requests.post(get_wagers_parimutuel_resource(),
+                                                  data=json.dumps(data),
+                                                  headers=get_api_headers())
+        self.assertTrue(wager_parimutuel_response.status_code, 200)
+        body = wager_parimutuel_response.json()
+        self.assertEqual(body.get('Success'), False)
+        self.assertEqual(body.get('Message'), get_api_error_player_id_not_passed())
+    
     def test_tc_3_wager_parimutuel_without_initid(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
@@ -129,6 +141,24 @@ class PlayerSignInTestCase(TestCase):
         q_net_wager_list = self.get_wager_parimutuel(player)
         self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
         
+        for wager in q_net_wager_list:
+            self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
+            self.assertEqual(0, wager['SignInID'])
+
+    def tc_4_wager_parimutuel_without_event(self):
+        player = create_random_player(player_id_length=40)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        channel = 1
+        self.create_and_validate_player(player, channel)
+        signin_id = None
+    
+        # Create Wager
+        data = self.create_and_validate_wager_parimutuel(player, signin_id, channel)
+        q_net_wager_list = self.get_wager_parimutuel(player)
+        self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
+    
         for wager in q_net_wager_list:
             self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
             self.assertEqual(0, wager['SignInID'])
