@@ -66,5 +66,21 @@ def get_task_error_invalid_event():
     return 'Invalid event name on record number 1. No data saved.'
 
 
+def get_task_error_invalid_event_name():
+    return 'Invalid event name on record number 1. Couldn''t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_breed():
+    return 'Invalid breed on record number 1. No data saved.'
+
+
+def get_task_error_invalid_value():
+    return 'Invalid wager value on record number 1. Couldn''t proceed with wager cancellation.'
+
+
+def get_task_error_sql_overflow():
+    return 'SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.'
+
+
 def get_task_error_invalid_currency():
     return 'Invalid currency code on record number 1. No data saved.'
