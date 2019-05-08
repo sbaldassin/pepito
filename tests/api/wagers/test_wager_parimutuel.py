@@ -93,11 +93,11 @@ class PlayerSignInTestCase(TestCase):
     
     def get_wager_parimutuel(self, player):
         url = "http://{}/wagers/parimutuel?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
-        return get_until_not_empty(url, timeout=50)
+        return get_until_not_empty(url)
     
     def get_task(self, task_id):
         url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
-        return get_until_not_empty(url, timeout=40)
+        return get_until_not_empty(url, timeout=100)
 
     def test_tc_1_wager_parimutuel_example(self):
         player = create_random_player(player_id_length=40)
@@ -256,7 +256,7 @@ class PlayerSignInTestCase(TestCase):
         self.assertFalse(q_net_wager_list)
         self.verify_wager_error(request_id, get_task_error_invalid_value())
 
-    def tc_10_wager_parimutuel_without_transactiondate(self):
+    def test_tc_10_wager_parimutuel_without_transactiondate(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -274,9 +274,9 @@ class PlayerSignInTestCase(TestCase):
     
         for wager in q_net_wager_list:
             self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
-            self.assertTrue(wager['TransactionDate'])
+            self.assertTrue(wager['DateCreated'])
 
-    def tc_11_wager_parimutuel_without_count_0(self):
+    def test_tc_11_wager_parimutuel_without_count_0(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -294,7 +294,7 @@ class PlayerSignInTestCase(TestCase):
     
         for wager in q_net_wager_list:
             self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
-            self.assertEqual(1, wager['Count'])
+            self.assertEqual(1, wager['WagerCount'])
             
     def test_tc_12_wager_parimutuel_empty_wagers_list(self):
         # New test

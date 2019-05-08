@@ -4,7 +4,7 @@ from time import sleep
 import requests
 
 
-def get_until_not_empty(url, timeout=180):
+def get_until_not_empty(url, timeout=100):
     count = 0
     result = []
     while count < timeout and result == []:

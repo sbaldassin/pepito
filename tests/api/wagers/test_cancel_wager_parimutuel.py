@@ -114,7 +114,7 @@ class CancelWagerParimutuelTestCase(TestCase):
         self.assertEqual(wager_count, 0)
         self.assertEqual(euro_cents_value, 0)
 
-    @retry(Exception, tries=10)
+    @retry(Exception, tries=5)
     def verify_canceled_wager_error(self, request_id, error):
         task = self.get_task(request_id)
         self.assertEqual(len(task), 1)
