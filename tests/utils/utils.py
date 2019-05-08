@@ -75,7 +75,7 @@ def get_task_error_invalid_breed():
 
 
 def get_task_error_invalid_value():
-    return 'Invalid wager value on record number 1. Couldn''t proceed with wager cancellation.'
+    return 'Invalid wager value on record number 1. No data saved.'
 
 
 def get_task_error_sql_overflow():

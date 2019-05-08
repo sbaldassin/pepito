@@ -1,6 +1,6 @@
 import json
 import logging
-from unittest import TestCase, skip
+from unittest import TestCase
 import requests
 
 from tests.config.config import get_config
@@ -9,8 +9,10 @@ from tests.factory.wager_factory import create_parimutuel_wager
 from tests.factory.event_factory import create_parimutuel_event
 
 from tests.utils.utils import get_api_headers, get_api_error_wager_list_empty, get_api_error_player_id_not_passed, get_api_ok_message, get_player_sign_up_resource, \
-    get_player_sign_in_resource, get_wagers_parimutuel_resource, get_task_error_invalid_event, get_task_error_invalid_currency
+    get_player_sign_in_resource, get_wagers_parimutuel_resource, get_task_error_invalid_event, \
+    get_task_error_invalid_currency, get_task_error_invalid_breed, get_task_error_invalid_value
 from tests.utils.getters import get_until_not_empty
+from tests.utils.retry import retry
 
 logging.basicConfig(level=logging.INFO)
 
@@ -74,16 +76,12 @@ class PlayerSignInTestCase(TestCase):
         request_id = body.get('RequestID')
         self.assertTrue(request_id)
         return data, request_id
-    
-    def cancel_wagers_parimutuel(self, data):
-        wager_parimutuel_response = requests.delete(get_wagers_parimutuel_resource(channel=''),
-                                                data=json.dumps(data),
-                                                headers=get_api_headers())
-        self.assertTrue(wager_parimutuel_response.status_code, 200)
-        body = wager_parimutuel_response.json()
-        logging.info("Cancel Wager Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
+
+    @retry(Exception)
+    def verify_wager_error(self, request_id, error):
+        task = self.get_task(request_id)
+        self.assertEqual(len(task), 1)
+        self.assertEqual(task[0]['Error'], error)
         
     def get_signin(self, player):
         return requests.get("http://{}/sign_in?customer_id={}".format(
@@ -119,9 +117,6 @@ class PlayerSignInTestCase(TestCase):
         for wager in q_net_wager_list:
             self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
             self.assertEqual(signin_id, wager['SignInID'])
-            
-        # Cancel Wager
-        #self.cancel_wagers_parimutuel(data)
 
     def test_tc_2_wager_parimutuel_without_player_id(self):
         data = {"PlayerID": None, "Wagers": []}
@@ -166,11 +161,27 @@ class PlayerSignInTestCase(TestCase):
         q_net_wager_list = self.get_wager_parimutuel(player)
         self.assertFalse(q_net_wager_list)
     
-        task = self.get_task(request_id)
-        self.assertEqual(len(task), 1)
-        self.assertEqual(task[0]['Error'], get_task_error_invalid_event())
+        self.verify_wager_error(request_id, get_task_error_invalid_event())
 
-    def tc_6_wager_parimutuel_without_eventdate(self):
+    def test_tc_5_wager_parimutuel_without_breed(self):
+        player = create_random_player(player_id_length=40)
+        logging.info("Creating player: {}".format(player.__dict__))
+    
+        # Create player
+        self.create_and_validate_player(player)
+    
+        # Create Wager
+        wagers = self.create_wagers(add_event=True)
+    
+        for w in wagers:
+            del w["Breed"]
+    
+        data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
+        q_net_wager_list = self.get_wager_parimutuel(player)
+        self.assertFalse(q_net_wager_list)
+        self.verify_wager_error(request_id, get_task_error_invalid_breed())
+        
+    def test_tc_6_wager_parimutuel_without_eventdate(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -190,7 +201,7 @@ class PlayerSignInTestCase(TestCase):
         for wager in q_net_wager_list:
             self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
 
-    def tc_7_wager_parimutuel_without_eventid(self):
+    def test_tc_7_wager_parimutuel_without_eventid(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -225,10 +236,25 @@ class PlayerSignInTestCase(TestCase):
         data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
         q_net_wager_list = self.get_wager_parimutuel(player)
         self.assertFalse(q_net_wager_list)
+        self.verify_wager_error(request_id, get_task_error_invalid_currency())
+
+    def test_tc_9_wager_parimutuel_without_value(self):
+        player = create_random_player(player_id_length=40)
+        logging.info("Creating player: {}".format(player.__dict__))
     
-        task = self.get_task(request_id)
-        self.assertEqual(len(task), 1)
-        self.assertEqual(task[0]['Error'], get_task_error_invalid_currency())
+        # Create player
+        self.create_and_validate_player(player)
+    
+        # Create Wager
+        wagers = self.create_wagers(add_event=True)
+    
+        for w in wagers:
+            del w["Value"]
+    
+        data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
+        q_net_wager_list = self.get_wager_parimutuel(player)
+        self.assertFalse(q_net_wager_list)
+        self.verify_wager_error(request_id, get_task_error_invalid_value())
 
     def tc_10_wager_parimutuel_without_transactiondate(self):
         player = create_random_player(player_id_length=40)
