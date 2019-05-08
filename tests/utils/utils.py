@@ -34,6 +34,22 @@ def get_wager_casino_resource(channel=1):
     return '{host}/player/wager/casino/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
+def get_wager_esport_resource(channel=1):
+    return '{host}/player/wager/esports/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_lottery_resource(channel=1):
+    return '{host}/player/wager/lottery/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_sport_resource(channel=1):
+    return '{host}/player/wager/sports/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_betting_resource(channel=1):
+    return '{host}/player/wager/betting/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
 def get_wagers_parimutuel_resource(channel=1):
     return '{host}/player/wager/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
