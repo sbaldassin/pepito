@@ -34,6 +34,22 @@ def get_wager_casino_resource(channel=1):
     return '{host}/player/wager/casino/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
+def get_wager_esport_resource(channel=1):
+    return '{host}/player/wager/esports/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_lottery_resource(channel=1):
+    return '{host}/player/wager/lottery/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_sport_resource(channel=1):
+    return '{host}/player/wager/sports/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_wager_betting_resource(channel=1):
+    return '{host}/player/wager/betting/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
 def get_wagers_parimutuel_resource(channel=1):
     return '{host}/player/wager/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
@@ -66,5 +82,33 @@ def get_task_error_invalid_event():
     return 'Invalid event name on record number 1. No data saved.'
 
 
+def get_task_error_invalid_event_name():
+    return 'Invalid event name on record number 1. Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_breed():
+    return 'Invalid breed on record number 1. No data saved.'
+
+
+def get_task_error_invalid_breed_cancellation():
+    return 'Invalid breed on record number 1.  Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_value():
+    return 'Invalid wager value on record number 1. No data saved.'
+
+
+def get_task_error_invalid_value_cancellation():
+    return 'Invalid wager value on record number 1.  Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_sql_overflow():
+    return 'SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.'
+
+
 def get_task_error_invalid_currency():
     return 'Invalid currency code on record number 1. No data saved.'
+
+
+def get_task_error_invalid_currency_cancellation():
+    return 'Invalid currency code on record number 1.  Couldn\'t proceed with wager cancellation.'

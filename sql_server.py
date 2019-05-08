@@ -33,7 +33,8 @@ def get_first_customer():
 @app.route('/customer')
 def get_customer_by_id():
     customer_id = request.args.get("customer_id")
-    customers = QNetCustomerRepository().get_by_external_customer_id(customer_id)
+    merchant_id = request.args.get("merchant_id", 11)
+    customers = QNetCustomerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
     logging.info("Customers: {}".format(customers))
     return json.dumps(customers, default=str)
 
@@ -41,7 +42,7 @@ def get_customer_by_id():
 @app.route('/customer_by_name_and_merchant')
 def get_customer_by_name_and_merchant_id():
     name = request.args.get("name")
-    merchant_id = request.args.get("merchant_id")
+    merchant_id = request.args.get("merchant_id", 11)
     customers = QNetCustomerRepository().get_by_name_and_merchant_id(name, merchant_id)
     logging.info("Customer: {}".format(customers))
     return json.dumps(customers, default=str)
@@ -98,11 +99,12 @@ def get_wagers_by_customer_id():
 @app.route('/wagers/parimutuel')
 def get_wagers_parimutuel_by_customer_id():
     customer_id = request.args.get("customer_id")
+    merchant_id = request.args.get("merchant_id", 11)
     wagercount = request.args.get("wagercount")
     if wagercount:
-        wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount)
+        wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount, merchant_id)
     else:
-        wagers = QNetDwFactWagerRepository().get_by_external_customer_id(customer_id)
+        wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
     logging.info("Wagers: {}".format(wagers))
     return json.dumps(wagers, default=str)
 
@@ -110,6 +112,7 @@ def get_wagers_parimutuel_by_customer_id():
 @app.route('/games/parimutuel')
 def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
+    merchant_id = request.args.get("merchant_id", 11)
     games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id)
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
