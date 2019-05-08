@@ -67,15 +67,23 @@ def get_task_error_invalid_event():
 
 
 def get_task_error_invalid_event_name():
-    return 'Invalid event name on record number 1. Couldn''t proceed with wager cancellation.'
+    return 'Invalid event name on record number 1. Couldn\'t proceed with wager cancellation.'
 
 
 def get_task_error_invalid_breed():
     return 'Invalid breed on record number 1. No data saved.'
 
 
+def get_task_error_invalid_breed_cancellation():
+    return 'Invalid breed on record number 1.  Couldn\'t proceed with wager cancellation.'
+
+
 def get_task_error_invalid_value():
     return 'Invalid wager value on record number 1. No data saved.'
+
+
+def get_task_error_invalid_value_cancellation():
+    return 'Invalid wager value on record number 1.  Couldn\'t proceed with wager cancellation.'
 
 
 def get_task_error_sql_overflow():
@@ -84,3 +92,7 @@ def get_task_error_sql_overflow():
 
 def get_task_error_invalid_currency():
     return 'Invalid currency code on record number 1. No data saved.'
+
+
+def get_task_error_invalid_currency_cancellation():
+    return 'Invalid currency code on record number 1.  Couldn\'t proceed with wager cancellation.'
