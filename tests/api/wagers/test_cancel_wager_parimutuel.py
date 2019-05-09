@@ -8,8 +8,8 @@ from tests.factory.event_factory import create_parimutuel_event
 from tests.factory.player_factory import create_random_player
 from tests.factory.wager_factory import create_parimutuel_wager
 from tests.utils.utils import get_api_headers, get_api_error_player_id_not_passed, get_api_ok_message, get_player_sign_up_resource, \
-    get_player_sign_in_resource, get_wagers_parimutuel_resource, get_task_error_invalid_event_name, get_task_error_invalid_breed, \
-    get_task_error_invalid_event, get_task_error_invalid_currency, get_task_error_invalid_value, get_task_error_sql_overflow
+    get_player_sign_in_resource, get_wagers_parimutuel_resource, get_task_error_invalid_event_name, get_task_error_invalid_breed_cancellation, \
+    get_task_error_invalid_event, get_task_error_invalid_currency_cancellation, get_task_error_invalid_value_cancellation, get_task_error_sql_overflow
 from tests.utils.getters import get_until_not_empty
 from tests.utils.retry import retry
 
@@ -85,17 +85,24 @@ class CancelWagerParimutuelTestCase(TestCase):
         logging.info("Cancel Wager Parimutuel API response: {}".format(body))
         self.assertEqual(body.get('Success'), True)
         self.assertEqual(body.get('Message'), get_api_ok_message())
+        request_id = body.get('RequestID')
+        self.assertTrue(request_id)
+        return request_id
         
     def get_signin(self, player):
-        return requests.get("http://{}/sign_in?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()
+        url = "http://{}/sign_in?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
+        return get_until_not_empty(url)
 
     def get_customer(self, player):
-        return requests.get("http://{}/customer?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()
+        url = "http://{}/customer?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
+        return get_until_not_empty(url)
     
     def get_wager_parimutuel(self, player):
         url = "http://{}/wagers/parimutuel?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
+        return get_until_not_empty(url, timeout=50)
+    
+    def get_wager_parimutuel_wager_count(self, player, wagercount):
+        url = "http://{}/wagers/parimutuel?customer_id={}&wagercount={}".format(get_config().get("test_framework", "db"), player.PlayerID, wagercount)
         return get_until_not_empty(url, timeout=50)
     
     def get_task(self, task_id):
@@ -104,17 +111,12 @@ class CancelWagerParimutuelTestCase(TestCase):
 
     @retry(Exception, tries=5)
     def verify_canceled_wager(self, data, player):
-        q_net_wager_list = self.get_wager_parimutuel(player)
-        self.assertEqual(len(q_net_wager_list), len(data['Wagers']) * 2)
-        wager_count = 0
-        euro_cents_value = 0
-        for wager in q_net_wager_list:
-            wager_count += wager['WagerCount']
-            euro_cents_value += wager['EuroCentsValue']
-        self.assertEqual(wager_count, 0)
-        self.assertEqual(euro_cents_value, 0)
+        for wager in data['Wagers']:
+            wc = wager['Count'] * -1
+            q_net_wager_list = self.get_wager_parimutuel_wager_count(player, wc)
+            self.assertTrue(q_net_wager_list)
 
-    @retry(Exception, tries=5)
+    @retry(Exception, tries=6)
     def verify_canceled_wager_error(self, request_id, error):
         task = self.get_task(request_id)
         self.assertEqual(len(task), 1)
@@ -137,8 +139,6 @@ class CancelWagerParimutuelTestCase(TestCase):
         self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
         
         # Cancel Wager
-        self.cancel_wagers_parimutuel(data)
-
         self.verify_canceled_wager(data, player)
 
     def test_tc_2_cancel_wager_parimutuel_without_player_id(self):
@@ -180,10 +180,9 @@ class CancelWagerParimutuelTestCase(TestCase):
     
         # Cancel Wager
         self.cancel_wagers_parimutuel(data)
-    
         self.verify_canceled_wager(data, player)
 
-    def test_tc_4_cancel_wager_parimutuel_without_event(self):
+    def tc_4_cancel_wager_parimutuel_without_event(self):
         player = create_random_player(player_id_length=40)
         logging.info("Creating player: {}".format(player.__dict__))
     
@@ -200,8 +199,9 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['Event'] = None
-        self.cancel_wagers_parimutuel(data)
-        self.verify_canceled_wager_error(request_id, get_task_error_invalid_event_name())
+            
+        request_id = self.cancel_wagers_parimutuel(data)
+        self.verify_canceled_wager_error(request_id, get_task_error_invalid_event())
 
     def test_tc_5_cancel_wager_parimutuel_without_breed(self):
         player = create_random_player(player_id_length=40)
@@ -220,9 +220,9 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['Breed'] = None
-        self.cancel_wagers_parimutuel(data)
-    
-        self.verify_canceled_wager_error(request_id, get_task_error_invalid_breed())
+            
+        request_id = self.cancel_wagers_parimutuel(data)
+        self.verify_canceled_wager_error(request_id, get_task_error_invalid_breed_cancellation())
 
     def test_tc_6_cancel_wager_parimutuel_without_event_date(self):
         player = create_random_player(player_id_length=40)
@@ -241,6 +241,7 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['EventDate'] = None
+        
         self.cancel_wagers_parimutuel(data)
         self.verify_canceled_wager(data, player)
 
@@ -261,6 +262,7 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['EventID'] = None
+            
         self.cancel_wagers_parimutuel(data)
         self.verify_canceled_wager(data, player)
 
@@ -281,9 +283,9 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['Currency'] = None
-        self.cancel_wagers_parimutuel(data)
-    
-        self.verify_canceled_wager_error(request_id, get_task_error_invalid_currency())
+            
+        request_id = self.cancel_wagers_parimutuel(data)
+        self.verify_canceled_wager_error(request_id, get_task_error_invalid_currency_cancellation())
 
     def test_tc_9_cancel_wager_parimutuel_without_value(self):
         player = create_random_player(player_id_length=40)
@@ -302,9 +304,9 @@ class CancelWagerParimutuelTestCase(TestCase):
         # Cancel Wager without event
         for w in data['Wagers']:
             w['Value'] = None
-        self.cancel_wagers_parimutuel(data)
-    
-        self.verify_canceled_wager_error(request_id, get_task_error_invalid_value())
+        
+        request_id = self.cancel_wagers_parimutuel(data)
+        self.verify_canceled_wager_error(request_id, get_task_error_invalid_value_cancellation())
 
     def test_tc_10_cancel_wager_parimutuel_without_transaction_date(self):
         player = create_random_player(player_id_length=40)
@@ -325,6 +327,5 @@ class CancelWagerParimutuelTestCase(TestCase):
             w['TransactionDate'] = None
 
         # SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM
-        self.cancel_wagers_parimutuel(data)
-    
+        request_id = self.cancel_wagers_parimutuel(data)
         self.verify_canceled_wager_error(request_id, get_task_error_sql_overflow())

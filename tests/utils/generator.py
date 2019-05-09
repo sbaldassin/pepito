@@ -49,3 +49,6 @@ def generate_random_boolean():
 
 def generate_random_currency():
     return random.choice(['USD', 'EUR'])
+
+def generate_random_productid():
+    return random.choice(['0','1', '2','3','4', '5','6'])

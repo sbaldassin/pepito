@@ -1,7 +1,10 @@
+import datetime
 import json
 import logging
 from unittest import TestCase
+
 import requests
+
 from tests.config.config import get_config
 from tests.factory.bonus_factory import create_bonus
 from tests.factory.player_factory import create_random_player
@@ -17,7 +20,7 @@ class BonusTestCase(TestCase):
     def setUp(self):
         super(BonusTestCase, self)
 
-    def test_tc_1_player_revenue(self):
+    def test_tc_1_player_bonus(self):
         player, bonuses = self._create_player_with_bonus()
         result = self.get_bonus_from_db(player)
         logging.info("DB result: {}".format(result))
@@ -25,84 +28,94 @@ class BonusTestCase(TestCase):
         self.assertFalse(result == [])
         self.assertTrue(result[0]["EuroAmount"] != 0)
 
-    # def test_tc_2_player_revenue_with_eur_currency(self):
-    #     revenue = create_revenue()
-    #     revenue.Currency = "EUR"
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
+    def test_tc_2_player_bonus_with_eur_currency(self):
+        bonus = create_bonus()
+        bonus.Currency = "EUR"
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertFalse(result == [])
+        self.assertEquals(int(bonus.Amount) * 100, result[0]["EuroAmount"])
+
+    def test_tc_3_player_bonus_with_invalid_currency(self):
+        bonus = create_bonus()
+        bonus.Currency = 123
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_4_player_bonus_with_zero_amount(self):
+        bonus = create_bonus()
+        bonus.Amount = 0
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_5_player_bonus_with_negative_amount(self):
+        bonus = create_bonus()
+        bonus.Amount = -1
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_6_player_bonus_with_string_amount(self):
+        bonus = create_bonus()
+        bonus.Amount = "sdk"
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_7_player_bonus_with_future_date(self):
+        bonus = create_bonus()
+        bonus.TransactionDate = datetime.datetime(2030, 4, 24, 18, 26, 1, 37000).strftime('%Y-%m-%d')
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    # def test_tc_7_a_player_bonus_with_invalid_productID(self):
+    #     bonus = create_bonus()
+    #     bonus.product_id = "7"
+    #     player, bonuses = self._create_player_with_bonus()
+    #     result = self.get_bonus_from_db(player)
     #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertFalse(result == [])
-    #     self.assertEquals(int(revenue.Amount) * 100, result[0]["EuroAmount"])
-    #
-    # def test_tc_3_player_revenue_with_invalid_currency(self):
-    #     revenue = create_revenue()
-    #     revenue.Currency = 123
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_4_player_revenue_with_zero_amount(self):
-    #     revenue = create_revenue()
-    #     revenue.Amount = 0
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_5_player_revenue_with_negative_amount(self):
-    #     revenue = create_revenue()
-    #     revenue.Amount = -1
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_6_player_revenue_with_string_amount(self):
-    #     revenue = create_revenue()
-    #     revenue.Amount = "sdk"
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_7_player_revenue_with_future_date(self):
-    #     revenue = create_revenue()
-    #     revenue.TransactionDate = datetime.datetime(2030, 4, 24, 18, 26, 1, 37000).strftime('%Y-%m-%d')
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_8_player_revenue_with_invalid_date(self):
-    #     revenue = create_revenue()
-    #     revenue.TransactionDate = "hah"
-    #     player, revenue = self._create_player_with_revenue([revenue])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertTrue(result == [])
-    #
-    # def test_tc_9_player_revenue_with_multiple_transactions(self):
-    #     revenue_1 = create_revenue()
-    #     revenue_2 = create_revenue()
-    #     player, revenues = self._create_player_with_revenue(revenues=[revenue_1, revenue_2])
-    #     result = self.get_revenue_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-    #
-    #     self.assertFalse(result == [])
-    #     self.assertEquals(len(result), 2)
+
+    #    self.assertFalse(result == []) 
+
+    def test_tc_8_player_bonus_with_invalid_date(self):
+        bonus = create_bonus()
+        bonus.TransactionDate = "hah"
+        player, bonus = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_9_player_bonus_with_multiple_transactions(self):
+        bonus_1 = create_bonus()
+        bonus_2 = create_bonus()
+        player, bonuses = self._create_player_with_bonus(bonuses=[bonus_1, bonus_2])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertFalse(result == [])
+        self.assertEquals(len(result), 2)
 
     @staticmethod
     def get_bonus_from_db(player):
         url = "http://{}/bonuses?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
-        return get_until_not_empty(url)
+        logging.info("Get Bonus from DB: {}".format(player.__dict__))
+        return get_until_not_empty(url,timeout=18)
 
     @staticmethod
     def _create_player():

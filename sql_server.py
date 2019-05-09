@@ -102,7 +102,7 @@ def get_wagers_parimutuel_by_customer_id():
     merchant_id = request.args.get("merchant_id", 11)
     wagercount = request.args.get("wagercount")
     if wagercount:
-        wagers = QNetDwFactWagerRepository().ge(customer_id, wagercount)
+        wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount, merchant_id)
     else:
         wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
     logging.info("Wagers: {}".format(wagers))
