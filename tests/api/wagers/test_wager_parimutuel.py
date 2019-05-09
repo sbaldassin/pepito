@@ -17,10 +17,10 @@ from tests.utils.retry import retry
 logging.basicConfig(level=logging.INFO)
 
 
-class PlayerSignInTestCase(TestCase):
+class WagerParimutuelTestCase(TestCase):
 
     def setUp(self):
-        super(PlayerSignInTestCase, self)
+        super(WagerParimutuelTestCase, self)
     
     def create_and_validate_player(self, player, channel=1):
         player_sign_up_response = requests.post(get_player_sign_up_resource(channel=channel), data=json.dumps(player.__dict__),

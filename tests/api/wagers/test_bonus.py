@@ -83,14 +83,13 @@ class BonusTestCase(TestCase):
 
         self.assertTrue(result == [])
 
-    # def test_tc_7_a_player_bonus_with_invalid_productID(self):
-    #     bonus = create_bonus()
-    #     bonus.product_id = "7"
-    #     player, bonuses = self._create_player_with_bonus()
-    #     result = self.get_bonus_from_db(player)
-    #     logging.info("DB result: {}".format(result))
-
-    #    self.assertFalse(result == []) 
+    def test_tc_7_a_player_bonus_with_invalid_productID(self):
+        bonus = create_bonus()
+        bonus.ProductID = "7"
+        player, bonuses = self._create_player_with_bonus()
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+        self.assertFalse(result == [])
 
     def test_tc_8_player_bonus_with_invalid_date(self):
         bonus = create_bonus()
