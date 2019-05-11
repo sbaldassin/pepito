@@ -83,14 +83,6 @@ class BonusTestCase(TestCase):
 
         self.assertTrue(result == [])
 
-    def test_tc_7_a_player_bonus_with_invalid_productID(self):
-        bonus = create_bonus()
-        bonus.ProductID = "7"
-        player, bonuses = self._create_player_with_bonus()
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertFalse(result == [])
-
     def test_tc_8_player_bonus_with_invalid_date(self):
         bonus = create_bonus()
         bonus.TransactionDate = "hah"
@@ -109,6 +101,50 @@ class BonusTestCase(TestCase):
 
         self.assertFalse(result == [])
         self.assertEquals(len(result), 2)
+
+    def test_tc_10_player_bonus_with_invalid_productID(self):
+        bonus = create_bonus()
+        bonus.ProductID = "7"
+        player, bonuses = self._create_player_with_bonus()
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+        self.assertFalse(result == [])
+
+    def test_tc_11_bonus_invalid_value(self):
+        bonus = create_bonus()
+        bonus.Value = "Invalid"
+        player, revenue = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_12_bonus_negative_value(self):
+        bonus = create_bonus()
+        bonus.Value = -1
+        player, revenue = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_13_bonus_zero_value(self):
+        bonus = create_bonus()
+        bonus.Value = 0
+        player, revenue = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
+
+    def test_tc_14_bonus_huge_value(self):
+        bonus = create_bonus()
+        bonus.Value = 100000000000
+        player, revenue = self._create_player_with_bonus([bonus])
+        result = self.get_bonus_from_db(player)
+        logging.info("DB result: {}".format(result))
+
+        self.assertTrue(result == [])
 
     @staticmethod
     def get_bonus_from_db(player):
