@@ -7,9 +7,10 @@ class QNetDwDimGameParimutuelRepository(BaseRepository):
         super(QNetDwDimGameParimutuelRepository, self).__init__()
         self.model = QNetDwDimGameParimutuel
     
-    def get_by_event_id(self, event_id):
+    def get_by_event_id(self, event_id, merchant_id):
         with self.dao.create_session() as session:
-            instances = session.query(self.model).filter(self.model.Event == event_id)
+            instances = session.query(self.model).filter(self.model.ExternalEventID == event_id,
+                                                         self.model.MerchantID == merchant_id)
             session.expunge_all()
             result = []
             for instance in instances:

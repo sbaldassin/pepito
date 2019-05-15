@@ -113,7 +113,7 @@ def get_wagers_parimutuel_by_customer_id():
 def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
     merchant_id = request.args.get("merchant_id", 11)
-    games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id)
+    games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id, merchant_id)
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
 

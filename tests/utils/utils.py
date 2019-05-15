@@ -54,6 +54,10 @@ def get_wagers_parimutuel_resource(channel=1):
     return '{host}/player/wager/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
+def get_dim_parimutuel_resource():
+    return '{host}/dim/parimutuel'.format(host=get_config().get("api", "host"))
+
+
 def get_api_headers():
     headers = {
         'Authorization': 'Bearer {token}'.format(token=get_config().get("api", "authorization_header")),
