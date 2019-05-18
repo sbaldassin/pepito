@@ -33,6 +33,10 @@ class EventsParimutuelTestCase(TestCase):
         url = "http://{}/games/parimutuel?event_id={}".format(get_config().get("test_framework", "db"), event_id)
         return get_until_not_empty(url, timeout=100)
 
+    def get_event_by_breed(self, breed):
+        url = "http://{}/games/parimutuel?breed={}".format(get_config().get("test_framework", "db"), breed)
+        return get_until_not_empty(url, timeout=100)
+
     def test_tc_1_create_event_parimutuel_example(self):
         event = create_parimutuel_event(is_future=True)
         logging.info("Creating event: {}".format(event.__dict__))
@@ -128,7 +132,7 @@ class EventsParimutuelTestCase(TestCase):
             self.assertTrue(e['GameID'])
             self.assertEqual(e['TimeID'], 0)
 
-    def atest_tc_5_create_event_parimutuel_without_event_id(self):
+    def test_tc_5_create_event_parimutuel_without_event_id(self):
         event = create_parimutuel_event()
         event.EventID = None
         logging.info("Creating event: {}".format(event.__dict__))
@@ -144,20 +148,18 @@ class EventsParimutuelTestCase(TestCase):
         request_id = body.get('RequestID')
         self.assertTrue(request_id)
 
-        # TODO: get event by other values <> than EventID
-        # q_net_event_list = self.get_event(event.EventID)
-        # self.assertEqual(len(q_net_event_list), 1)
-        #
-        # for e in q_net_event_list:
-        #     self.assertEqual(e['ExternalEventID'], event.EventID)
-        #     self.assertEqual(e['Event'], event.Event)
-        #     self.assertEqual(e['Breed'], event.Breed)
-        #     self.assertEqual(e['MerchantID'], 11)
-        #     self.assertTrue(e['Breed'])
-        #     self.assertEqual(e['EventDate'], None)
-        #     self.assertTrue(e['DateCreated'])
-        #     self.assertTrue(e['GameID'])
-        #     self.assertEqual(e['TimeID'], 0)
+        q_net_event_list = self.get_event_by_breed(event.Breed)
+        self.assertEqual(len(q_net_event_list), 1)
+
+        for e in q_net_event_list:
+            self.assertFalse(e['ExternalEventID'])
+            self.assertEqual(e['Event'], event.Event)
+            self.assertEqual(e['Breed'], event.Breed)
+            self.assertEqual(e['MerchantID'], 11)
+            self.assertTrue(e['Breed'])
+            self.assertTrue(e['EventDate'])
+            self.assertTrue(e['DateCreated'])
+            self.assertTrue(e['GameID'])
 
     def test_tc_6_create_event_parimutuel_aggregated(self):
         events = []

@@ -19,7 +19,7 @@ class QNetDwDimGameParimutuelRepository(BaseRepository):
 
     def get_by_breed(self, breed, merchant_id):
         with self.dao.create_session() as session:
-            instances = session.query(self.model).filter(self.model.Breed.lower() == breed.lower(),
+            instances = session.query(self.model).filter(self.model.Breed == breed,
                                                          self.model.MerchantID == merchant_id)
             session.expunge_all()
             result = []
