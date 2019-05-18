@@ -81,9 +81,17 @@ def get_api_error_wager_list_empty():
     return 'Wager list is empty'
 
 
+def get_api_error_event_list_empty():
+    return 'No Data being passed'
+
+
 # API Tasks error messages
 def get_task_error_invalid_event():
     return 'Invalid event name on record number 1. No data saved.'
+
+
+def get_task_error_invalid_parimutuel_event():
+    return 'Invalid Event on record number 1. No data saved.'
 
 
 def get_task_error_invalid_event_name():
