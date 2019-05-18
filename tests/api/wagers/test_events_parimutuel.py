@@ -37,12 +37,9 @@ class EventsParimutuelTestCase(TestCase):
         url = "http://{}/games/parimutuel?breed={}".format(get_config().get("test_framework", "db"), breed)
         return get_until_not_empty(url, timeout=100)
 
-    def test_tc_1_create_event_parimutuel_example(self):
-        event = create_parimutuel_event(is_future=True)
-        logging.info("Creating event: {}".format(event.__dict__))
-
+    def send_parimutuel_event(self, events):
         parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps([event.__dict__]),
+                                                  data=json.dumps(events),
                                                   headers=get_api_headers())
         self.assertTrue(parimutuel_event_response.status_code, 200)
         body = parimutuel_event_response.json()
@@ -51,6 +48,13 @@ class EventsParimutuelTestCase(TestCase):
         self.assertEqual(body.get('Message'), get_api_ok_message())
         request_id = body.get('RequestID')
         self.assertTrue(request_id)
+        return request_id
+
+    def test_tc_1_create_event_parimutuel_example(self):
+        event = create_parimutuel_event(is_future=True)
+        logging.info("Creating event: {}".format(event.__dict__))
+
+        self.send_parimutuel_event([event.__dict__])
 
         q_net_event_list = self.get_event(event.EventID)
         self.assertEqual(len(q_net_event_list), 1)
@@ -71,16 +75,7 @@ class EventsParimutuelTestCase(TestCase):
         event.Event = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps([event.__dict__]),
-                                                  headers=get_api_headers())
-        self.assertTrue(parimutuel_event_response.status_code, 200)
-        body = parimutuel_event_response.json()
-        logging.info("Event Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
-        request_id = body.get('RequestID')
-        self.assertTrue(request_id)
+        request_id = self.send_parimutuel_event([event.__dict__])
 
         self.verify_event_error(request_id, get_task_error_invalid_parimutuel_event())
 
@@ -89,16 +84,7 @@ class EventsParimutuelTestCase(TestCase):
         event.Breed = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps([event.__dict__]),
-                                                  headers=get_api_headers())
-        self.assertTrue(parimutuel_event_response.status_code, 200)
-        body = parimutuel_event_response.json()
-        logging.info("Event Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
-        request_id = body.get('RequestID')
-        self.assertTrue(request_id)
+        request_id = self.send_parimutuel_event([event.__dict__])
 
         self.verify_event_error(request_id, get_task_error_invalid_breed())
 
@@ -107,16 +93,7 @@ class EventsParimutuelTestCase(TestCase):
         event.EventDate = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps([event.__dict__]),
-                                                  headers=get_api_headers())
-        self.assertTrue(parimutuel_event_response.status_code, 200)
-        body = parimutuel_event_response.json()
-        logging.info("Event Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
-        request_id = body.get('RequestID')
-        self.assertTrue(request_id)
+        self.send_parimutuel_event([event.__dict__])
 
         q_net_event_list = self.get_event(event.EventID)
         self.assertEqual(len(q_net_event_list), 1)
@@ -137,16 +114,7 @@ class EventsParimutuelTestCase(TestCase):
         event.EventID = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps([event.__dict__]),
-                                                  headers=get_api_headers())
-        self.assertTrue(parimutuel_event_response.status_code, 200)
-        body = parimutuel_event_response.json()
-        logging.info("Event Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
-        request_id = body.get('RequestID')
-        self.assertTrue(request_id)
+        self.send_parimutuel_event([event.__dict__])
 
         q_net_event_list = self.get_event_by_breed(event.Breed)
         self.assertEqual(len(q_net_event_list), 1)
@@ -166,16 +134,7 @@ class EventsParimutuelTestCase(TestCase):
         for i in range(2):
             events.append(create_parimutuel_event(is_future=True).__dict__)
 
-        parimutuel_event_response = requests.post(get_dim_parimutuel_resource(),
-                                                  data=json.dumps(events),
-                                                  headers=get_api_headers())
-        self.assertTrue(parimutuel_event_response.status_code, 200)
-        body = parimutuel_event_response.json()
-        logging.info("Event Parimutuel API response: {}".format(body))
-        self.assertEqual(body.get('Success'), True)
-        self.assertEqual(body.get('Message'), get_api_ok_message())
-        request_id = body.get('RequestID')
-        self.assertTrue(request_id)
+        self.send_parimutuel_event(events)
 
         for event in events:
             q_net_event_list = self.get_event(event['EventID'])
