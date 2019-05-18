@@ -114,7 +114,7 @@ def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
     merchant_id = request.args.get("merchant_id", 11)
     breed = request.args.get("breed")
-    if breed:
+    if not breed:
         games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id, merchant_id)
     else:
         games = QNetDwDimGameParimutuelRepository().get_by_breed(breed, merchant_id)
