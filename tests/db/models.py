@@ -183,6 +183,24 @@ class QNetDwDimGameLottery(Base):
         return super(QNetDwDimGameLottery, self).to_dict()
 
 
+class QNetDwDimGameSports(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Game_Sports'
+
+    GameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Sport = Column(String(250))
+    League = Column(String(250))
+    Event = Column(String(250))
+    Live = Column(Boolean)
+    EventDate = Column(DateTime)
+    TimeID = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalEventID = Column(String(50))
+
+    def to_dict(self):
+        return super(QNetDwDimGameSports, self).to_dict()
+
+
 class QNetTaskApx(Base):
     __tablename__ = 'Q_Net_Task_Apx'
     

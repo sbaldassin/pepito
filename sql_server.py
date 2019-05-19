@@ -8,6 +8,7 @@ from tests.config.config import get_config
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
 from tests.db.repositories.q_net_dw_dim_game_lottery_repository import QNetDwDimGameLotteryRepository
 from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
+from tests.db.repositories.q_net_dw_dim_game_sports_repository import QNetDwDimGameSportsRepository
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
@@ -132,6 +133,16 @@ def get_game_lottery():
     merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
     category = request.args.get("category")
     games = QNetDwDimGameLotteryRepository().get_by_name_category(name, category, merchant_id)
+
+    logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
+
+
+@app.route('/games/sports')
+def get_game_sports():
+    event_id = request.args.get("event_id")
+    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    games = QNetDwDimGameSportsRepository().get_by_event_id(event_id, merchant_id)
 
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
