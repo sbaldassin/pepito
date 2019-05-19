@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_dim_game_lottery_repository import QNetDwDimGameLotteryRepository
 from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
@@ -118,6 +119,17 @@ def get_game_parimutuel_by_customer_id():
         games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id, merchant_id)
     else:
         games = QNetDwDimGameParimutuelRepository().get_by_breed(breed, merchant_id)
+    logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
+
+
+@app.route('/games/lottery')
+def get_game_lottery():
+    name = request.args.get("name")
+    merchant_id = request.args.get("merchant_id", 11)
+    category = request.args.get("category")
+    games = QNetDwDimGameLotteryRepository().get_by_name_category(name, category, merchant_id)
+
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
 

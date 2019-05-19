@@ -58,6 +58,10 @@ def get_dim_parimutuel_resource():
     return '{host}/dim/parimutuel'.format(host=get_config().get("api", "host"))
 
 
+def get_dim_lottery_resource():
+    return '{host}/dim/lottery'.format(host=get_config().get("api", "host"))
+
+
 def get_api_headers():
     headers = {
         'Authorization': 'Bearer {token}'.format(token=get_config().get("api", "authorization_header")),
@@ -88,6 +92,10 @@ def get_api_error_event_list_empty():
 # API Tasks error messages
 def get_task_error_invalid_event():
     return 'Invalid event name on record number 1. No data saved.'
+
+
+def get_task_error_invalid_lottery_event():
+    return 'Invalid Name on record number 1. No data saved.'
 
 
 def get_task_error_invalid_parimutuel_event():
