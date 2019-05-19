@@ -142,7 +142,11 @@ def get_game_lottery():
 def get_game_sports():
     event_id = request.args.get("event_id")
     merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
-    games = QNetDwDimGameSportsRepository().get_by_event_id(event_id, merchant_id)
+    event = request.args.get("event")
+    if not event:
+        games = QNetDwDimGameSportsRepository().get_by_event_id(event_id, merchant_id)
+    else:
+        games = QNetDwDimGameSportsRepository().get_by_event(event, merchant_id)
 
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)

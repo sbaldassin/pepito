@@ -106,6 +106,14 @@ def get_task_error_invalid_parimutuel_event():
     return 'Invalid Event on record number 1. No data saved.'
 
 
+def get_task_error_invalid_sport_event():
+    return 'Invalid Sport on record number 1. No data saved.'
+
+
+def get_task_error_invalid_sport_league():
+    return 'Invalid League on record number 1. No data saved.'
+
+
 def get_task_error_invalid_event_name():
     return 'Invalid event name on record number 1. Couldn\'t proceed with wager cancellation.'
 

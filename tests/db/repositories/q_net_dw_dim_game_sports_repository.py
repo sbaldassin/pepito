@@ -16,3 +16,13 @@ class QNetDwDimGameSportsRepository(BaseRepository):
             for instance in instances:
                 result.append(instance.to_dict())
             return result
+
+    def get_by_event(self, event, merchant_id):
+        with self.dao.create_session() as session:
+            instances = session.query(self.model).filter(self.model.Event == event,
+                                                         self.model.MerchantID == merchant_id)
+            session.expunge_all()
+            result = []
+            for instance in instances:
+                result.append(instance.to_dict())
+            return result

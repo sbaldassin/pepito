@@ -7,7 +7,8 @@ from tests.config.config import get_config
 from tests.factory.event_factory import create_sport_event
 
 from tests.utils.utils import get_api_headers, get_api_ok_message, get_dim_sports_resource, \
-    get_api_error_event_list_empty, get_task_error_invalid_parimutuel_event, get_task_error_invalid_breed
+    get_api_error_event_list_empty, get_task_error_invalid_sport_event, get_task_error_invalid_sport_league, \
+    get_task_error_invalid_parimutuel_event
 from tests.utils.getters import get_until_not_empty
 from tests.utils.retry import retry
 
@@ -29,8 +30,10 @@ class EventsSportsTestCase(TestCase):
         url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
         return get_until_not_empty(url, timeout=100)
 
-    def get_event(self, event_id):
+    def get_event(self, event_id, event=None):
         url = "http://{}/games/sports?event_id={}".format(get_config().get("test_framework", "db"), event_id)
+        if event:
+            url = "http://{}/games/sports?event={}".format(get_config().get("test_framework", "db"), event)
         return get_until_not_empty(url, timeout=100)
 
     def send_sport_event(self, events):
@@ -60,14 +63,32 @@ class EventsSportsTestCase(TestCase):
             self.assertTrue(e['TimeID'])
             self.assertTrue(e['GameID'])
             self.assertEqual(e['Live'], event.Live)
-            self.assertEqual(e['MerchantID'], get_config().get("api", "merchant_id"))
+            self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
             self.assertTrue(e['DateCreated'])
             self.assertTrue(e['EventDate'])
             self.assertEqual(e['Sport'], event.Sport)
             self.assertEqual(e['ExternalEventID'], event.EventID)
             self.assertEqual(e['League'], event.League)
 
-    def atest_tc_2_create_event_parimutuel_without_event(self):
+    def test_tc_2_create_event_sport_without_sport(self):
+        event = create_sport_event(is_future=True)
+        event.Sport = None
+        logging.info("Creating event: {}".format(event.__dict__))
+
+        request_id = self.send_sport_event([event.__dict__])
+
+        self.verify_event_error(request_id, get_task_error_invalid_sport_event())
+
+    def test_tc_3_create_event_sport_without_league(self):
+        event = create_sport_event(is_future=True)
+        event.League = None
+        logging.info("Creating event: {}".format(event.__dict__))
+
+        request_id = self.send_sport_event([event.__dict__])
+
+        self.verify_event_error(request_id, get_task_error_invalid_sport_league())
+
+    def test_tc_4_create_event_sport_without_event(self):
         event = create_sport_event(is_future=True)
         event.Event = None
         logging.info("Creating event: {}".format(event.__dict__))
@@ -76,16 +97,29 @@ class EventsSportsTestCase(TestCase):
 
         self.verify_event_error(request_id, get_task_error_invalid_parimutuel_event())
 
-    def atest_tc_3_create_event_parimutuel_without_breed(self):
+    def test_tc_5_create_event_sport_without_live(self):
         event = create_sport_event(is_future=True)
-        event.Breed = None
+        event.Live = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        request_id = self.send_sport_event([event.__dict__])
+        self.send_sport_event([event.__dict__])
 
-        self.verify_event_error(request_id, get_task_error_invalid_breed())
+        q_net_event_list = self.get_event(event.EventID)
+        self.assertEqual(len(q_net_event_list), 1)
 
-    def atest_tc_4_create_event_parimutuel_without_event_date(self):
+        for e in q_net_event_list:
+            self.assertEqual(e['Event'], event.Event)
+            self.assertTrue(e['TimeID'])
+            self.assertTrue(e['GameID'])
+            self.assertFalse(e['Live'])
+            self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
+            self.assertTrue(e['DateCreated'])
+            self.assertTrue(e['EventDate'])
+            self.assertEqual(e['Sport'], event.Sport)
+            self.assertEqual(e['ExternalEventID'], event.EventID)
+            self.assertEqual(e['League'], event.League)
+
+    def test_tc_6_create_event_sport_without_event_date(self):
         event = create_sport_event(is_future=True)
         event.EventDate = None
         logging.info("Creating event: {}".format(event.__dict__))
@@ -96,37 +130,40 @@ class EventsSportsTestCase(TestCase):
         self.assertEqual(len(q_net_event_list), 1)
 
         for e in q_net_event_list:
-            self.assertEqual(e['ExternalEventID'], event.EventID)
             self.assertEqual(e['Event'], event.Event)
-            self.assertEqual(e['Breed'], event.Breed)
-            self.assertEqual(e['MerchantID'], 11)
-            self.assertTrue(e['Breed'])
-            self.assertEqual(e['EventDate'], None)
-            self.assertTrue(e['DateCreated'])
-            self.assertTrue(e['GameID'])
             self.assertEqual(e['TimeID'], 0)
+            self.assertTrue(e['GameID'])
+            self.assertEqual(e['Live'], event.Live)
+            self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
+            self.assertTrue(e['DateCreated'])
+            self.assertEqual(e['EventDate'], None)
+            self.assertEqual(e['Sport'], event.Sport)
+            self.assertEqual(e['ExternalEventID'], event.EventID)
+            self.assertEqual(e['League'], event.League)
 
-    def atest_tc_5_create_event_parimutuel_without_event_id(self):
+    def test_tc_7_create_event_sport_without_event_id(self):
         event = create_sport_event(is_future=True)
         event.EventID = None
         logging.info("Creating event: {}".format(event.__dict__))
 
         self.send_sport_event([event.__dict__])
 
-        q_net_event_list = self.get_event_by_breed(event.Breed)
+        q_net_event_list = self.get_event(event.EventID, event.Event)
         self.assertEqual(len(q_net_event_list), 1)
 
         for e in q_net_event_list:
-            self.assertFalse(e['ExternalEventID'])
             self.assertEqual(e['Event'], event.Event)
-            self.assertEqual(e['Breed'], event.Breed)
-            self.assertEqual(e['MerchantID'], 11)
-            self.assertTrue(e['Breed'])
-            self.assertTrue(e['EventDate'])
-            self.assertTrue(e['DateCreated'])
+            self.assertTrue(e['TimeID'])
             self.assertTrue(e['GameID'])
+            self.assertEqual(e['Live'], event.Live)
+            self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
+            self.assertTrue(e['DateCreated'])
+            self.assertTrue(e['EventDate'], None)
+            self.assertEqual(e['Sport'], event.Sport)
+            self.assertEqual(e['ExternalEventID'], '')
+            self.assertEqual(e['League'], event.League)
 
-    def atest_tc_6_create_event_parimutuel_aggregated(self):
+    def test_tc_8_create_event_sports_aggregated(self):
         events = []
         for i in range(2):
             events.append(create_sport_event(is_future=True).__dict__)
@@ -138,18 +175,19 @@ class EventsSportsTestCase(TestCase):
             self.assertEqual(len(q_net_event_list), 1)
 
             for e in q_net_event_list:
-                self.assertEqual(e['ExternalEventID'], event['EventID'])
                 self.assertEqual(e['Event'], event['Event'])
-                self.assertEqual(e['Breed'], event['Breed'])
-                self.assertEqual(e['MerchantID'], 11)
-                self.assertTrue(e['Breed'])
-                self.assertTrue(e['EventDate'])
-                self.assertTrue(e['DateCreated'])
-                self.assertTrue(e['GameID'])
                 self.assertTrue(e['TimeID'])
+                self.assertTrue(e['GameID'])
+                self.assertEqual(e['Live'], event['Live'])
+                self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
+                self.assertTrue(e['DateCreated'])
+                self.assertTrue(e['EventDate'])
+                self.assertEqual(e['Sport'], event['Sport'])
+                self.assertEqual(e['ExternalEventID'], event['EventID'])
+                self.assertEqual(e['League'], event['League'])
 
     # New tc
-    def atest_tc_7_event_parimutuel_empty_list(self):
+    def test_tc_9_event_sports_empty_list(self):
         parimutuel_event_response = requests.post(get_dim_sports_resource(),
                                                   data=json.dumps([]),
                                                   headers=get_api_headers())
