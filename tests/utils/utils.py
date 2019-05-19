@@ -62,6 +62,10 @@ def get_dim_lottery_resource():
     return '{host}/dim/lottery'.format(host=get_config().get("api", "host"))
 
 
+def get_dim_sports_resource():
+    return '{host}/dim/sports'.format(host=get_config().get("api", "host"))
+
+
 def get_api_headers():
     headers = {
         'Authorization': 'Bearer {token}'.format(token=get_config().get("api", "authorization_header")),
