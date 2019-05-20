@@ -38,7 +38,7 @@ def get_first_customer():
 @app.route('/customer')
 def get_customer_by_id():
     customer_id = request.args.get("customer_id")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customers = QNetCustomerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
     logging.info("Customers: {}".format(customers))
     return json.dumps(customers, default=str)
@@ -47,7 +47,7 @@ def get_customer_by_id():
 @app.route('/customer_by_name_and_merchant')
 def get_customer_by_name_and_merchant_id():
     name = request.args.get("name")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customers = QNetCustomerRepository().get_by_name_and_merchant_id(name, merchant_id)
     logging.info("Customer: {}".format(customers))
     return json.dumps(customers, default=str)
@@ -104,7 +104,7 @@ def get_wagers_by_customer_id():
 @app.route('/wagers/parimutuel')
 def get_wagers_parimutuel_by_customer_id():
     customer_id = request.args.get("customer_id")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     wagercount = request.args.get("wagercount")
     if wagercount:
         wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount, merchant_id)
@@ -117,7 +117,7 @@ def get_wagers_parimutuel_by_customer_id():
 @app.route('/games/parimutuel')
 def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     breed = request.args.get("breed")
     if not breed:
         games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id, merchant_id)
@@ -130,7 +130,7 @@ def get_game_parimutuel_by_customer_id():
 @app.route('/games/lottery')
 def get_game_lottery():
     name = request.args.get("name")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     category = request.args.get("category")
     games = QNetDwDimGameLotteryRepository().get_by_name_category(name, category, merchant_id)
 
@@ -141,7 +141,7 @@ def get_game_lottery():
 @app.route('/games/sports')
 def get_game_sports():
     event_id = request.args.get("event_id")
-    merchant_id = request.args.get("merchant_id", get_config().get("api", "merchant_id"))
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     event = request.args.get("event")
     if not event:
         games = QNetDwDimGameSportsRepository().get_by_event_id(event_id, merchant_id)
