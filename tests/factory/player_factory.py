@@ -1,6 +1,6 @@
 from tests.models.player import Player
 from tests.utils.generator import generate_random_int, generate_random_string, generate_random_state, \
-    generate_random_date, generate_random_country_code, generate_random_language_code, generate_random_boolean
+    generate_random_date, generate_random_country_code, generate_random_language_code, generate_random_boolean, generate_random_productid
 
 
 def create_random_player(player_id_length=5):
@@ -31,6 +31,11 @@ def create_random_player(player_id_length=5):
                     optout_email=generate_random_boolean(),
                     optout_sms=generate_random_boolean(),
                     optout_push=generate_random_boolean(),
-                    optout_mobile_push=generate_random_boolean()
+                    optout_mobile_push=generate_random_boolean(),
+                    amount=generate_random_int(),
+                    currency="USD",
+                    productID=generate_random_productid(),                    
+                    transaction_date=generate_random_date(),
+                    count=generate_random_int()
                     )
     return player

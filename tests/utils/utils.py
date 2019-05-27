@@ -30,6 +30,10 @@ def get_bonus_resource():
     return '{host}/player/bonus'.format(host=get_config().get("api", "host"))
 
 
+def get_freespin_resource():
+    return '{host}/player/freespin'.format(host=get_config().get("api", "host"))
+
+
 def get_wager_casino_resource(channel=1):
     return '{host}/player/wager/casino/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
@@ -52,6 +56,18 @@ def get_wager_betting_resource(channel=1):
 
 def get_wagers_parimutuel_resource(channel=1):
     return '{host}/player/wager/parimutuel/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
+
+
+def get_dim_parimutuel_resource():
+    return '{host}/dim/parimutuel'.format(host=get_config().get("api", "host"))
+
+
+def get_dim_lottery_resource():
+    return '{host}/dim/lottery'.format(host=get_config().get("api", "host"))
+
+
+def get_dim_sports_resource():
+    return '{host}/dim/sports'.format(host=get_config().get("api", "host"))
 
 
 def get_api_headers():
@@ -77,9 +93,29 @@ def get_api_error_wager_list_empty():
     return 'Wager list is empty'
 
 
+def get_api_error_event_list_empty():
+    return 'No Data being passed'
+
+
 # API Tasks error messages
 def get_task_error_invalid_event():
     return 'Invalid event name on record number 1. No data saved.'
+
+
+def get_task_error_invalid_lottery_event():
+    return 'Invalid Name on record number 1. No data saved.'
+
+
+def get_task_error_invalid_parimutuel_event():
+    return 'Invalid Event on record number 1. No data saved.'
+
+
+def get_task_error_invalid_sport_event():
+    return 'Invalid Sport on record number 1. No data saved.'
+
+
+def get_task_error_invalid_sport_league():
+    return 'Invalid League on record number 1. No data saved.'
 
 
 def get_task_error_invalid_event_name():
@@ -112,3 +148,11 @@ def get_task_error_invalid_currency():
 
 def get_task_error_invalid_currency_cancellation():
     return 'Invalid currency code on record number 1.  Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_identifier():
+    return 'Identifier cannot be left empty on record number 1. No data saved.'
+
+
+def get_task_error_invalid_value():
+    return 'Invalid freespin value on record number 1. No data saved.'

@@ -168,6 +168,55 @@ class QNetDwDimGameParimutuel(Base):
         return super(QNetDwDimGameParimutuel, self).to_dict()
 
 
+class QNetDwDimGameLottery(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Game_Lottery'
+
+    GameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Name = Column(String(250))
+    Category = Column(String(250))
+    DateCreated = Column(DateTime)
+    DrawDate = Column(DateTime)
+    TimeID = Column(Integer)
+
+    def to_dict(self):
+        return super(QNetDwDimGameLottery, self).to_dict()
+
+
+class QNetDwDimGameSports(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Game_Sports'
+
+    GameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Sport = Column(String(250))
+    League = Column(String(250))
+    Event = Column(String(250))
+    Live = Column(Boolean)
+    EventDate = Column(DateTime)
+    TimeID = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalEventID = Column(String(50))
+
+    def to_dict(self):
+        return super(QNetDwDimGameSports, self).to_dict()
+
+
+class QNetDwFactFreeSpin(Base):
+    __tablename__ = 'Q_Net_Dw_Fact_FreeSpin'
+
+    FactFreeSpinID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    TimeID = Column(Integer)
+    FreeSpinID = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalCustomerID = Column(String(50))
+    SignInID = Column(Integer)
+    ActivityDate = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDwFactFreeSpin, self).to_dict()
+
+
 class QNetTaskApx(Base):
     __tablename__ = 'Q_Net_Task_Apx'
     

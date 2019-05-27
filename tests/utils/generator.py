@@ -26,15 +26,19 @@ def generate_random_phone_number():
         generate_random_int(2), generate_random_int(4), generate_random_int(5))
 
 
-def generate_random_date(years=None, include_time=None):
+def generate_random_date(years=None, include_time=None, is_future=None):
     if not years:
         years = random.choice(range(5))
     
     date_format = '%Y-%m-%d'
     if include_time:
         date_format = '%Y-%m-%d %H:%M:%S'
-        
-    dt = datetime.datetime.now() - datetime.timedelta(days=years * 365)
+
+    if not is_future:
+        dt = datetime.datetime.now() - datetime.timedelta(days=years * 365)
+    else:
+        dt = datetime.datetime.now() + datetime.timedelta(days=years * 365)
+
     return dt.strftime(date_format)
 
 

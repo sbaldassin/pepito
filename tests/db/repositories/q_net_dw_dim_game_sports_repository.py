@@ -1,11 +1,11 @@
-from tests.db.models import QNetDwDimGameParimutuel
+from tests.db.models import QNetDwDimGameSports
 from tests.db.repositories.base_repository import BaseRepository
 
 
-class QNetDwDimGameParimutuelRepository(BaseRepository):
+class QNetDwDimGameSportsRepository(BaseRepository):
     def __init__(self):
-        super(QNetDwDimGameParimutuelRepository, self).__init__()
-        self.model = QNetDwDimGameParimutuel
+        super(QNetDwDimGameSportsRepository, self).__init__()
+        self.model = QNetDwDimGameSports
     
     def get_by_event_id(self, event_id, merchant_id):
         with self.dao.create_session() as session:
@@ -17,9 +17,9 @@ class QNetDwDimGameParimutuelRepository(BaseRepository):
                 result.append(instance.to_dict())
             return result
 
-    def get_by_breed(self, breed, merchant_id):
+    def get_by_event(self, event, merchant_id):
         with self.dao.create_session() as session:
-            instances = session.query(self.model).filter(self.model.Breed == breed,
+            instances = session.query(self.model).filter(self.model.Event == event,
                                                          self.model.MerchantID == merchant_id)
             session.expunge_all()
             result = []

@@ -1,17 +1,23 @@
 import json
 import logging
+
 from flask import Flask
 from flask import request
 
+from tests.config.config import get_config
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_dim_game_lottery_repository import QNetDwDimGameLotteryRepository
 from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
+from tests.db.repositories.q_net_dw_dim_game_sports_repository import QNetDwDimGameSportsRepository
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
+from tests.db.repositories.q_net_dw_fact_free_spin_repository import QNetDwFactFreeSpinRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
 from tests.db.repositories.q_net_dw_fact_wager_repository import QNetDwFactWagerRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
 from tests.db.repositories.q_net_task_apx_repository import QNetTaskApxRepository
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,7 +39,7 @@ def get_first_customer():
 @app.route('/customer')
 def get_customer_by_id():
     customer_id = request.args.get("customer_id")
-    merchant_id = request.args.get("merchant_id", 11)
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customers = QNetCustomerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
     logging.info("Customers: {}".format(customers))
     return json.dumps(customers, default=str)
@@ -42,7 +48,7 @@ def get_customer_by_id():
 @app.route('/customer_by_name_and_merchant')
 def get_customer_by_name_and_merchant_id():
     name = request.args.get("name")
-    merchant_id = request.args.get("merchant_id", 11)
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customers = QNetCustomerRepository().get_by_name_and_merchant_id(name, merchant_id)
     logging.info("Customer: {}".format(customers))
     return json.dumps(customers, default=str)
@@ -99,7 +105,7 @@ def get_wagers_by_customer_id():
 @app.route('/wagers/parimutuel')
 def get_wagers_parimutuel_by_customer_id():
     customer_id = request.args.get("customer_id")
-    merchant_id = request.args.get("merchant_id", 11)
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     wagercount = request.args.get("wagercount")
     if wagercount:
         wagers = QNetDwFactWagerRepository().get_by_external_customer_id_and_wagercount(customer_id, wagercount, merchant_id)
@@ -112,10 +118,47 @@ def get_wagers_parimutuel_by_customer_id():
 @app.route('/games/parimutuel')
 def get_game_parimutuel_by_customer_id():
     event_id = request.args.get("event_id")
-    merchant_id = request.args.get("merchant_id", 11)
-    games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id)
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
+    breed = request.args.get("breed")
+    if not breed:
+        games = QNetDwDimGameParimutuelRepository().get_by_event_id(event_id, merchant_id)
+    else:
+        games = QNetDwDimGameParimutuelRepository().get_by_breed(breed, merchant_id)
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
+
+
+@app.route('/games/lottery')
+def get_game_lottery():
+    name = request.args.get("name")
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
+    category = request.args.get("category")
+    games = QNetDwDimGameLotteryRepository().get_by_name_category(name, category, merchant_id)
+
+    logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
+
+
+@app.route('/games/sports')
+def get_game_sports():
+    event_id = request.args.get("event_id")
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
+    event = request.args.get("event")
+    if not event:
+        games = QNetDwDimGameSportsRepository().get_by_event_id(event_id, merchant_id)
+    else:
+        games = QNetDwDimGameSportsRepository().get_by_event(event, merchant_id)
+
+    logging.info("Game parimutuel: {}".format(games))
+    return json.dumps(games, default=str)
+
+
+@app.route('/freespin')
+def get_freespin_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
+    freespin = QNetDwFactFreeSpinRepository().get_by_external_customer_id(customer_id, merchant_id)
+    return json.dumps(freespin, default=str)
 
 
 @app.route('/tasks')
