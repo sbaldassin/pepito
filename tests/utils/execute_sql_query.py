@@ -6,7 +6,8 @@ from tests.config.config import get_config
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
+    # eg:
+    # root@75c454b03053:/source_tests/tests/utils# python3 execute_sql_query.py "select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='Merchant';"
 
     parser = argparse.ArgumentParser(description='Script to execute sql queries.')
     parser.add_argument('sql', help='the query to be executed.')
