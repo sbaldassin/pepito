@@ -30,6 +30,10 @@ def get_bonus_resource():
     return '{host}/player/bonus'.format(host=get_config().get("api", "host"))
 
 
+def get_freespin_resource():
+    return '{host}/player/freespin'.format(host=get_config().get("api", "host"))
+
+
 def get_wager_casino_resource(channel=1):
     return '{host}/player/wager/casino/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
