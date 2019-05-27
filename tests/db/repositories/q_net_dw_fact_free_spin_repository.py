@@ -2,9 +2,9 @@ from tests.db.models import QNetDwFactFreeSpin
 from tests.db.repositories.base_repository import BaseRepository
 
 
-class QNetDwFactFreeSpin(BaseRepository):
+class QNetDwFactFreeSpinRepository(BaseRepository):
     def __init__(self):
-        super(QNetDwFactFreeSpin, self).__init__()
+        super(QNetDwFactFreeSpinRepository, self).__init__()
         self.model = QNetDwFactFreeSpin
 
     def get_by_external_customer_id(self, external_customer_id, merchant_id):

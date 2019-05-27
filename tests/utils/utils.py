@@ -148,3 +148,11 @@ def get_task_error_invalid_currency():
 
 def get_task_error_invalid_currency_cancellation():
     return 'Invalid currency code on record number 1.  Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_identifier():
+    return 'Identifier cannot be left empty on record number 1. No data saved.'
+
+
+def get_task_error_invalid_value():
+    return 'Invalid freespin value on record number 1. No data saved.'
