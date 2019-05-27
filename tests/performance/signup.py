@@ -1,6 +1,5 @@
 import json
 
-import requests
 from locust import HttpLocust, TaskSet, task
 
 from tests.factory.player_factory import create_random_player
