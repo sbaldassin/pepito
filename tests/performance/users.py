@@ -66,11 +66,11 @@ class UsersTestCase(TaskSequence):
 
     def create_random_wager(self):
         wagers_list = [
-            {"create_method": create_wager_bet, "resource_url": get_wager_betting_resource, "count": 5},
-            {"create_method": create_wager_casino, "resource_url": get_wager_casino_resource, "count": 100},
-            {"create_method": create_wager_sport, "resource_url": get_wager_sport_resource, "count": 5},
-            {"create_method": create_wager_esport, "resource_url": get_wager_esport_resource, "count": 5},
-            {"create_method": create_wager_lottery, "resource_url": get_wager_lottery_resource, "count": 5}
+            {"create_method": create_wager_bet, "resource_url": get_wager_betting_resource(), "count": 5},
+            {"create_method": create_wager_casino, "resource_url": get_wager_casino_resource(), "count": 100},
+            {"create_method": create_wager_sport, "resource_url": get_wager_sport_resource(), "count": 5},
+            {"create_method": create_wager_esport, "resource_url": get_wager_esport_resource(), "count": 5},
+            {"create_method": create_wager_lottery, "resource_url": get_wager_lottery_resource(), "count": 5}
         ]
 
         index = randint(0, 4)
@@ -79,5 +79,5 @@ class UsersTestCase(TaskSequence):
 
 class UsersTestCase(HttpLocust):
     task_set = UsersTestCase
-    min_wait = 5000
-    max_wait = 9000
+    min_wait = 1000
+    max_wait = 2000

@@ -31,11 +31,6 @@ def create_random_player(player_id_length=5):
                     optout_email=generate_random_boolean(),
                     optout_sms=generate_random_boolean(),
                     optout_push=generate_random_boolean(),
-                    optout_mobile_push=generate_random_boolean(),
-                    amount=generate_random_int(),
-                    currency="USD",
-                    productID=generate_random_productid(),                    
-                    transaction_date=generate_random_date(),
-                    count=generate_random_int()
+                    optout_mobile_push=generate_random_boolean()
                     )
     return player
