@@ -6,10 +6,12 @@ from flask import request
 
 from tests.config.config import get_config
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_dim_game_repository import QNetDwDimGameRepository
 from tests.db.repositories.q_net_dw_dim_game_lottery_repository import QNetDwDimGameLotteryRepository
 from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
 from tests.db.repositories.q_net_dw_dim_game_sports_repository import QNetDwDimGameSportsRepository
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
+from tests.db.repositories.q_net_dw_fact_game_repository import QNetDwFactGameRepository
 from tests.db.repositories.q_net_dw_fact_free_spin_repository import QNetDwFactFreeSpinRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
@@ -151,6 +153,24 @@ def get_game_sports():
 
     logging.info("Game parimutuel: {}".format(games))
     return json.dumps(games, default=str)
+
+
+@app.route('/game')
+def get_game():
+    merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
+    customer_id = request.args.get("customer_id")
+
+    fact = QNetDwFactGameRepository().get_by_customer_id(customer_id, merchant_id)
+    data = {
+        "fact": fact
+    }
+
+    if fact:
+        dim = QNetDwDimGameRepository().get_by_id(fact[0]['GameID'], merchant_id)
+        data["dim"] = dim,
+
+    logging.info("Game : {}".format(data))
+    return json.dumps(data, default=str)
 
 
 @app.route('/freespin')

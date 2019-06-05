@@ -201,6 +201,36 @@ class QNetDwDimGameSports(Base):
         return super(QNetDwDimGameSports, self).to_dict()
 
 
+class QNetDwDimGame(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Game'
+
+    GameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    GameName = Column(String(250))
+    GameCategory = Column(String(250))
+    DateCreated = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDwDimGame, self).to_dict()
+
+
+class QNetDwFactGame(Base):
+    __tablename__ = 'Q_Net_Dw_Fact_Game'
+
+    FactGameID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    TimeID = Column(Integer)
+    GameID = Column(Integer)
+    DateCreated = Column(DateTime)
+    ExternalCustomerID = Column(String(50))
+    SignInID = Column(Integer)
+    ChannelID = Column(Integer)
+    ActivityDate = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDwFactGame, self).to_dict()
+
+
 class QNetDwFactFreeSpin(Base):
     __tablename__ = 'Q_Net_Dw_Fact_FreeSpin'
 

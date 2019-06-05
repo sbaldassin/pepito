@@ -29,6 +29,11 @@ def get_freespin_response(player_id):
     return get_until_not_empty(url, timeout=150)
 
 
+def get_game_session_response(player_id):
+    url = "http://{}/game?customer_id={}".format(get_config().get("test_framework", "db"), player_id)
+    return get_until_not_empty(url, timeout=150)
+
+
 def get_task(task_id):
     url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
     return get_until_not_empty(url, timeout=100)
