@@ -62,7 +62,7 @@ class GameSessionTestCase(TestCase):
 
         verify_api_error(request_id, get_task_error_invalid_game_type())
 
-    def test_tc_2_game_session_casion_without_game_identifier(self):
+    def test_tc_3_game_session_casion_without_game_identifier(self):
         player = create_random_player(player_id_length=40)
         session = create_game_session()
         session.GameIdentifier = None
@@ -75,10 +75,9 @@ class GameSessionTestCase(TestCase):
 
         verify_api_error(request_id, get_task_error_invalid_game_identifier())
 
-    def atest_tc_4_create_game_session_casino_without_session_date(self):
+    def test_tc_4_create_game_session_casino_without_session_date(self):
         player = create_random_player(player_id_length=40)
         session = create_game_session()
-        session.GameIdentifier = None
         session.SessionDate = None
         data = {
             "PlayerID": player.PlayerID,
