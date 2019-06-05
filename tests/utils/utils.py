@@ -160,3 +160,10 @@ def get_task_error_invalid_identifier():
 
 def get_task_error_invalid_value():
     return 'Invalid freespin value on record number 1. No data saved.'
+
+
+def get_task_error_invalid_game_type():
+    return 'Invalid game type on record number 1. No data saved.'
+
+def get_task_error_invalid_game_identifier():
+    return 'Invalid game identifier on record number 1. No data saved.'

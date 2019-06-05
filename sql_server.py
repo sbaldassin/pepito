@@ -160,14 +160,15 @@ def get_game():
     merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customer_id = request.args.get("customer_id")
 
-    fact = QNetDwFactGameRepository().get_by_customer_id(customer_id, merchant_id)
-    data = {
-        "fact": fact
-    }
+    data = QNetDwFactGameRepository().get_by_customer_id(customer_id, merchant_id)
 
-    if fact:
-        dim = QNetDwDimGameRepository().get_by_id(fact[0]['GameID'], merchant_id)
-        data["dim"] = dim,
+    if data:
+        d = {
+            "fact": data
+        }
+        dim = QNetDwDimGameRepository().get_by_id(data[0]['GameID'], merchant_id)
+        d["dim"] = dim
+        data = d
 
     logging.info("Game : {}".format(data))
     return json.dumps(data, default=str)
