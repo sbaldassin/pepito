@@ -13,6 +13,7 @@ from tests.db.repositories.q_net_dw_dim_game_sports_repository import QNetDwDimG
 from tests.db.repositories.q_net_dw_fact_bonus_repository import QNetDwFactBonusRepository
 from tests.db.repositories.q_net_dw_fact_game_repository import QNetDwFactGameRepository
 from tests.db.repositories.q_net_dw_fact_free_spin_repository import QNetDwFactFreeSpinRepository
+from tests.db.repositories.q_net_dw_fact_payout_repository import QNetDwFactPayoutRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
@@ -102,6 +103,14 @@ def get_wagers_by_customer_id():
     wagers = QNetDwFactWagerRepository().get_by_external_customer_id(customer_id)
     logging.info("Deposits: {}".format(wagers))
     return json.dumps(wagers, default=str)
+
+
+@app.route('/payouts')
+def get_payouts_by_customer_id():
+    customer_id = request.args.get("customer_id")
+    payouts = QNetDwFactPayoutRepository().get_by_external_customer_id(customer_id)
+    logging.info("Payouts: {}".format(payouts))
+    return json.dumps(payouts, default=str)
 
 
 @app.route('/wagers/parimutuel')

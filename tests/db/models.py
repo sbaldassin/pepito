@@ -152,6 +152,25 @@ class QNetDwFactWager(Base):
         return super(QNetDwFactWager, self).to_dict()
 
 
+class QNetDwFactPayout(Base):
+    __tablename__ = 'Q_Net_Dw_Fact_Payout'
+
+    FactPayoutID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    ExternalCustomerID = Column(String(50))
+    GameID = Column(Integer)
+    SignInID = Column(Integer)
+    Amount = Column(Integer)
+    TimeID = Column(Integer)
+    ActivityDate = Column(DateTime)
+    DateCreated = Column(DateTime)
+    VerticalID = Column(Integer)
+    PayoutCount = Column(Integer)
+
+    def to_dict(self):
+        return super(QNetDwFactPayout, self).to_dict()
+
+
 class QNetDwDimGameParimutuel(Base):
     __tablename__ = 'Q_Net_Dw_Dim_Game_Parimutuel'
     

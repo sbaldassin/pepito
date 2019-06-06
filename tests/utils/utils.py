@@ -38,6 +38,10 @@ def get_wager_casino_resource(channel=1):
     return '{host}/player/wager/casino/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
+def get_payout_casino_resource():
+    return '{host}/player/payout/'.format(host=get_config().get("api", "host"))
+
+
 def get_wager_esport_resource(channel=1):
     return '{host}/player/wager/esports/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
