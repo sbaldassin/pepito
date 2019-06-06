@@ -1,10 +1,9 @@
-from tests.models.wager import ParimutuelWager, WagerCasino, WagerSport, WagerBet, WagerEsport, WagerLottery
-from tests.utils.generator import generate_random_int, generate_random_date, generate_random_currency, \
-    generate_random_string
+from tests.models.wager import Casino, Parimutuel, Sport, Bet, Esport, Lottery
+from tests.utils.generator import generate_random_int, generate_random_date, generate_random_currency
 
 
-def create_wager_casino():
-    wager = WagerCasino(
+def create_casino():
+    wager = Casino(
         value=generate_random_int(),
         currency="EUR",
         transaction_date=generate_random_date(),
@@ -14,8 +13,8 @@ def create_wager_casino():
     return wager
 
 
-def create_parimutuel_wager():
-    wager = ParimutuelWager(
+def create_parimutuel():
+    wager = Parimutuel(
         value=generate_random_int(),
         currency=generate_random_currency(),
         transaction_date=generate_random_date(include_time=True),
@@ -23,8 +22,8 @@ def create_parimutuel_wager():
     return wager
 
 
-def create_wager_sport():
-    wager = WagerSport(
+def create_sport():
+    wager = Sport(
         sport = "Football",
         league = "Serie A",
         event = "AC Milan vs Juventus FC",
@@ -38,8 +37,8 @@ def create_wager_sport():
     return wager
 
 
-def create_wager_bet():
-    wager = WagerBet(
+def create_bet():
+    wager = Bet(
         event_category = "Weather",
         event_date = generate_random_date(),
         event = "Rainy",
@@ -51,8 +50,8 @@ def create_wager_bet():
     return wager
 
 
-def create_wager_esport():
-    wager = WagerEsport(
+def create_esport():
+    wager = Esport(
         game = "CS Zero",
         league = "League 1",
         event_id = generate_random_int(),
@@ -67,8 +66,8 @@ def create_wager_esport():
     return wager
 
 
-def create_wager_lottery():
-    wager = WagerLottery(
+def create_lottery():
+    wager = Lottery(
         name = "Euro millions",
         category = "EU based lottery",
         draw_date = generate_random_date(),

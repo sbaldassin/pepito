@@ -4,7 +4,7 @@ from unittest import TestCase
 import requests
 from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
-from tests.factory.wager_factory import create_wager_sport
+from tests.factory.wager_factory import create_sport
 from tests.utils.generator import generate_random_int
 from tests.utils.getters import get_until_not_empty
 from tests.utils.utils import get_player_sign_up_resource, get_api_headers, get_wager_sport_resource
@@ -26,7 +26,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result[0]["EuroCentsValue"] != 0)
 
     def test_tc_2_wager_sport_invalid_currency(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Currency = "Invalid"
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -35,7 +35,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_3_wager_sport_usd_currency(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Currency = "USD"
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -44,7 +44,7 @@ class WagerSportsTestCase(TestCase):
         self.assertFalse(result == [])
 
     def test_tc_4_wager_sport_invalid_value(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Value = "Invalid"
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -53,7 +53,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_5_wager_sport_negative_value(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Value = -1
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -62,7 +62,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_6_wager_sport_zero_value(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Value = 0
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -71,7 +71,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_7_wager_sport_huge_value(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Value = 100000000000
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -80,7 +80,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_8_wager_sport_zero_count(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Count = 0
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -89,7 +89,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_9_wager_sport_negative_count(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Count = -1
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -98,7 +98,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_10_wager_sport_invalid_count(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Count = "invalid"
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -107,7 +107,7 @@ class WagerSportsTestCase(TestCase):
         self.assertTrue(result == [])
 
     def test_tc_11_wager_sport_huge_count(self):
-        wager = create_wager_sport()
+        wager = create_sport()
         wager.Count = 100000000000
         player, revenue = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
@@ -133,7 +133,7 @@ class WagerSportsTestCase(TestCase):
 
     @staticmethod
     def _create_wagers(player, wagers=[]):
-        _wagers = [create_wager_sport()] if wagers == [] else wagers
+        _wagers = [create_sport()] if wagers == [] else wagers
         logging.info("Creating wagers: {}".format([r.__dict__ for r in _wagers]))
 
         data = {"PlayerID": player.PlayerID, "InitID": generate_random_int(),

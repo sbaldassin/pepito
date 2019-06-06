@@ -1,6 +1,6 @@
 
 
-class WagerCasino:
+class Casino:
 
     def __init__(self, game_type, game_identifier, currency, value, transaction_date, count):
         self.GameType = game_type
@@ -11,7 +11,7 @@ class WagerCasino:
         self.Count = count
 
 
-class WagerSport:
+class Sport:
 
     def __init__(self, sport, league, event, live, event_id, currency, value, transaction_date, count):
         self.Sport = sport
@@ -25,7 +25,7 @@ class WagerSport:
         self.Count = count
 
 
-class WagerBet:
+class Bet:
 
     def __init__(self, event_category, event_date, event, currency, value, transaction_date, count):
         self.EventCategory = event_category
@@ -37,7 +37,7 @@ class WagerBet:
         self.Count = count
 
 
-class WagerEsport:
+class Esport:
 
     def __init__(self, game, league, event_id, event_category, event_date, event,
                  currency, value, transaction_date, count):
@@ -53,7 +53,7 @@ class WagerEsport:
         self.Count = count
 
 
-class WagerLottery:
+class Lottery:
 
     def __init__(self, name, category, draw_date, currency, value, transaction_date, count):
         self.Name = name
@@ -65,7 +65,7 @@ class WagerLottery:
         self.Count = count
 
 
-class ParimutuelWager:
+class Parimutuel:
 
     def __init__(self, currency, value, transaction_date, count):
         self.Currency = currency

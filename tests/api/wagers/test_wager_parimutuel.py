@@ -5,8 +5,8 @@ import requests
 
 from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
-from tests.factory.wager_factory import create_parimutuel_wager
 from tests.factory.event_factory import create_parimutuel_event
+from tests.factory.wager_factory import create_parimutuel
 
 from tests.utils.utils import get_api_headers, get_api_error_wager_list_empty, get_api_error_player_id_not_passed, \
     get_api_ok_message, get_player_sign_up_resource, \
@@ -58,7 +58,7 @@ class WagerParimutuelTestCase(TestCase):
     def create_wagers(self, total_wagers=1, add_event=True):
         wagers = []
         for i in range(total_wagers):
-            wager = create_parimutuel_wager().__dict__
+            wager = create_parimutuel().__dict__
             if add_event:
                 event = create_parimutuel_event().__dict__
                 wager.update(event)

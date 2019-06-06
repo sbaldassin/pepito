@@ -4,7 +4,7 @@ from unittest import TestCase
 import requests
 from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
-from tests.factory.wager_factory import create_wager_esport
+from tests.factory.wager_factory import create_esport
 from tests.utils.generator import generate_random_int
 from tests.utils.getters import get_until_not_empty
 from tests.utils.utils import get_player_sign_up_resource, get_api_headers, get_wager_esport_resource
@@ -44,7 +44,7 @@ class WagerEsportTestCase(TestCase):
 
     @staticmethod
     def _create_wagers(player, wagers=[]):
-        _wagers = [create_wager_esport()] if wagers == [] else wagers
+        _wagers = [create_esport()] if wagers == [] else wagers
         logging.info("Creating wagers: {}".format([r.__dict__ for r in _wagers]))
 
         data = {"PlayerID": player.PlayerID, "InitID": generate_random_int(),
