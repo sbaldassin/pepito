@@ -1,7 +1,7 @@
 import json
 from random import randint
 
-from locust import HttpLocust, seq_task, TaskSequence
+from locust import HttpLocust, seq_task, TaskSequence, task
 
 from tests.factory.bonus_factory import create_bonus
 from tests.factory.payout_factory import create_payout
@@ -36,7 +36,7 @@ class UsersTestCase(TaskSequence):
                          data=json.dumps(data),
                          headers=get_api_headers())
 
-    @seq_task(3)
+    @seq_task(2)
     def create_five_wagers(self):
         wagers, url = self.create_random_wager()
         data = {"PlayerID": self.player.PlayerID, "InitID": generate_random_int(),
@@ -45,7 +45,7 @@ class UsersTestCase(TaskSequence):
                          data=json.dumps(data),
                          headers=get_api_headers())
 
-    @seq_task(4)
+    @seq_task(2)
     def create_withdrawal(self):
         withdrawals = [create_withdrawal()]
         data = {"PlayerID": self.player.PlayerID, "InitID": generate_random_int(),
@@ -54,7 +54,7 @@ class UsersTestCase(TaskSequence):
                          data=json.dumps(data),
                          headers=get_api_headers())
 
-    @seq_task(5)
+    @seq_task(2)
     def create_bonus(self):
         bonuses = [create_bonus()]
         data = {"PlayerID": self.player.PlayerID, "InitID": generate_random_int(),
@@ -63,7 +63,7 @@ class UsersTestCase(TaskSequence):
                          data=json.dumps(data),
                          headers=get_api_headers())
 
-    @seq_task(6)
+    @seq_task(2)
     def create_payout(self):
         bonuses = [create_payout(self.get_payout_type())]
         data = {"PlayerID": self.player.PlayerID, "InitID": generate_random_int(),
