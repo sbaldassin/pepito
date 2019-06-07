@@ -1,6 +1,6 @@
 
 
-class Casino:
+class Payout:
 
     def __init__(self, product_id, game, currency, amount, transaction_date, count):
         self.ProductID = product_id
