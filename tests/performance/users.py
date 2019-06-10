@@ -85,8 +85,8 @@ class UsersTestCase(TaskSequence):
         return [wagers_list[index]["create_method"]() for i in range(wagers_list[index]["count"])], wagers_list[index]["resource_url"]
 
     def get_payout_type(self):
-        payouts_list = ["bet", "casino", "sport", "esport", "lottery"]
-        index = randint(0, 4)
+        payouts_list = ["bet", "casino", "sport", "esport", "lottery", "parimutuel"]
+        index = randint(0, 5)
         return payouts_list[index]
 
 
