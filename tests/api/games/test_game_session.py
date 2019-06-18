@@ -58,6 +58,7 @@ class GameSessionTestCase(TestCase):
             "GameSessions": [session.__dict__]
         }
 
+        logging.info("Game session: {}".format(data))
         request_id = create_areto_api_object(resource=get_game_session_resource(), data=data)
 
         verify_api_error(request_id, get_task_error_invalid_game_type())
@@ -70,7 +71,7 @@ class GameSessionTestCase(TestCase):
             "PlayerID": player.PlayerID,
             "GameSessions": [session.__dict__]
         }
-
+        logging.info("Game session: {}".format(data))
         request_id = create_areto_api_object(resource=get_game_session_resource(), data=data)
 
         verify_api_error(request_id, get_task_error_invalid_game_identifier())

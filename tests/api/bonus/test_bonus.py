@@ -9,7 +9,7 @@ from tests.config.config import get_config
 from tests.factory.bonus_factory import create_bonus
 from tests.factory.player_factory import create_random_player
 from tests.utils.generator import generate_random_int
-from tests.utils.getters import get_until_not_empty
+from tests.utils.getters import get_until_not_empty, get_until_attempt_greater_than_zero
 from tests.utils.utils import get_player_sign_up_resource, get_api_headers, get_bonus_resource
 
 logging.basicConfig(level=logging.INFO)
@@ -21,81 +21,75 @@ class BonusTestCase(TestCase):
         super(BonusTestCase, self)
 
     def test_tc_1_player_bonus(self):
-        player, bonuses = self._create_player_with_bonus()
+        player, bonuses, _ = self._create_player_with_bonus()
         result = self.get_bonus_from_db(player)
         logging.info("DB result: {}".format(result))
 
         self.assertFalse(result == [])
-        self.assertTrue(result[0]["EuroAmount"] != 0)
+        self.assertTrue(result[0]["BonusEuroValue"] != 0)
 
     def test_tc_2_player_bonus_with_eur_currency(self):
         bonus = create_bonus()
         bonus.Currency = "EUR"
-        player, bonus = self._create_player_with_bonus([bonus])
+        player, bonus, _ = self._create_player_with_bonus([bonus])
         result = self.get_bonus_from_db(player)
         logging.info("DB result: {}".format(result))
 
         self.assertFalse(result == [])
-        self.assertEquals(int(bonus.Amount) * 100, result[0]["EuroAmount"])
+        self.assertEquals(int(bonus[0].Value) * 100, result[0]["BonusEuroValue"])
 
     def test_tc_3_player_bonus_with_invalid_currency(self):
         bonus = create_bonus()
         bonus.Currency = 123
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_4_player_bonus_with_zero_amount(self):
         bonus = create_bonus()
-        bonus.Amount = 0
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        bonus.Value = 0
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_5_player_bonus_with_negative_amount(self):
         bonus = create_bonus()
-        bonus.Amount = -1
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        bonus.Value = -1
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_6_player_bonus_with_string_amount(self):
         bonus = create_bonus()
-        bonus.Amount = "sdk"
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        bonus.Value = "sdk"
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_7_player_bonus_with_future_date(self):
         bonus = create_bonus()
         bonus.TransactionDate = datetime.datetime(2030, 4, 24, 18, 26, 1, 37000).strftime('%Y-%m-%d')
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_8_player_bonus_with_invalid_date(self):
         bonus = create_bonus()
         bonus.TransactionDate = "hah"
-        player, bonus = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_9_player_bonus_with_multiple_transactions(self):
         bonus_1 = create_bonus()
         bonus_2 = create_bonus()
-        player, bonuses = self._create_player_with_bonus(bonuses=[bonus_1, bonus_2])
+        player, bonuses, _ = self._create_player_with_bonus(bonuses=[bonus_1, bonus_2])
         result = self.get_bonus_from_db(player)
         logging.info("DB result: {}".format(result))
 
@@ -105,52 +99,32 @@ class BonusTestCase(TestCase):
     def test_tc_10_player_bonus_with_invalid_productID(self):
         bonus = create_bonus()
         bonus.ProductID = "7"
-        player, bonuses = self._create_player_with_bonus()
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertFalse(result == [])
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_11_bonus_invalid_value(self):
         bonus = create_bonus()
         bonus.Value = "Invalid"
-        player, revenue = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
-        self.assertTrue(result == [])
-
-    def test_tc_12_bonus_negative_value(self):
-        bonus = create_bonus()
-        bonus.Value = -1
-        player, revenue = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
-
-    def test_tc_13_bonus_zero_value(self):
-        bonus = create_bonus()
-        bonus.Value = 0
-        player, revenue = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
-
-    def test_tc_14_bonus_huge_value(self):
+    def test_tc_12_bonus_huge_value(self):
         bonus = create_bonus()
         bonus.Value = 100000000000
-        player, revenue = self._create_player_with_bonus([bonus])
-        result = self.get_bonus_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, bonus, request_id = self._create_player_with_bonus([bonus])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     @staticmethod
     def get_bonus_from_db(player):
         url = "http://{}/bonuses?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
         logging.info("Get Bonus from DB: {}".format(player.__dict__))
-        return get_until_not_empty(url,timeout=18)
+        return get_until_not_empty(url,timeout=100)
 
     @staticmethod
     def _create_player():
@@ -176,9 +150,13 @@ class BonusTestCase(TestCase):
                                  headers=get_api_headers())
 
         logging.info("API response: {}".format(response.json()))
-        return bonuses
+        return bonuses, response.json()["RequestID"]
 
     def _create_player_with_bonus(self, bonuses=[]):
         player = self._create_player()
-        bonuses = self._create_bonuses(player, bonuses)
-        return player, bonuses
+        bonuses, request_id = self._create_bonuses(player, bonuses)
+        return player, bonuses, request_id
+
+    def get_task(self, task_id):
+        url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
+        return get_until_attempt_greater_than_zero(url, timeout=100)

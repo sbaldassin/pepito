@@ -164,7 +164,7 @@ class WagerBetTestCase(TestCase):
     @staticmethod
     def get_wager_from_db(player):
         url = "http://{}/wagers?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
-        return get_until_not_empty(url)
+        return get_until_not_empty(url, timeout=120)
 
     @staticmethod
     def _create_player():

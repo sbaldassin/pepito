@@ -5,6 +5,7 @@ import requests
 
 from tests.config.config import get_config
 from tests.factory.event_factory import create_lottery_event
+from tests.utils.api_utils import get_task
 
 from tests.utils.utils import get_api_headers, get_api_ok_message, get_dim_lottery_resource, \
     get_api_error_event_list_empty, get_task_error_invalid_lottery_event, get_task_error_invalid_breed
@@ -32,6 +33,7 @@ class EventsLotteryTestCase(TestCase):
     def get_event(self, name, category):
         url = "http://{}/games/lottery?name={}&category={}".format(
             get_config().get("test_framework", "db"), name, category)
+        logging.info("Url: {}".format(url))
         return get_until_not_empty(url, timeout=100)
 
     def send_lottery_event(self, events):
@@ -51,7 +53,9 @@ class EventsLotteryTestCase(TestCase):
         event = create_lottery_event(is_future=True)
         logging.info("Creating event: {}".format(event.__dict__))
 
-        self.send_lottery_event([event.__dict__])
+        task_id = self.send_lottery_event([event.__dict__])
+        task = get_task(task_id)
+        logging.info("Task: {}".format(task))
 
         q_net_event_list = self.get_event(event.Name, event.Category)
         self.assertEqual(len(q_net_event_list), 1)

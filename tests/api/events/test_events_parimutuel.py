@@ -8,7 +8,7 @@ from tests.factory.event_factory import create_parimutuel_event
 
 from tests.utils.utils import get_api_headers, get_api_ok_message, get_dim_parimutuel_resource, \
     get_api_error_event_list_empty, get_task_error_invalid_parimutuel_event, get_task_error_invalid_breed
-from tests.utils.getters import get_until_not_empty
+from tests.utils.getters import get_until_not_empty, get_until_attempt_greater_than_zero
 from tests.utils.retry import retry
 
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +27,7 @@ class EventsParimutuelTestCase(TestCase):
     
     def get_task(self, task_id):
         url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
-        return get_until_not_empty(url, timeout=100)
+        return get_until_attempt_greater_than_zero(url, timeout=100)
 
     def get_event(self, event_id):
         url = "http://{}/games/parimutuel?event_id={}".format(get_config().get("test_framework", "db"), event_id)

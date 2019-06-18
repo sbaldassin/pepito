@@ -51,6 +51,7 @@ class PlayerFreespinCasinoTestCase(TestCase):
             "FreeSpins": [freespin.__dict__]
         }
 
+        logging.info("Data: {}".format(data))
         request_id = create_areto_api_object(resource=get_freespin_resource(), data=data)
 
         verify_api_error(request_id, get_task_error_invalid_identifier())
