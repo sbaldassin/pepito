@@ -9,7 +9,7 @@ from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
 from tests.factory.revenue_factory import create_revenue
 from tests.utils.generator import generate_random_int
-from tests.utils.getters import get_until_not_empty
+from tests.utils.getters import get_until_not_empty, get_until_attempt_greater_than_zero
 from tests.utils.utils import get_player_sign_up_resource, get_api_headers, get_deposit_resource
 
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ class DepositTestCase(TestCase):
         super(DepositTestCase, self)
 
     def test_tc_1_player_revenue(self):
-        player, revenues = self._create_player_with_revenue()
+        player, revenues, _ = self._create_player_with_revenue()
         result = self.get_revenue_from_db(player)
         logging.info("DB result: {}".format(result))
 
@@ -31,71 +31,65 @@ class DepositTestCase(TestCase):
     def test_tc_2_player_revenue_with_eur_currency(self):
         revenue = create_revenue()
         revenue.Currency = "EUR"
-        player, revenue = self._create_player_with_revenue([revenue])
+        player, revenue, _ = self._create_player_with_revenue([revenue])
         result = self.get_revenue_from_db(player)
         logging.info("DB result: {}".format(result))
 
         self.assertFalse(result == [])
-        self.assertEquals(int(revenue.Amount) * 100, result[0]["EuroAmount"])
+        self.assertEquals(int(revenue[0].Amount) * 100, result[0]["EuroAmount"])
 
     def test_tc_3_player_revenue_with_invalid_currency(self):
         revenue = create_revenue()
         revenue.Currency = 123
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_4_player_revenue_with_zero_amount(self):
         revenue = create_revenue()
         revenue.Amount = 0
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_5_player_revenue_with_negative_amount(self):
         revenue = create_revenue()
         revenue.Amount = -1
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_6_player_revenue_with_string_amount(self):
         revenue = create_revenue()
         revenue.Amount = "sdk"
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_7_player_revenue_with_future_date(self):
         revenue = create_revenue()
         revenue.TransactionDate = datetime.datetime(2030, 4, 24, 18, 26, 1, 37000).strftime('%Y-%m-%d')
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_8_player_revenue_with_invalid_date(self):
         revenue = create_revenue()
         revenue.TransactionDate = "hah"
-        player, revenue = self._create_player_with_revenue([revenue])
-        result = self.get_revenue_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_revenue([revenue])
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     def test_tc_9_player_revenue_with_multiple_transactions(self):
         revenue_1 = create_revenue()
         revenue_2 = create_revenue()
-        player, revenues = self._create_player_with_revenue(revenues=[revenue_1, revenue_2])
+        player, revenues, _ = self._create_player_with_revenue(revenues=[revenue_1, revenue_2])
         result = self.get_revenue_from_db(player)
         logging.info("DB result: {}".format(result))
 
@@ -120,7 +114,7 @@ class DepositTestCase(TestCase):
 
     @staticmethod
     def _create_revenues(player, revenues=[]):
-        revenues = [create_revenue()] if revenues is [] else revenues
+        revenues = [create_revenue()] if revenues == [] else revenues
         logging.info("Creating revenue: {}".format([r.__dict__ for r in revenues]))
 
         data = {"PlayerID": player.PlayerID, "InitID": generate_random_int(),
@@ -131,9 +125,13 @@ class DepositTestCase(TestCase):
                                  headers=get_api_headers())
 
         logging.info("API response: {}".format(response.json()))
-        return revenues
+        return revenues, response.json()["RequestID"]
 
     def _create_player_with_revenue(self, revenues=[]):
         player = self._create_player()
-        revenues = self._create_revenues(player, revenues)
-        return player, revenues
+        revenues, request_id = self._create_revenues(player, revenues)
+        return player, revenues, request_id
+
+    def get_task(self, task_id):
+        url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
+        return get_until_attempt_greater_than_zero(url, timeout=100)
