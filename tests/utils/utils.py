@@ -138,7 +138,7 @@ def get_task_error_invalid_breed_cancellation():
     return 'Invalid breed on record number 1.  Couldn\'t proceed with wager cancellation.'
 
 
-def get_task_error_invalid_value():
+def get_task_error_invalid_wager_value():
     return 'Invalid wager value on record number 1. No data saved.'
 
 
@@ -169,5 +169,22 @@ def get_task_error_invalid_value():
 def get_task_error_invalid_game_type():
     return 'Invalid game type on record number 1. No data saved.'
 
+
 def get_task_error_invalid_game_identifier():
     return 'Invalid game identifier on record number 1. No data saved.'
+
+
+def get_task_error_invalid_sport_identifier():
+    return 'Invalid Sport identifier on record number 1. No data saved.'
+
+
+def get_task_error_invalid_league_identifier():
+    return 'Invalid League/tournament identifier on record number 1. No data saved.'
+
+
+def get_task_error_invalid_event():
+    return 'Invalid Event on record number 1. Event is empty. No data saved.'
+
+
+def get_task_error_wager_not_found():
+    return 'Wager not found. Couldn\'t proceed with wager cancellation.'
