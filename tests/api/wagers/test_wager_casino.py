@@ -7,7 +7,7 @@ from tests.config.config import get_config
 from tests.factory.player_factory import create_random_player
 from tests.factory.wager_factory import create_casino
 from tests.utils.generator import generate_random_int
-from tests.utils.getters import get_until_not_empty
+from tests.utils.getters import get_until_not_empty, get_until_attempt_greater_than_zero
 from tests.utils.utils import get_player_sign_up_resource, get_api_headers, get_wager_casino_resource
 
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +19,7 @@ class WagerCasinoTestCase(TestCase):
         super(WagerCasinoTestCase, self)
 
     def test_tc_1_player_wager_casino(self):
-        player, wager = self._create_player_with_wager()
+        player, wager, _ = self._create_player_with_wager()
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
@@ -28,117 +28,81 @@ class WagerCasinoTestCase(TestCase):
 
     def test_tc_2_player_wager_casino_invalid_value(self):
         wager = create_casino()
-
         wager.Value = "value"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, wager, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_3_player_wager_casino_negative_value(self):
         wager = create_casino()
-
         wager.Value = -1
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_4_player_wager_casino_zero_value(self):
         wager = create_casino()
         wager.Value = 0
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_5_player_wager_casino_huge_value(self):
         wager = create_casino()
         wager.Value = 10000000000000
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_6_player_wager_casino_invalid_currency(self):
         wager = create_casino()
         wager.Currency = "Invalid"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_7_player_wager_casino_usd_currency(self):
         wager = create_casino()
         wager.Currency = "USD"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertFalse(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_8_player_wager_casino_invalid_count(self):
         wager = create_casino()
         wager.Count = "invalid"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_9_player_wager_casino_zero_count(self):
         wager = create_casino()
         wager.Count = 0
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_10_player_wager_casino_negative_count(self):
         wager = create_casino()
         wager.Count = -1
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_11_player_wager_casino_huge_count(self):
         wager = create_casino()
         wager.Count = 10000000000000
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_12_wager_casino_invalid_transaction_date(self):
         wager = create_casino()
         wager.TransactionDate = "invalid_date"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_13_wager_casino_future_transaction_date(self):
         wager = create_casino()
         wager.TransactionDate = datetime.datetime(2030, 4, 24, 18, 26, 1, 37000).strftime('%Y-%m-%d')
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     def test_tc_14_wager_casino_invalid_game_type(self):
         wager = create_casino()
         wager.GameType = "invalid"
-        player, wager = self._create_player_with_wager([wager])
-        result = self.get_wager_from_db(player)
-        logging.info("DB result: {}".format(result))
-        self.assertTrue(result == [])
+        player, revenue, request_id = self._create_player_with_wager([wager])
+        self.assert_not_created(request_id, player)
 
     @staticmethod
     def get_wager_from_db(player):
@@ -169,9 +133,23 @@ class WagerCasinoTestCase(TestCase):
                                  headers=get_api_headers())
 
         logging.info("API response: {}".format(response.json()))
-        return wagers
+        return wagers, response.json()["RequestID"]
 
     def _create_player_with_wager(self, wagers=[]):
         player = self._create_player()
-        wagers = self._create_wagers(player, wagers)
-        return player, wagers
+        wagers, request_id = self._create_wagers(player, wagers)
+        return player, wagers, request_id
+
+    def get_task(self, task_id):
+        url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
+        return get_until_attempt_greater_than_zero(url, timeout=100)
+
+    def assert_not_created(self, request_id, player):
+        try:
+            task = self.get_task(request_id)[0]
+            logging.info("Task: {}".format(task))
+            self.assertFalse(task["Error"] == "")
+        except IndexError:
+            result = self.get_wager_from_db(player)
+            logging.info("DB result: {}".format(result))
+            self.assertTrue(result == [])
