@@ -97,11 +97,11 @@ class CancelWagerSportsTestCase(TestCase):
     
     def get_wager_sports(self, player):
         url = "http://{}/wagers/parimutuel?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
-        return get_until_not_empty(url, timeout=50)
+        return get_until_not_empty(url, timeout=70)
     
     def get_wager_sports_wager_count(self, player, wagercount):
         url = "http://{}/wagers/parimutuel?customer_id={}&wagercount={}".format(get_config().get("test_framework", "db"), player.PlayerID, wagercount)
-        return get_until_not_empty(url, timeout=50)
+        return get_until_not_empty(url, timeout=70)
     
     def get_task(self, task_id):
         url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)

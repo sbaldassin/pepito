@@ -535,6 +535,10 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertEqual(body["Message"], "OK")
 
     def test_tc_25_player_registration_empty_custom_string_4(self):
+        """
+        IMPORTANT NOTE: If the CustomString4 is empty, the value from the PromoCode field will be added - IT IS RESERVED FIELD.
+        :return:
+        """
         player = create_random_player()
         player.CustomString4 = ''
         logging.info("Creating player: {}".format(player.__dict__))
@@ -551,7 +555,7 @@ class PlayerRegistrationTestCase(TestCase):
 
         self.assertTrue(q_net_customer)
         self.assertTrue(q_net_dw_fact_signup)
-        self.assertEquals(q_net_customer["CustomString4"], "")
+        self.assertEquals(q_net_customer["CustomString4"], player.PromoCode)
 
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")

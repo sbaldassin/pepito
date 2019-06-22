@@ -9,6 +9,7 @@ from tests.utils.api_utils import get_task
 
 from tests.utils.utils import get_api_headers, get_api_ok_message, get_dim_lottery_resource, \
     get_api_error_event_list_empty, get_task_error_invalid_lottery_event, get_task_error_invalid_breed
+from tests.utils.utils import get_task_error_invalid_category
 from tests.utils.getters import get_until_not_empty
 from tests.utils.retry import retry
 
@@ -29,6 +30,12 @@ class EventsLotteryTestCase(TestCase):
     def get_task(self, task_id):
         url = "http://{}/tasks?task_id={}".format(get_config().get("test_framework", "db"), task_id)
         return get_until_not_empty(url, timeout=100)
+
+    @retry(Exception, tries=5)
+    def verify_error(self, request_id, error_message):
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == error_message)
 
     def get_event(self, name, category):
         url = "http://{}/games/lottery?name={}&category={}".format(
@@ -79,23 +86,20 @@ class EventsLotteryTestCase(TestCase):
         self.verify_event_error(request_id, get_task_error_invalid_lottery_event())
 
     def test_tc_3_create_event_lottery_without_category(self):
+        """
+        The TC in asana is not correct, basically it states that the event should be created
+        becasue category is optional, but according to the doc, category is a required param,
+        and also the expected result in this case is to get an error: Invalid Category on record number 1. No data saved.
+        """
         event = create_lottery_event(is_future=True)
         event.Category = None
         logging.info("Creating event: {}".format(event.__dict__))
 
-        self.send_lottery_event([event.__dict__])
+        request_id = self.send_lottery_event([event.__dict__])
 
         q_net_event_list = self.get_event(event.Name, '')
-        self.assertEqual(len(q_net_event_list), 1)
-
-        for e in q_net_event_list:
-            self.assertEqual(e['Name'], event.Name)
-            self.assertEqual(e['Category'], '')
-            self.assertEqual(e['MerchantID'], 11)
-            self.assertTrue(e['DrawDate'])
-            self.assertTrue(e['DateCreated'])
-            self.assertTrue(e['GameID'])
-            self.assertTrue(e['TimeID'])
+        self.assertEqual(len(q_net_event_list), 0)
+        self.verify_error(request_id, get_task_error_invalid_category())
 
     def test_tc_4_create_event_lottery_without_draw_date(self):
         event = create_lottery_event(is_future=True)

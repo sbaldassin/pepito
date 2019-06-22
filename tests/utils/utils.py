@@ -182,9 +182,13 @@ def get_task_error_invalid_league_identifier():
     return 'Invalid League/tournament identifier on record number 1. No data saved.'
 
 
-def get_task_error_invalid_event():
+def get_task_error_invalid_event2():
     return 'Invalid Event on record number 1. Event is empty. No data saved.'
 
 
 def get_task_error_wager_not_found():
     return 'Wager not found. Couldn\'t proceed with wager cancellation.'
+
+
+def get_task_error_invalid_category():
+    return 'Invalid Category on record number 1. No data saved'

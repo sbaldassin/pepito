@@ -11,7 +11,7 @@ from tests.factory.wager_factory import create_parimutuel
 from tests.utils.utils import get_api_headers, get_api_error_wager_list_empty, get_api_error_player_id_not_passed, \
     get_api_ok_message, get_player_sign_up_resource, \
     get_player_sign_in_resource, get_wagers_parimutuel_resource, get_task_error_invalid_event, \
-    get_task_error_invalid_currency, get_task_error_invalid_breed, get_task_error_invalid_value
+    get_task_error_invalid_currency, get_task_error_invalid_breed, get_task_error_invalid_wager_value
 from tests.utils.getters import get_until_not_empty
 from tests.utils.retry import retry
 
@@ -258,7 +258,7 @@ class WagerParimutuelTestCase(TestCase):
         data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
         q_net_wager_list = self.get_wager_parimutuel(player)
         self.assertFalse(q_net_wager_list)
-        self.verify_wager_error(request_id, get_task_error_invalid_value())
+        self.verify_wager_error(request_id, get_task_error_invalid_wager_value())
 
     def test_tc_10_wager_parimutuel_without_transactiondate(self):
         player = create_random_player(player_id_length=40)
