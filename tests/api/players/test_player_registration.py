@@ -534,16 +534,40 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
 
+    def test_tc_24_A_player_registration_empty_custom_string_3_empty_promo_code(self):
+        player = create_random_player()
+        player.CustomString3 = ''
+        player.PromoCode = ''
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
+        self.assertTrue(response.status_code, 500)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+        self.assertEquals(q_net_customer["CustomString3"], player.TrackingCode)
+
+        self.assertTrue(body['Success'])
+        self.assertEqual(body["Message"], "OK")
+
     def test_tc_25_player_registration_empty_custom_string_4(self):
         """
-        IMPORTANT NOTE: If the CustomString4 is empty, the value from the PromoCode field will be added - IT IS RESERVED FIELD.
+        IMPORTANT NOTE from asana: If the CustomString4 is empty,
+        the value from the PromoCode field will be added - IT IS RESERVED FIELD.
         :return:
         """
         player = create_random_player()
         player.CustomString4 = ''
         logging.info("Creating player: {}".format(player.__dict__))
         response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__), headers=get_api_headers())
-        self.assertTrue(response.status_code, 500)
+        self.assertTrue(response.status_code, 200)
         body = response.json()
         logging.info("API response: {}".format(body))
 
@@ -670,8 +694,13 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
 
-    @skip("No promo code column")
     def test_tc_31_player_registration_empty_promo_code(self):
+        """
+              IMPORTANT NOTE from asana: If PromoCode the CustomString4 will be replaced with
+              promocode value, if promocode is empty CustomString4 will keep it's original value
+
+              :return:
+              """
         player = create_random_player()
         player.PromoCode = ""
         logging.info("Creating player: {}".format(player.__dict__))
@@ -688,13 +717,22 @@ class PlayerRegistrationTestCase(TestCase):
 
         self.assertTrue(q_net_customer)
         self.assertTrue(q_net_dw_fact_signup)
-        self.assertEquals(q_net_customer["PromoCode"], "")
+        self.assertEquals(q_net_customer["CustomString4"], str(player.CustomString4))
 
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
 
-    @skip("No tracking code column")
     def test_tc_32_player_registration_empty_tracking_code(self):
+        """
+          IMPORTANT NOTE: According to doc https://qa-gaming.aretonet.com/kb/campaigns#ua_campaigns_promo
+
+          If both a promotional code and a tracking code are received, the promotional code will be taken into
+          consideration while the tracking code will be discarded;
+
+          and if tracking code is available this value will be used as CustomString3 iff promo code is not null or empty
+
+          :return:
+        """
         player = create_random_player()
         player.TrackingCode = ""
         logging.info("Creating player: {}".format(player.__dict__))
@@ -712,7 +750,7 @@ class PlayerRegistrationTestCase(TestCase):
 
         self.assertTrue(q_net_customer)
         self.assertTrue(q_net_dw_fact_signup)
-        self.assertEquals(q_net_customer["TrackingCode"], "")
+        self.assertEquals(q_net_customer["CustomString3"], str(player.CustomString3))
 
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
@@ -855,50 +893,51 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertTrue(body['Success'])
         self.assertEqual(body["Message"], "OK")
 
-    @skip("No OptoutMobilePush column")
-    def test_tc_39_player_registration_empty_optout_mobile_push(self):
-        player = create_random_player()
-        player.OptoutMobilePush = ""
-        logging.info("Creating player: {}".format(player.__dict__))
-        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
-                                 headers=get_api_headers())
-        self.assertTrue(response.status_code, 500)
-        body = response.json()
-        logging.info("API response: {}".format(body))
+    # BUG optout_mobile_push
+    # @skip("No OptoutMobilePush column")
+    # def test_tc_39_player_registration_empty_optout_mobile_push(self):
+    #     player = create_random_player()
+    #     player.OptoutMobilePush = ""
+    #     logging.info("Creating player: {}".format(player.__dict__))
+    #     response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+    #                              headers=get_api_headers())
+    #     self.assertTrue(response.status_code, 500)
+    #     body = response.json()
+    #     logging.info("API response: {}".format(body))
+    #
+    #     q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+    #         get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+    #
+    #     q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+    #         get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+    #
+    #     self.assertTrue(q_net_customer)
+    #     self.assertTrue(q_net_dw_fact_signup)
+    #     self.assertEquals(q_net_customer["OptoutMobilePush"], "")
+    #
+    #     self.assertTrue(body['Success'])
+    #     self.assertEqual(body["Message"], "OK")
 
-        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
-
-        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
-
-        self.assertTrue(q_net_customer)
-        self.assertTrue(q_net_dw_fact_signup)
-        self.assertEquals(q_net_customer["OptoutMobilePush"], "")
-
-        self.assertTrue(body['Success'])
-        self.assertEqual(body["Message"], "OK")
-
-    @skip("No OptoutMobilePush column")
-    def test_tc_40_player_registration_true_optout_mobile_push(self):
-        player = create_random_player()
-        player.OptoutMobilePush = True
-        logging.info("Creating player: {}".format(player.__dict__))
-        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
-                                 headers=get_api_headers())
-        self.assertTrue(response.status_code, 500)
-        body = response.json()
-        logging.info("API response: {}".format(body))
-
-        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
-
-        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
-            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
-
-        self.assertTrue(q_net_customer)
-        self.assertTrue(q_net_dw_fact_signup)
-        self.assertEquals(q_net_customer["OptoutMobilePush"], True)
-
-        self.assertTrue(body['Success'])
-        self.assertEqual(body["Message"], "OK")
+    # BUG optout_mobile_push
+    # def test_tc_40_player_registration_true_optout_mobile_push(self):
+    #     player = create_random_player()
+    #     player.OptoutMobilePush = True
+    #     logging.info("Creating player: {}".format(player.__dict__))
+    #     response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+    #                              headers=get_api_headers())
+    #     self.assertTrue(response.status_code, 500)
+    #     body = response.json()
+    #     logging.info("API response: {}".format(body))
+    #
+    #     q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+    #         get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+    #
+    #     q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+    #         get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+    #
+    #     self.assertTrue(q_net_customer)
+    #     self.assertTrue(q_net_dw_fact_signup)
+    #     self.assertEquals(q_net_customer["OptoutMobilePush"], True)
+    #
+    #     self.assertTrue(body['Success'])
+    #     self.assertEqual(body["Message"], "OK")

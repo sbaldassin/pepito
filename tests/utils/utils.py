@@ -22,8 +22,8 @@ def get_withdrawal_resource():
     return '{host}/player/withdrawal/'.format(host=get_config().get("api", "host"))
 
 
-def get_deposit_resource():
-    return '{host}/player/deposit/1'.format(host=get_config().get("api", "host"))
+def get_deposit_resource(channel=1):
+    return '{host}/player/deposit/{channel}'.format(host=get_config().get("api", "host"), channel=channel)
 
 
 def get_bonus_resource():
