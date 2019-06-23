@@ -26,7 +26,7 @@ def create_areto_api_object(resource, data, success=True, msg=get_api_ok_message
 # INTERNAL API ENDPOINTS
 def get_freespin_response(player_id):
     url = "http://{}/freespin?customer_id={}".format(get_config().get("test_framework", "db"), player_id)
-    return get_until_not_empty(url, timeout=150)
+    return get_until_not_empty(url, timeout=200)
 
 
 def get_game_session_response(player_id):

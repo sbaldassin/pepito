@@ -26,9 +26,7 @@ class PlayerFreespinCasinoTestCase(TestCase):
             "PlayerID": player.PlayerID,
             "FreeSpins": [freespin.__dict__]
         }
-
         create_areto_api_object(resource=get_freespin_resource(), data=data)
-
         q_net_freespin_list = get_freespin_response(data.get('PlayerID'))
         self.assertEqual(len(q_net_freespin_list), 1)
 
@@ -36,7 +34,7 @@ class PlayerFreespinCasinoTestCase(TestCase):
             self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
             self.assertTrue(e['FactFreeSpinID'])
             self.assertTrue(e['TimeID'])
-            self.assertTrue(e['SignInID'])
+            self.assertGreaterEqual(e['SignInID'], 0)
             self.assertTrue(e['FreeSpinID'])
             self.assertTrue(e['DateCreated'])
             self.assertTrue(e['ActivityDate'])
