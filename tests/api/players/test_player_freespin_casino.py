@@ -21,13 +21,14 @@ class PlayerFreespinCasinoTestCase(TestCase):
 
     def test_tc_1_create_freespin_example(self):
         player = create_random_player(player_id_length=40)
-        freespin = create_freespin(is_future=True)
+        freespin = create_freespin()
         data = {
             "PlayerID": player.PlayerID,
             "FreeSpins": [freespin.__dict__]
         }
-        create_areto_api_object(resource=get_freespin_resource(), data=data)
+        request_id = create_areto_api_object(resource=get_freespin_resource(), data=data)
         q_net_freespin_list = get_freespin_response(data.get('PlayerID'))
+
         self.assertEqual(len(q_net_freespin_list), 1)
 
         for e in q_net_freespin_list:
