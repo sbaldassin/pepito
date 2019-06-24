@@ -99,7 +99,7 @@ class CancelWagerParimutuelTestCase(TestCase):
     
     def get_wager_parimutuel(self, player):
         url = "http://{}/wagers/parimutuel?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
-        return get_until_not_empty(url, timeout=50)
+        return get_until_not_empty(url)
     
     def get_wager_parimutuel_wager_count(self, player, wagercount):
         url = "http://{}/wagers/parimutuel?customer_id={}&wagercount={}".format(get_config().get("test_framework", "db"), player.PlayerID, wagercount)
