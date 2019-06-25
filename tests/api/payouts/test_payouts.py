@@ -34,7 +34,7 @@ class PayoutTestCase(TestCase):
 
         self.assertFalse(result == [])
 
-    def test_tc_3_player_payout_sport(self):
+    def test_tc_3_player_payout_bet(self):
         player, payout, _ = self._create_player_with_payout(payout_type="bet")
         result = self.get_payout_from_db(player)
         logging.info("DB result: {}".format(result))
@@ -48,14 +48,14 @@ class PayoutTestCase(TestCase):
 
         self.assertFalse(result == [])
 
-    def test_tc_5_player_payout_esport(self):
+    def test_tc_5_player_payout_lottery(self):
         player, payout, _ = self._create_player_with_payout(payout_type="lottery")
         result = self.get_payout_from_db(player)
         logging.info("DB result: {}".format(result))
 
         self.assertFalse(result == [])
 
-    def test_tc_6_player_payout_esport(self):
+    def test_tc_6_player_payout_parimutuel(self):
         player, payout, _ = self._create_player_with_payout(payout_type="parimutuel")
         result = self.get_payout_from_db(player)
         logging.info("DB result: {}".format(result))
@@ -305,6 +305,230 @@ class PayoutTestCase(TestCase):
         logging.info("Task: {}".format(task))
         self.assertFalse(task["Error"] == "")
 
+    def test_tc_33_player_payout_with_esport_payout_empty_game(self):
+        payout = create_payout(payout_type="esport")
+        payout.Game = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_34_player_payout_with_esport_payout_empty_league(self):
+        payout = create_payout(payout_type="esport")
+        payout.League = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_35_player_payout_with_esport_payout_empty_event(self):
+        payout = create_payout(payout_type="esport")
+        payout.Event = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_36_player_payout_with_esport_payout_empty_category(self):
+        payout = create_payout(payout_type="esport")
+        payout.Category = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_37_player_payout_with_esport_payout_past_event_date(self):
+        payout = create_payout(payout_type="esport")
+        payout.EventDate = generate_random_date(is_future=False)
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_38_player_payout_with_esport_payout_null_game(self):
+        payout = create_payout(payout_type="esport")
+        payout.Game = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_39_player_payout_with_esport_payout_null_league(self):
+        payout = create_payout(payout_type="esport")
+        payout.League = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_40_player_payout_with_esport_payout_null_event(self):
+        payout = create_payout(payout_type="esport")
+        payout.Event = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_41_player_payout_with_esport_payout_null_category(self):
+        payout = create_payout(payout_type="esport")
+        payout.Category = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_42_player_payout_with_esport_payout_null_event_date(self):
+        payout = create_payout(payout_type="esport")
+        payout.EventDate = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_43_player_payout_with_esport_payout_string_event_date(self):
+        payout = create_payout(payout_type="esport")
+        payout.EventDate = "test_date"
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="esport")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_44_player_payout_with_parimutuel_payout_string_event_date(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.EventDate = "test_date"
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_45_player_payout_with_parimutuel_payout_null_event_date(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.EventDate = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_46_player_payout_with_parimutuel_payout_empty_event_date(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.EventDate = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_47_player_payout_with_parimutuel_payout_past_event_date(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.EventDate = generate_random_date(is_future=False)
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_48_player_payout_with_parimutuel_payout_emty_event(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.Event = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_49_player_payout_with_parimutuel_payout_null_event(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.Event = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_50_player_payout_with_parimutuel_payout_null_breed(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.Breed = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_51_player_payout_with_parimutuel_payout_empty_breed(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.Breed = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="parimutuel")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_52_player_payout_with_lottery_payout_null_event_date(self):
+        payout = create_payout(payout_type="lottery")
+        payout.DrawDate = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="lottery")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_52_player_payout_with_lottery_payout_empty_event_date(self):
+        payout = create_payout(payout_type="lottery")
+        payout.DrawDate = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="lottery")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_53_player_payout_with_lottery_payout_empty_event(self):
+        payout = create_payout(payout_type="lottery")
+        payout.Name = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="lottery")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_54_player_payout_with_lottery_payout_null_event(self):
+        payout = create_payout(payout_type="lottery")
+        payout.Name = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="lottery")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_55_player_payout_with_lottery_payout_empty_event_category(self):
+        payout = create_payout(payout_type="bet")
+        payout.Category = ""
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="bet")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
+
+    def test_tc_56_player_payout_with_lottery_payout_null_event_category(self):
+        payout = create_payout(payout_type="bet")
+        payout.Category = None
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="bet")
+        task = self.get_task(request_id)[0]
+        logging.info("Task: {}".format(task))
+        self.assertFalse(task["Error"] == "")
 
     @staticmethod
     def get_payout_from_db(player):
