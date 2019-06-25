@@ -106,7 +106,7 @@ class WagerCasinoTestCase(TestCase):
         wager.GameType = None
         player, revenue, request_id = self._create_player_with_wager([wager])
         result = self.get_wager_from_db(player)
-        self.assertFalse(result == [])
+        self.assertTrue(result == [])
 
     @staticmethod
     def get_wager_from_db(player):
