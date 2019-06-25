@@ -7,7 +7,7 @@ from tests.factory.player_factory import create_random_player
 from tests.factory.wager_factory import create_sport
 from tests.utils.utils import get_api_headers, get_api_error_player_id_not_passed, get_api_ok_message, get_player_sign_up_resource, \
     get_player_sign_in_resource, get_wager_sport_resource, get_task_error_invalid_breed_cancellation, \
-    get_task_error_invalid_sport_identifier, get_task_error_invalid_currency, get_task_error_invalid_wager_value, get_task_error_sql_overflow
+    get_task_error_invalid_sport_identifier, get_task_error_invalid_currency, get_task_error_invalid_wager_value, get_task_error_invalid_transaction_date
 from tests.utils.getters import get_until_not_empty
 from tests.utils.retry import retry
 
@@ -376,4 +376,4 @@ class CancelWagerSportsTestCase(TestCase):
 
         # SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM
         request_id = self.cancel_wagers_sports(data)
-        self.verify_canceled_wager_error(request_id, get_task_error_sql_overflow())
+        self.verify_canceled_wager_error(request_id, get_task_error_invalid_transaction_date())
