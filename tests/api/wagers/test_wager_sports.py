@@ -86,7 +86,7 @@ class WagerSportsTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_9_wager_sport_negative_count(self):
         wager = create_sport()
@@ -104,7 +104,7 @@ class WagerSportsTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_11_wager_sport_huge_count(self):
         wager = create_sport()
@@ -113,7 +113,7 @@ class WagerSportsTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     @staticmethod
     def get_wager_from_db(player):

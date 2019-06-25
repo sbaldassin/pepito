@@ -75,13 +75,15 @@ class WagerBetTestCase(TestCase):
         wager = create_bet()
         wager.Count = "count"
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_10_wager_bet_zero_count(self):
         wager = create_bet()
         wager.Count = 0
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_11_wager_bet_negative_count(self):
         wager = create_bet()
@@ -93,29 +95,33 @@ class WagerBetTestCase(TestCase):
         wager = create_bet()
         wager.Count = 100000000000000
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_13_wager_bet_invalid_event_date(self):
         wager = create_bet()
         wager.EventDate = "invalid_date"
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_14_wager_bet_past_event_date(self):
         wager = create_bet()
         wager.EventDate = generate_random_date()
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_15_wager_bet_non_existing_category(self):
         wager = create_bet()
         wager.EventCategory = generate_random_string()
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_16_wager_bet_non_existing_event(self):
         wager = create_bet()
-        wager.Event = generate_random_string()
+        wager.Event = None
         player, revenue, request_id = self._create_player_with_wager([wager])
         self.assert_not_created(request_id, player)
 

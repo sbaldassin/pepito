@@ -87,7 +87,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_9_wager_lottery_negative_count(self):
         wager = create_lottery()
@@ -105,7 +105,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_11_wager_lottery_huge_count(self):
         wager = create_lottery()
@@ -114,7 +114,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_12_wager_lottery_invalid_category(self):
         wager = create_lottery()
@@ -123,7 +123,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_13_wager_lottery_invalid_transaction_date(self):
         wager = create_lottery()
@@ -150,7 +150,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     def test_tc_16_wager_lottery_future_draw_date(self):
         wager = create_lottery()
@@ -159,7 +159,7 @@ class WagerLotteryTestCase(TestCase):
         result = self.get_wager_from_db(player)
         logging.info("DB result: {}".format(result))
 
-        self.assertTrue(result == [])
+        self.assertFalse(result == [])
 
     @staticmethod
     def get_wager_from_db(player):

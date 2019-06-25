@@ -60,19 +60,21 @@ class WagerCasinoTestCase(TestCase):
         wager = create_casino()
         wager.Currency = "USD"
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_8_player_wager_casino_invalid_count(self):
         wager = create_casino()
         wager.Count = "invalid"
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
 
     def test_tc_9_player_wager_casino_zero_count(self):
         wager = create_casino()
         wager.Count = 0
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_10_player_wager_casino_negative_count(self):
         wager = create_casino()
@@ -84,7 +86,8 @@ class WagerCasinoTestCase(TestCase):
         wager = create_casino()
         wager.Count = 10000000000000
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     def test_tc_12_wager_casino_invalid_transaction_date(self):
         wager = create_casino()
@@ -98,11 +101,12 @@ class WagerCasinoTestCase(TestCase):
         player, revenue, request_id = self._create_player_with_wager([wager])
         self.assert_not_created(request_id, player)
 
-    def test_tc_14_wager_casino_invalid_game_type(self):
+    def test_tc_14_wager_casino_without_game_type(self):
         wager = create_casino()
-        wager.GameType = "invalid"
+        wager.GameType = None
         player, revenue, request_id = self._create_player_with_wager([wager])
-        self.assert_not_created(request_id, player)
+        result = self.get_wager_from_db(player)
+        self.assertFalse(result == [])
 
     @staticmethod
     def get_wager_from_db(player):
