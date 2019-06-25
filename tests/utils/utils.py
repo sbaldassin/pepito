@@ -150,6 +150,10 @@ def get_task_error_sql_overflow():
     return 'SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.'
 
 
+def get_task_error_invalid_transaction_date():
+    return 'Invalid transaction date on record number 1. No data saved.'
+
+
 def get_task_error_invalid_currency():
     return 'Invalid currency code on record number 1. No data saved.'
 

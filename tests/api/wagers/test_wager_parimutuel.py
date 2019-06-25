@@ -260,25 +260,25 @@ class WagerParimutuelTestCase(TestCase):
         self.assertFalse(q_net_wager_list)
         self.verify_wager_error(request_id, get_task_error_invalid_wager_value())
 
-    def test_tc_10_wager_parimutuel_without_transactiondate(self):
-        player = create_random_player(player_id_length=40)
-        logging.info("Creating player: {}".format(player.__dict__))
-
-        # Create player
-        self.create_and_validate_player(player)
-
-        # Create Wager
-        wagers = self.create_wagers()
-        for w in wagers:
-            del w['TransactionDate']
-
-        data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
-        q_net_wager_list = self.get_wager_parimutuel(player)
-        self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
-
-        for wager in q_net_wager_list:
-            self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
-            self.assertTrue(wager['DateCreated'])
+    # def test_tc_10_wager_parimutuel_without_transactiondate(self):
+    #     player = create_random_player(player_id_length=40)
+    #     logging.info("Creating player: {}".format(player.__dict__))
+    #
+    #     # Create player
+    #     self.create_and_validate_player(player)
+    #
+    #     # Create Wager
+    #     wagers = self.create_wagers()
+    #     for w in wagers:
+    #         del w['TransactionDate']
+    #
+    #     data, request_id = self.create_and_validate_wager_parimutuel(player, wagers)
+    #     q_net_wager_list = self.get_wager_parimutuel(player)
+    #     self.assertEqual(len(q_net_wager_list), len(data['Wagers']))
+    #
+    #     for wager in q_net_wager_list:
+    #         self.assertEqual(player.PlayerID, wager['ExternalCustomerID'])
+    #         self.assertTrue(wager['DateCreated'])
 
     def test_tc_11_wager_parimutuel_without_count_0(self):
         player = create_random_player(player_id_length=40)
