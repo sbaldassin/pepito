@@ -40,6 +40,69 @@ class PlayerRegistrationTestCase(TestCase):
         self.assertEqual(player.Name, q_net_customer['Name'])
         self.assertEqual(player.Surname, q_net_customer['Surname'])
 
+    def test_tc_1_a_player_registration_russian(self):
+        player = create_random_player(player_id_length=40)
+        player.Name = u"Москва"
+        player.Surname = u"Москва"
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 200)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertTrue(body.get('Success'), True)
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+
+    def test_tc_1_a_player_registration_arabic(self):
+        player = create_random_player(player_id_length=40)
+        player.Name = u"جون"
+        player.Surname = u"جون"
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 200)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertTrue(body.get('Success'), True)
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+
+    def test_tc_1_a_player_registration_french(self):
+        player = create_random_player(player_id_length=40)
+        player.Name = u"Le jeu du garçon"
+        player.Surname = u"Le jeu du garçon"
+        logging.info("Creating player: {}".format(player.__dict__))
+        response = requests.post(get_player_sign_up_resource(), data=json.dumps(player.__dict__),
+                                 headers=get_api_headers())
+        self.assertTrue(response.status_code, 200)
+        body = response.json()
+        logging.info("API response: {}".format(body))
+        self.assertTrue(body.get('Success'), True)
+
+        q_net_customer = requests.get("http://{}/customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()[0]
+
+        q_net_dw_fact_signup = requests.get("http://{}/sign_up?customer_id={}".format(
+            get_config().get("test_framework", "db"), player.PlayerID)).json()
+
+        self.assertTrue(q_net_customer)
+        self.assertTrue(q_net_dw_fact_signup)
+
     def test_tc_2_player_registration_id_41_chars(self):
         player = create_random_player(player_id_length=41)
         logging.info("Creating player: {}".format(player.__dict__))
