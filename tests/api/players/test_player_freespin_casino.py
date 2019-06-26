@@ -34,7 +34,7 @@ class PlayerFreespinCasinoTestCase(TestCase):
         for e in q_net_freespin_list:
             self.assertEqual(e['MerchantID'], int(get_config().get("api", "merchant_id")))
             self.assertTrue(e['FactFreeSpinID'])
-            self.assertTrue(e['TimeID'])
+            self.assertGreaterEqual(e['TimeID'], 0)
             self.assertGreaterEqual(e['SignInID'], 0)
             self.assertTrue(e['FreeSpinID'])
             self.assertTrue(e['DateCreated'])
