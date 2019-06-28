@@ -404,6 +404,54 @@ class PayoutTestCase(TestCase):
                                                                      payout_type="bet")
         self.assert_created(player)
 
+    def test_tc_57_player_payout_with_payout_casino_and_productd_zero(self):
+        payout = create_payout(payout_type="casino")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
+    def test_tc_58_player_payout_with_payout_sport_and_productd_zero(self):
+        payout = create_payout(payout_type="sport")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
+    def test_tc_59_player_payout_with_payout_bet_and_productd_zero(self):
+        payout = create_payout(payout_type="bet")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
+    def test_tc_60_player_payout_with_payout_esport_and_productd_zero(self):
+        payout = create_payout(payout_type="esport")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
+    def test_tc_61_player_payout_with_payout_lottery_and_productd_zero(self):
+        payout = create_payout(payout_type="lottery")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
+    def test_tc_62_player_payout_with_payout_parimutuel_and_productd_zero(self):
+        payout = create_payout(payout_type="parimutuel")
+        payout.ProductID = 0
+        player, payout, request_id = self._create_player_with_payout(payouts=[payout],
+                                                                     payout_type="casino")
+
+        self.assert_created(player)
+
     @staticmethod
     def get_payout_from_db(player):
         url = "http://{}/payouts?customer_id={}".format(get_config().get("test_framework", "db"), player.PlayerID)
