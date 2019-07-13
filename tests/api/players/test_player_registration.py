@@ -1,11 +1,9 @@
 import json
 import logging
-from unittest import TestCase, skip
+from unittest import TestCase
 import requests
 
 from tests.config.config import get_config
-from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
-from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
 from tests.factory.player_factory import create_random_player
 from tests.utils.utils import get_api_headers, get_player_sign_up_resource
 

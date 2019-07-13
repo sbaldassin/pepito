@@ -22,3 +22,13 @@ def assert_login(context):
 
     loged_in_name = context.browser.find_element(*HomePage.logged_in_name_locator).text
     assert loged_in_name == get_config().get("user", "username")
+
+
+@step("I reset the password")
+def reset_password(context):
+    pass
+
+
+@step("I get an reset password email")
+def assert_reset_password(context):
+    pass
