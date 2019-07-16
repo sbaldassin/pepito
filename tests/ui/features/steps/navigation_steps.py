@@ -17,3 +17,8 @@ def navigate_to_dimensions_data(context):
 @step("I click in integration errors button")
 def navigate_to_integration_errors(context):
     context.browser.find_element(*HomePage.integration_errors_btn_locator).click()
+
+
+@step("I click on campaign notifications button")
+def navigate_to_integration_errors(context):
+    context.browser.find_element(*HomePage.campaign_notifications_btn_locator).click()
