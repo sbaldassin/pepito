@@ -40,10 +40,18 @@ def get_first_customer():
 
 
 @app.route('/customer')
-def get_customer_by_id():
+def get_customer_by_id_and_merchant():
     customer_id = request.args.get("customer_id")
     merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customers = QNetCustomerRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
+    logging.info("Customers: {}".format(customers))
+    return json.dumps(customers, default=str)
+
+
+@app.route('/customer_by_id')
+def get_customer_by_id():
+    customer_id = request.args.get("customer_id")
+    customers = QNetCustomerRepository().get_by_external_customer_id(customer_id)
     logging.info("Customers: {}".format(customers))
     return json.dumps(customers, default=str)
 

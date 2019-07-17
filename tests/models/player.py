@@ -33,3 +33,10 @@ class Player:
         self.OptOutSms = optout_sms
         self.OptOutPush = optout_push
         self.OptOutMobilePush = optout_mobile_push
+
+    def to_csv(self):
+        return [self.PlayerID, self.Name, self.Surname, self.ZipCode,self.State, self.City, self.CountryCode,
+                self.Email, self.DateOfBirth, self.MobilePhone,self.SignUpDate, self.LanguageCode, self.TimeZone,
+                self.CustomInt1, self.CustomInt2, self.CustomInt3, self.CustomInt4, self.CustomString1,
+                self.CustomString2, self.CustomString3, self.CustomString4, self.Btag, self.OptOutEmail,
+                self.OptOutSms, self.OptOutPush]
