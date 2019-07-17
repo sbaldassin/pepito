@@ -16,6 +16,7 @@ from tests.db.repositories.q_net_dw_fact_free_spin_repository import QNetDwFactF
 from tests.db.repositories.q_net_dw_fact_payout_repository import QNetDwFactPayoutRepository
 from tests.db.repositories.q_net_dw_fact_signin_repository import QNetDwFactSignInRepository
 from tests.db.repositories.q_net_dw_fact_signup_repository import QNetDwFactSignupRepository
+from tests.db.repositories.q_net_email_outbox_repository import EmailOutboxRepository
 from tests.db.repositories.q_net_fact_revenue_repository import QNetDWFactRevenueRepository
 from tests.db.repositories.q_net_dw_fact_wager_repository import QNetDwFactWagerRepository
 from tests.db.repositories.q_net_fact_withdrawal_repository import QNetDWFactWithdrawalRepository
@@ -39,6 +40,7 @@ def get_first_customer():
     return json.dumps(customer, default=str)
 
 
+
 @app.route('/customer')
 def get_customer_by_id_and_merchant():
     customer_id = request.args.get("customer_id")
@@ -47,6 +49,13 @@ def get_customer_by_id_and_merchant():
     logging.info("Customers: {}".format(customers))
     return json.dumps(customers, default=str)
 
+
+@app.route('/emails')
+def get_emails_by_recipients():
+    recipient = request.args.get("recipient")
+    emails = EmailOutboxRepository().get_by_recipient(recipient)
+    logging.info("Emails: {}".format(emails))
+    return json.dumps(emails, default=str)
 
 @app.route('/customer_by_id')
 def get_customer_by_id():

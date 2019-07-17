@@ -65,6 +65,22 @@ class QNetDwFactSignup(Base):
         return super(QNetDwFactSignup, self).to_dict()
 
 
+class EmailOutbox(Base):
+    __tablename__ = 'EmailOutbox'
+
+    EmailID = Column(Integer, primary_key=True)
+    From = Column(String(100))
+    FromDisplay = Column(String(100))
+    Recipients = Column(String(500))
+    IsHtml = Column(Integer)
+    Body = Column(String(5000))
+    AttachmentsCount = Column(Integer)
+    DateSent = Column(String(50))
+
+    def to_dict(self):
+        return super(EmailOutbox, self).to_dict()
+
+
 class QNetDwFactSignIn(Base):
     __tablename__ = 'Q_net_dw_fact_signin'
 

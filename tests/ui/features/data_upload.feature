@@ -1,7 +1,6 @@
 Feature: Data upload
 
 
-    @PEPE
     Scenario: Users should be able to upload users dimensions data
         Given I have a csv with 5 users
         When I navigate to the home page
