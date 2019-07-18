@@ -6,3 +6,6 @@ class Freespin:
         self.Identifier = identifier
         self.Value = value
         self.TransactionDate = transaction_date
+
+    def to_csv(self):
+        return [self.Identifier, self.Value]
