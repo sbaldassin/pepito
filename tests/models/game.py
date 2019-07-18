@@ -7,6 +7,9 @@ class CasinoGame:
         self.GameType = game_type
         self.GameIdentifier = game_identifier
 
+    def to_csv(self):
+        return [self.GameType, self.GameIdentifier]
+
 
 class BetGame:
 

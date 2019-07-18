@@ -6,8 +6,10 @@ from behave import step
 from os.path import dirname, join, abspath
 
 from tests.config.config import get_config
+from tests.factory.game_factory import create_random_game
 from tests.factory.player_factory import create_random_player
 from tests.ui.page_objects.dimensions import DimensionsDataPage
+from tests.utils.api_utils import get_dim_game
 from tests.utils.getters import get_until_not_empty
 
 
@@ -48,13 +50,13 @@ def assert_users_saved(context):
 @step("I have a csv with 2 games")
 def create_game_csv(context):
     dimensions_file = join(dirname(abspath(__file__)), "data", "games.csv")
-    # open(dimensions_file, 'w').close()
-    # users = [create_random_player() for _ in range(5)]
-    # csvData = [user.to_csv() for user in users]
-    # with open(dimensions_file, 'w') as csvFile:
-    #     writer = csv.writer(csvFile)
-    #     writer.writerows(csvData)
-    # context.users = users
+    open(dimensions_file, 'w').close()
+    games = [create_random_game() for _ in range(2)]
+    csvData = [g.to_csv() for g in games]
+    with open(dimensions_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.games = games
 
 
 @step("I am able to upload games data")
@@ -78,8 +80,6 @@ def navigate_to_game_tab(context):
 
 @step("the games are saved in the db")
 def assert_games_saved(context):
-    games = []
-    # for user in context.users:
-    #     url = "http://{}/customer_by_id?customer_id={}".format(get_config().get("test_framework", "db"), user.PlayerID)
-    #     users = get_until_not_empty(url)
-    #     assert  len(users) == 1
+    for game in context.games:
+        response = get_dim_game(game.GameType)
+        assert len(response) == 1

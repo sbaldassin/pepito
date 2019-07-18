@@ -39,6 +39,11 @@ def get_task(task_id):
     return get_until_not_empty(url, timeout=100)
 
 
+def get_dim_game(name):
+    url = "http://{}/dim_game?name={}".format(get_config().get("test_framework", "db"), name)
+    return get_until_not_empty(url, timeout=100)
+
+
 @retry(AssertionError, tries=5, delay=5, backoff=2)
 def verify_api_error(request_id, error):
     task = get_task(request_id)
