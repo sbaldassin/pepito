@@ -200,6 +200,14 @@ def get_game():
     return json.dumps(data, default=str)
 
 
+@app.route('/dim_game')
+def get_dim_game():
+    name = request.args.get("name")
+    data = QNetDwDimGameRepository().get_by_name(name)
+    logging.info("Dim Game : {}".format(data))
+    return json.dumps(data, default=str)
+
+
 @app.route('/freespin')
 def get_freespin_by_customer_id():
     customer_id = request.args.get("customer_id")
