@@ -6,6 +6,8 @@ from flask import request
 
 from tests.config.config import get_config
 from tests.db.repositories.q_net_customer_repository import QNetCustomerRepository
+from tests.db.repositories.q_net_dw_dim_bonus_repository import QNetDwDimBonusRepository
+from tests.db.repositories.q_net_dw_dim_free_spin_repository import QNetDwDimFreeSpinRepository
 from tests.db.repositories.q_net_dw_dim_game_repository import QNetDwDimGameRepository
 from tests.db.repositories.q_net_dw_dim_game_lottery_repository import QNetDwDimGameLotteryRepository
 from tests.db.repositories.q_net_dw_dim_game_parimutuel_repository import QNetDwDimGameParimutuelRepository
@@ -114,6 +116,16 @@ def get_bonuses_by_customer_id():
     return json.dumps(bonuses, default=str)
 
 
+@app.route('/dim_bonuses')
+def get_dim_bonuses():
+    merchant_id = request.args.get("merchant_id", int(get_config().get("ui", "merchant_id")))
+    name = request.args.get("name")
+    vertical_id = request.args.get("vertical_id")
+    bonuses = QNetDwDimBonusRepository().get_by_merchant_name_and_vertical_id(merchant_id, name, vertical_id)
+    logging.info("DIM bonus: {}".format(bonuses))
+    return json.dumps(bonuses, default=str)
+
+
 @app.route('/wagers')
 def get_wagers_by_customer_id():
     customer_id = request.args.get("customer_id")
@@ -213,6 +225,15 @@ def get_freespin_by_customer_id():
     customer_id = request.args.get("customer_id")
     merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     freespin = QNetDwFactFreeSpinRepository().get_by_external_customer_id(customer_id, merchant_id)
+    return json.dumps(freespin, default=str)
+
+
+@app.route('/dim_freespin')
+def get_dim_freespin():
+    merchant_id = request.args.get("merchant_id", int(get_config().get("ui", "merchant_id")))
+    name = request.args.get("name")
+    value = request.args.get("value")
+    freespin = QNetDwDimFreeSpinRepository().get_by_merchant_id_name_value(merchant_id, name, value)
     return json.dumps(freespin, default=str)
 
 

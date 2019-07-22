@@ -147,6 +147,19 @@ class QNetDWFactBonus(Base):
     def to_dict(self):
         return super(QNetDWFactBonus, self).to_dict()
 
+
+class QNetDWDimBonus(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_Bonus'
+
+    BonusID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Name = Column(String(250))
+    DateCreated = Column(DateTime)
+    VerticalID = Column(Integer)
+
+    def to_dict(self):
+        return super(QNetDWDimBonus, self).to_dict()
+
     
 class QNetDwFactWager(Base):
     __tablename__ = 'Q_Net_Dw_Fact_Wager'
@@ -280,6 +293,19 @@ class QNetDwFactFreeSpin(Base):
 
     def to_dict(self):
         return super(QNetDwFactFreeSpin, self).to_dict()
+
+
+class QNetDwDimFreeSpin(Base):
+    __tablename__ = 'Q_Net_Dw_Dim_FreeSpin'
+
+    FreeSpinID = Column(Integer, primary_key=True)
+    MerchantID = Column(Integer)
+    Name = Column(String(250))
+    Value = Column(Integer)
+    DateCreated = Column(DateTime)
+
+    def to_dict(self):
+        return super(QNetDwDimFreeSpin, self).to_dict()
 
 
 class QNetTaskApx(Base):

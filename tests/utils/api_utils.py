@@ -44,6 +44,16 @@ def get_dim_game(name):
     return get_until_not_empty(url, timeout=100)
 
 
+def get_dim_bonus(name, vertical_id):
+    url = "http://{}/dim_bonuses?name={}&vertical_id={}".format(get_config().get("test_framework", "db"), name, vertical_id)
+    return get_until_not_empty(url, timeout=100)
+
+
+def get_dim_freespin(name, value):
+    url = "http://{}/dim_freespin?name={}&value={}".format(get_config().get("test_framework", "db"), name, value)
+    return get_until_not_empty(url, timeout=100)
+
+
 @retry(AssertionError, tries=5, delay=5, backoff=2)
 def verify_api_error(request_id, error):
     task = get_task(request_id)

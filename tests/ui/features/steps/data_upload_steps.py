@@ -11,7 +11,7 @@ from tests.factory.freespin_factory import create_freespin
 from tests.factory.game_factory import create_random_game
 from tests.factory.player_factory import create_random_player
 from tests.ui.page_objects.dimensions import DimensionsDataPage
-from tests.utils.api_utils import get_dim_game
+from tests.utils.api_utils import get_dim_freespin, get_dim_game, get_dim_bonus
 from tests.utils.getters import get_until_not_empty
 
 
@@ -119,10 +119,10 @@ def upload_games_data(context):
 
 
 @step("the freespins are saved in the db")
-def assert_games_saved(context):
+def assert_freesin_saved(context):
     for freespin in context.freespins:
-        #response = get_dim_game(freespin.GameType)
-        assert freespin
+        response = get_dim_freespin(freespin.Identifier, freespin.Value)
+        assert len(response) == 1
 
 
 @step("I click on bonuses tab")
@@ -159,5 +159,5 @@ def upload_bonus_data(context):
 @step("the bonuses are saved in the db")
 def assert_bonuses_saved(context):
     for bonus in context.bonuses:
-        #response = get_dim_game(freespin.GameType)
-        assert bonus
+        response = get_dim_bonus(bonus.Identifier, bonus.ProductID)
+        assert len(response) == 1
