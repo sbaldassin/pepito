@@ -5,7 +5,7 @@ from tests.utils.generator import generate_random_date, generate_random_string
 def create_game_session():
     session = GameSession(
         session_date=generate_random_date(),
-        game_type=generate_random_string(250),
+        game_type=generate_random_string(200),
         game_identifier=generate_random_string(100))
     return session
 

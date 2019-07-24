@@ -5,7 +5,7 @@ Feature: Users registration and login
         When I complete the sign in form
         Then I am able to login
 
-    @PEPE
+
     Scenario: User should be able to reset their password
         Given I navigate to reset password page
         And I reset the password

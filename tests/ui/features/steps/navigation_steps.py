@@ -1,3 +1,5 @@
+from time import sleep
+
 from behave import step
 
 from tests.ui.config.config import get_config
@@ -12,6 +14,11 @@ def navigate_to_home(context):
 @step("I navigate to the dimensions data page")
 def navigate_to_dimensions_data(context):
     context.browser.get(get_config().get("webapp", "dimensions"))
+
+
+@step("I navigate to the facts data page")
+def navigate_to_dimensions_data(context):
+    context.browser.get(get_config().get("webapp", "facts"))
 
 
 @step("I navigate to reset password page")

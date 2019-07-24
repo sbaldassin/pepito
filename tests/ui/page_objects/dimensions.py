@@ -17,3 +17,11 @@ class DimensionsDataPage:
     upload_bonuses_btn_locator = (By.XPATH, "(//i[@class='icon-file-upload2'])[2]")
     browse_bonuses_btn_locator = (By.ID, "fileDimBonuses")
 
+
+class FactsDataPage:
+    navigation_tabs_locator = (By.CLASS_NAME, "nav-tabs-bottom")
+    data_fact_type_locator = (By.TAG_NAME, "a")
+    browse_btn_locator = (By.ID, "fileFactBonuses")
+    browse_free_spin_btn_locator = (By.ID, "fileFactFreespin")
+    browse_game_session_btn_locator = (By.ID, "fileFactGame")
+    upload_btn_locator = (By.CLASS_NAME, "fileinput-upload-button")

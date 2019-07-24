@@ -1,16 +1,17 @@
 import csv
-from time import sleep
 
-import requests
+from time import sleep
 from behave import step
 from os.path import dirname, join, abspath
 
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from tests.config.config import get_config
-from tests.factory.bonus_factory import create_bonus
-from tests.factory.freespin_factory import create_freespin
-from tests.factory.game_factory import create_random_game
+from tests.factory.bonus_factory import create_bonus, create_bonus_fact
+from tests.factory.freespin_factory import create_freespin, create_freespin_fact
+from tests.factory.game_factory import create_random_game, create_casino_game_fact
 from tests.factory.player_factory import create_random_player
-from tests.ui.page_objects.dimensions import DimensionsDataPage
+from tests.ui.page_objects.dimensions import DimensionsDataPage, FactsDataPage
 from tests.utils.api_utils import get_dim_game
 from tests.utils.getters import get_until_not_empty
 
@@ -130,6 +131,13 @@ def navigate_to_bonuses_tab(context):
     context.browser.find_element(*DimensionsDataPage.bonuses_tab_locator).click()
 
 
+@step("I select the {fact_type} tab")
+def navigate_to_bonuses_tab(context, fact_type):
+    navigation_bar = context.browser.find_element(*FactsDataPage.navigation_tabs_locator)
+    options = navigation_bar.find_elements(*FactsDataPage.data_fact_type_locator)
+    [option for option in options if option.text == fact_type][0].click()
+
+
 @step("I have a csv with bonus data")
 def create_bonus_csv(context):
     dimensions_file = join(dirname(abspath(__file__)), "data", "bonus.csv")
@@ -137,6 +145,54 @@ def create_bonus_csv(context):
     bonuses = [create_bonus() for _ in range(2)]
     csvData = [g.to_csv() for g in bonuses]
     with open(dimensions_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.bonuses = bonuses
+
+
+@step("I have a csv with bonus facts data")
+def create_bonus_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "bonus.csv")
+    open(facts_file, 'w').close()
+    bonuses = [create_bonus_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in bonuses]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.bonuses = bonuses
+
+
+@step("I have a csv with casino games facts data")
+def create_casino_games_facts_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "games.csv")
+    open(facts_file, 'w').close()
+    facts = [create_casino_game_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in facts]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.facts = facts
+
+
+@step("I have a csv with free spins facts data")
+def create_bonus_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "freespin.csv")
+    open(facts_file, 'w').close()
+    facts = [create_freespin_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in facts]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.facts = facts
+
+
+@step("I have a csv with payouts facts data")
+def create_bonus_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "payouts.csv")
+    open(facts_file, 'w').close()
+    bonuses = [create_bonus_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in bonuses]
+    with open(facts_file, 'w') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerows(csvData)
     context.bonuses = bonuses
@@ -156,8 +212,77 @@ def upload_bonus_data(context):
         *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
 
 
-@step("the bonuses are saved in the db")
+@step("I am able to upload bonus fact data")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "bonus.csv")
+    context.browser.find_element(*FactsDataPage.browse_btn_locator).send_keys(dimensions_file)
+    context.browser.find_element(*FactsDataPage.upload_btn_locator).click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload free spins fact data")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "freespin.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_free_spin_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload game sessions fact data")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "games.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_game_session_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("The bonuses are saved in the db")
 def assert_bonuses_saved(context):
     for bonus in context.bonuses:
-        #response = get_dim_game(freespin.GameType)
-        assert bonus
+        url = "http://{}/bonuses?customer_id={}".format(
+            get_config().get("test_framework", "db"), bonus.player_id)
+        assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The free spins are saved in the db")
+def assert_freespins_saved(context):
+    for fact in context.facts:
+        url = "http://{}/freespin_by_customer?customer_id={}".format(
+            get_config().get("test_framework", "db"), fact.player_id)
+        assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The game session facts are saved in the db")
+def assert_game_sessions_saved(context):
+    for fact in context.facts:
+        url = "http://{}/game?customer_id={}".format(
+            get_config().get("test_framework", "db"), fact.player_id)
+        assert get_until_not_empty(url, timeout=100) != []

@@ -186,7 +186,7 @@ def get_game():
     merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
     customer_id = request.args.get("customer_id")
 
-    data = QNetDwFactGameRepository().get_by_customer_id(customer_id, merchant_id)
+    data = QNetDwFactGameRepository().get_by_customer_id_and_merchant_id(customer_id, merchant_id)
 
     if data:
         d = {
@@ -197,6 +197,15 @@ def get_game():
         data = d
 
     logging.info("Game : {}".format(data))
+    return json.dumps(data, default=str)
+
+
+@app.route('/game_session')
+def get_game_session():
+    customer_id = request.args.get("customer_id")
+
+    data = QNetDwFactGameRepository().get_by_customer_id(customer_id)
+    logging.info("Dim Game : {}".format(data))
     return json.dumps(data, default=str)
 
 
@@ -212,7 +221,14 @@ def get_dim_game():
 def get_freespin_by_customer_id():
     customer_id = request.args.get("customer_id")
     merchant_id = request.args.get("merchant_id", int(get_config().get("api", "merchant_id")))
-    freespin = QNetDwFactFreeSpinRepository().get_by_external_customer_id(customer_id, merchant_id)
+    freespin = QNetDwFactFreeSpinRepository().get_by_external_customer_id_and_merchant_id(customer_id, merchant_id)
+    return json.dumps(freespin, default=str)
+
+
+@app.route('/freespin_by_customer')
+def get_freespin_by_customer():
+    customer_id = request.args.get("customer_id")
+    freespin = QNetDwFactFreeSpinRepository().get_by_external_customer_id(customer_id)
     return json.dumps(freespin, default=str)
 
 

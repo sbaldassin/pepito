@@ -17,3 +17,16 @@ class GameSessionRequest:
 
     def add_game_session(self, game_session):
         self.GameSessions.append(game_session)
+
+
+class GameSessionFact:
+
+    def __init__(self, player, game_session):
+        self.player_id = player.PlayerID
+        self.name = game_session.GameType
+        self.category = game_session.GameIdentifier
+        self.session_Date = game_session.SessionDate
+        self.channel = 1
+
+    def to_csv(self):
+        return [self.player_id, self.name, self.category, self.session_Date, self.channel]
