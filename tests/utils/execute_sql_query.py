@@ -2,7 +2,7 @@ import argparse
 
 import pyodbc
 
-from tests.config.config import get_config
+# from tests.config.config import get_config
 
 
 if __name__ == "__main__":
@@ -19,9 +19,9 @@ if __name__ == "__main__":
     # username = get_config().get("mssql", "username")
     # password = get_config().get("mssql", "password")
     server = 'tcp:aretostagingserver.database.windows.net'
-    database = 'ARETOQA'
-    username = 'VJazbani'
-    password = 'STJt9n^h:RG(d<:T'
+    database = 'aretoQA'
+    username = 'qaaccount'
+    password = 'AretonetQA2019'
 
     cnxn = pyodbc.connect(
         'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
