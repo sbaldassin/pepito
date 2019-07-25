@@ -11,6 +11,22 @@ class Casino:
         self.Count = count
 
 
+class WagerCasinoFact:
+
+    def __init__(self, player, wager):
+        self.player_id = player.PlayerID
+        self.currency = wager.Currency
+        self.amount = wager.Value
+        self.name = wager.GameIdentifier
+        self.cateory = wager.GameType
+        self.date = wager.TransactionDate
+        self.count = wager.Count
+        self.channel = 1
+
+    def to_csv(self):
+        return [self.player_id, self.currency, self.amount, self.name, self.cateory, self.date, self.count, self.channel]
+
+
 class Sport:
 
     def __init__(self, sport, league, event, live, event_id, currency, value, transaction_date, count):
@@ -23,6 +39,26 @@ class Sport:
         self.Value = value
         self.TransactionDate = transaction_date
         self.Count = count
+
+
+class WagerSportFact:
+
+    def __init__(self, player, sport):
+        self.player_id = player.PlayerID
+        self.currency = sport.Currency
+        self.amount = sport.Value
+        self.sport = sport.Sport
+        self.league = sport.League
+        self.event = sport.Event
+        self.live = sport.Live
+        self.event_date = sport.TransactionDate
+        self.wager_date = sport.TransactionDate
+        self.count = sport.Count
+        self.channel = 1
+
+    def to_csv(self):
+        return [self.player_id, self.currency, self.amount, self.sport, self.league,
+                self.event, self.live, self.event_date, self.wager_date, self.count, self.channel]
 
 
 class Bet:
@@ -65,6 +101,24 @@ class Lottery:
         self.Count = count
 
 
+class WagerLotteryFact:
+
+    def __init__(self, player, wager):
+        self.player_id = player.PlayerID
+        self.currency = wager.Currency
+        self.amount = wager.Value
+        self.name = wager.Name
+        self.category = wager.Category
+        self.draw_date = wager.DrawDate
+        self.transaction_date = wager.TransactionDate
+        self.count = wager.Count
+        self.channel = 1
+
+    def to_csv(self):
+        return [self.player_id, self.currency, self.amount, self.name, self.category,
+                self.draw_date, self.transaction_date, self.count, self.channel]
+
+
 class Parimutuel:
 
     def __init__(self, currency, value, transaction_date, count):
@@ -72,3 +126,9 @@ class Parimutuel:
         self.Value = value
         self.TransactionDate = transaction_date
         self.Count = count
+
+
+class WagerParimutuelFact:
+
+    def __init__(self, player, wager):
+        self.player_id = player.PlayerID

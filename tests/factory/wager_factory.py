@@ -1,4 +1,6 @@
-from tests.models.wager import Casino, Parimutuel, Sport, Bet, Esport, Lottery
+from tests.factory.player_factory import create_random_player
+from tests.models.wager import Casino, Parimutuel, Sport, Bet, Esport, Lottery, WagerCasinoFact, WagerSportFact, \
+    WagerLotteryFact
 from tests.utils.generator import generate_random_int, generate_random_date, generate_random_currency
 
 
@@ -11,6 +13,30 @@ def create_casino():
         game_identifier=generate_random_int(),
         count=4)
     return wager
+
+
+def create_casino_fact():
+    player = create_random_player()
+    wager = create_casino()
+    return WagerCasinoFact(player, wager)
+
+
+def create_sports_fact():
+    player = create_random_player()
+    wager = create_sport()
+    return WagerSportFact(player, wager)
+
+
+def create_lottery_fact():
+    player = create_random_player()
+    wager = create_lottery()
+    return WagerLotteryFact(player, wager)
+
+
+def create_parimutuel_fact():
+    player = create_random_player()
+    wager = create_parimutuel()
+    return WagerLotteryFact(player, wager)
 
 
 def create_parimutuel():

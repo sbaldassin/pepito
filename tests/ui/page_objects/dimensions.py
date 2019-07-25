@@ -24,4 +24,8 @@ class FactsDataPage:
     browse_btn_locator = (By.ID, "fileFactBonuses")
     browse_free_spin_btn_locator = (By.ID, "fileFactFreespin")
     browse_game_session_btn_locator = (By.ID, "fileFactGame")
+    browse_wager_casino_btn_locator = (By.ID, "fileFactWagersCasino")
+    browse_wager_sport_btn_locator = (By.ID, "fileFactWagersSports")
+    browse_wager_lottery_btn_locator = (By.ID, "fileFactWagersLottery")
+    browse_wager_parimutuel_btn_locator = (By.ID, "fileFactWagersParimutuel")
     upload_btn_locator = (By.CLASS_NAME, "fileinput-upload-button")

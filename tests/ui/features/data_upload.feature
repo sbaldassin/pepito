@@ -64,7 +64,6 @@ Feature: Data upload
         And The free spins are saved in the db
 
 
-    @PEPE
     Scenario: Users should be able to upload casino games facts data
         Given I have a csv with casino games facts data
         When I navigate to the home page
@@ -76,48 +75,48 @@ Feature: Data upload
         And The game session facts are saved in the db
 
 
-    Scenario: Users should be able to upload Casino wagers facts data
-        Given I have a csv with bonus facts data
+    Scenario: Users should be able to upload casino wagers facts data
+        Given I have a csv with casino wagers facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Casino wagers tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload wagers casino fact data
+        And The wagers are saved in the db
 
 
     Scenario: Users should be able to upload Sports wagers facts data
-        Given I have a csv with bonus facts data
+        Given I have a csv with sports wagers facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Sports wagers tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload wagers sports fact data
+        And The wagers are saved in the db
 
 
     Scenario: Users should be able to upload Lottery wagers facts data
-        Given I have a csv with bonus facts data
+        Given I have a csv with lottery wagers facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Lottery wagers tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload wagers lottery fact data
+        And The wagers are saved in the db
 
-
+    @PEPE
     Scenario: Users should be able to upload Parimutuel wagers facts data
-        Given I have a csv with bonus facts data
+        Given I have a csv with parimutuel wagers facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Parimutuel wagers tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload wagers parimutuel fact data
+        And The wagers are saved in the db
 
     Scenario: Users should be able to upload Deposits facts data
         Given I have a csv with bonus facts data
