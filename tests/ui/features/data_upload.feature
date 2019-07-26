@@ -131,7 +131,7 @@ Feature: Data upload
         Then I am able to upload deposits fact data
         And the deposits are saved in the db
 
-        @PEPE
+
     Scenario: Users should be able to upload withdrawals facts data
         Given I have a csv with withdrawals facts data
         When I navigate to the home page
