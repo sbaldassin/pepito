@@ -10,6 +10,7 @@ Feature: Data upload
         Then I am able to upload dimensions data
         And the users are saved in the db
 
+
     Scenario: Users should be able to upload games data
         Given I have a csv with 2 games
         When I navigate to the home page
@@ -19,6 +20,7 @@ Feature: Data upload
         And I click on game tab
         Then I am able to upload games data
         And the games are saved in the db
+
 
     Scenario: Users should be able to upload freespin data
         Given I have a csv with freespin data
@@ -30,7 +32,8 @@ Feature: Data upload
         Then I am able to upload freespin data
         And the freespins are saved in the db
 
-   Scenario: Users should be able to upload bonus dimensions data
+
+    Scenario: Users should be able to upload bonus dimensions data
         Given I have a csv with bonus data
         When I navigate to the home page
         And I complete the sign in form
@@ -39,7 +42,6 @@ Feature: Data upload
         And I click on bonuses tab
         Then I am able to upload bonus data
         And the bonuses are saved in the db
-
 
 
     Scenario: Users should be able to upload bonus facts data
@@ -107,7 +109,7 @@ Feature: Data upload
         Then I am able to upload wagers lottery fact data
         And The wagers are saved in the db
 
-    @PEPE
+
     Scenario: Users should be able to upload Parimutuel wagers facts data
         Given I have a csv with parimutuel wagers facts data
         When I navigate to the home page
@@ -118,25 +120,27 @@ Feature: Data upload
         Then I am able to upload wagers parimutuel fact data
         And The wagers are saved in the db
 
-    Scenario: Users should be able to upload Deposits facts data
-        Given I have a csv with bonus facts data
+
+    Scenario: Users should be able to upload deposits facts data
+        Given I have a csv with deposits facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Deposits tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload deposits fact data
+        And the deposits are saved in the db
 
-    Scenario: Users should be able to upload Withdrawals facts data
-        Given I have a csv with bonus facts data
+        @PEPE
+    Scenario: Users should be able to upload withdrawals facts data
+        Given I have a csv with withdrawals facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Withdrawals tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload withdrawals fact data
+        And the withdrawals are saved in the db
 
     Scenario: Users should be able to upload Payouts facts data
         Given I have a csv with payouts facts data

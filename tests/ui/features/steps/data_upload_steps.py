@@ -4,14 +4,14 @@ from time import sleep
 from behave import step
 from os.path import dirname, join, abspath
 
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from tests.config.config import get_config
 from tests.factory.bonus_factory import create_bonus, create_bonus_fact
 from tests.factory.freespin_factory import create_freespin, create_freespin_fact
 from tests.factory.game_factory import create_random_game, create_casino_game_fact
 from tests.factory.player_factory import create_random_player
+from tests.factory.revenue_factory import create_revenue_fact
 from tests.factory.wager_factory import create_casino_fact, create_sports_fact, create_lottery_fact
+from tests.factory.withdrawal_factory import create_withdrawal_fact
 from tests.ui.page_objects.dimensions import DimensionsDataPage, FactsDataPage
 from tests.utils.api_utils import get_dim_game
 from tests.utils.getters import get_until_not_empty
@@ -137,6 +137,30 @@ def navigate_to_bonuses_tab(context, fact_type):
     navigation_bar = context.browser.find_element(*FactsDataPage.navigation_tabs_locator)
     options = navigation_bar.find_elements(*FactsDataPage.data_fact_type_locator)
     [option for option in options if option.text == fact_type][0].click()
+
+
+@step("I have a csv with deposits facts data")
+def create_deposits_csv(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "deposits.csv")
+    open(dimensions_file, 'w').close()
+    deposits = [create_revenue_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in deposits]
+    with open(dimensions_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.deposits = deposits
+
+
+@step("I have a csv with withdrawals facts data")
+def create_deposits_csv(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "withdrawals.csv")
+    open(dimensions_file, 'w').close()
+    withdrawals = [create_withdrawal_fact() for _ in range(2)]
+    csvData = [g.to_csv() for g in withdrawals]
+    with open(dimensions_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.withdrawals = withdrawals
 
 
 @step("I have a csv with bonus data")
@@ -389,6 +413,44 @@ def upload_wagers_casino_data(context):
         *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
 
 
+@step("I am able to upload deposits fact data")
+def upload_wagers_casino_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "deposits.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_deposits_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload withdrawals fact data")
+def upload_wagers_casino_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "withdrawals.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_withdawals_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
 @step("The bonuses are saved in the db")
 def assert_bonuses_saved(context):
     for bonus in context.bonuses:
@@ -418,4 +480,20 @@ def assert_wager_casino_saved(context):
     for fact in context.facts:
         url = "http://{}/wagers?customer_id={}".format(
             get_config().get("test_framework", "db"), fact.player_id)
+        assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The deposits are saved in the db")
+def assert_deposits_saved(context):
+    for fact in context.deposits:
+        url = "http://{}/deposits?customer_id={}".format(
+            get_config().get("test_framework", "db"), fact.player_id)
+        assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The withdrawals are saved in the db")
+def assert_deposits_saved(context):
+    for withdrawal in context.withdrawals:
+        url = "http://{}/withdrawals?customer_id={}".format(
+            get_config().get("test_framework", "db"), withdrawal.player_id)
         assert get_until_not_empty(url, timeout=100) != []
