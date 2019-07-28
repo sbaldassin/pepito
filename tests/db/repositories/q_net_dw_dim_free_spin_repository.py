@@ -11,7 +11,7 @@ class QNetDwDimFreeSpinRepository(BaseRepository):
         with self.dao.create_session() as session:
             instances = session.query(self.model).filter(self.model.MerchantID == merchant_id,
                                                          self.model.Name == name,
-                                                         self.model. == value)
+                                                         self.model.Value == value)
             session.expunge_all()
             result = []
             for instance in instances:
