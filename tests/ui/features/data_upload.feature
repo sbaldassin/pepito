@@ -142,12 +142,79 @@ Feature: Data upload
         Then I am able to upload withdrawals fact data
         And the withdrawals are saved in the db
 
-    Scenario: Users should be able to upload Payouts facts data
-        Given I have a csv with payouts facts data
+
+    Scenario: Users should be able to upload General Payouts facts data
+        Given I have a csv with general payouts facts data
         When I navigate to the home page
         And I complete the sign in form
         And I am able to login
         And I navigate to the facts data page
         And I select the Payouts tab
-#        Then I am able to upload bonus fact data
-#        And the bonuses are saved in the db
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Casino Payouts facts data
+        Given I have a csv with casino payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Sports Payouts facts data
+        Given I have a csv with sport payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Bets Payouts facts data
+        Given I have a csv with bet payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Esport Payouts facts data
+        Given I have a csv with esport payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Lottery Payouts facts data
+        Given I have a csv with lottery payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db
+
+
+    Scenario: Users should be able to upload Parimutuel Payouts facts data
+        Given I have a csv with parimutuel payouts facts data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Payouts tab
+        Then I am able to upload payouts fact data
+        And The payouts are saved in the db

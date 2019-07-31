@@ -8,6 +8,7 @@ from tests.config.config import get_config
 from tests.factory.bonus_factory import create_bonus, create_bonus_fact
 from tests.factory.freespin_factory import create_freespin, create_freespin_fact
 from tests.factory.game_factory import create_random_game, create_casino_game_fact
+from tests.factory.payout_factory import create_payout, create_payout_fact
 from tests.factory.player_factory import create_random_player
 from tests.factory.revenue_factory import create_revenue_fact
 from tests.factory.wager_factory import create_casino_fact, create_sports_fact, create_lottery_fact
@@ -187,6 +188,18 @@ def create_bonus_csv(context):
     context.bonuses = bonuses
 
 
+@step("I have a csv with {payout_type} payouts facts data")
+def create_bonus_csv(context, payout_type):
+    facts_file = join(dirname(abspath(__file__)), "data", "payouts.csv")
+    open(facts_file, 'w').close()
+    payouts = [create_payout_fact(payout_type) for _ in range(2)]
+    csvData = [g.to_csv() for g in payouts]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.payouts = payouts
+
+
 @step("I have a csv with casino games facts data")
 def create_casino_games_facts_csv(context):
     facts_file = join(dirname(abspath(__file__)), "data", "games.csv")
@@ -356,6 +369,25 @@ def upload_wagers_casino_data(context):
         *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
 
 
+@step("I am able to upload payouts fact data")
+def upload_wagers_casino_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "payouts.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_payouts_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
 @step("I am able to upload wagers sports fact data")
 def upload_wagers_casino_data(context):
     dimensions_file = join(dirname(abspath(__file__)), "data", "wagers.csv")
@@ -496,4 +528,12 @@ def assert_deposits_saved(context):
     for withdrawal in context.withdrawals:
         url = "http://{}/withdrawals?customer_id={}".format(
             get_config().get("test_framework", "db"), withdrawal.player_id)
+        assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The payouts are saved in the db")
+def assert_payouts_saved(context):
+    for payout in context.payouts:
+        url = "http://{}/payouts?customer_id={}".format(
+            get_config().get("test_framework", "db"), payout.player_id)
         assert get_until_not_empty(url, timeout=100) != []
