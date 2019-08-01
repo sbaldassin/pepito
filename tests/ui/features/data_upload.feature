@@ -31,8 +31,8 @@ Feature: Data upload
         And I click on freespin tab
         Then I am able to upload freespin data
         And the freespins are saved in the db
-
-
+#
+#
     Scenario: Users should be able to upload bonus dimensions data
         Given I have a csv with bonus data
         When I navigate to the home page
@@ -41,7 +41,7 @@ Feature: Data upload
         And I navigate to the dimensions data page
         And I click on bonuses tab
         Then I am able to upload bonus data
-        And the bonuses are saved in the db
+        And The dimension bonuses are saved in the db
 
 
     Scenario: Users should be able to upload bonus facts data

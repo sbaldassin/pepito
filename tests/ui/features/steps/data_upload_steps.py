@@ -14,7 +14,7 @@ from tests.factory.revenue_factory import create_revenue_fact
 from tests.factory.wager_factory import create_casino_fact, create_sports_fact, create_lottery_fact
 from tests.factory.withdrawal_factory import create_withdrawal_fact
 from tests.ui.page_objects.dimensions import DimensionsDataPage, FactsDataPage
-from tests.utils.api_utils import get_dim_game
+from tests.utils.api_utils import get_dim_freespin, get_dim_game
 from tests.utils.getters import get_until_not_empty
 
 
@@ -48,8 +48,20 @@ def upload_dimensions_data(context):
 def assert_users_saved(context):
     for user in context.users:
         url = "http://{}/customer_by_id?customer_id={}".format(get_config().get("test_framework", "db"), user.PlayerID)
-        users = get_until_not_empty(url)
-        assert  len(users) == 1
+        db_user = get_until_not_empty(url)
+        assert len(db_user) == 1
+        assert db_user[0]['ExternalCustomerID'] == user.PlayerID
+        assert db_user[0]['Email'] == user.Email
+        assert db_user[0]['Name'] == user.Name
+        assert db_user[0]['Surname'] == user.Surname
+        assert db_user[0]['ZipCode'] == user.ZipCode
+        assert db_user[0]['State'] == user.State
+        assert db_user[0]['City'] == user.City
+        assert db_user[0]['CountryCode'] == user.CountryCode
+        assert db_user[0]['DateOfBirth'] == user.DateOfBirth
+        assert db_user[0]['PhoneNumber'] == user.MobilePhone
+        assert db_user[0]['LastKnownLanguage'] == user.LanguageCode
+        assert db_user[0]['LastKnownTimezone'] == user.TimeZone
 
 
 @step("I have a csv with 2 games")
@@ -86,8 +98,21 @@ def navigate_to_game_tab(context):
 @step("the games are saved in the db")
 def assert_games_saved(context):
     for game in context.games:
-        response = get_dim_game(game.GameType)
-        assert len(response) == 1
+        db_game = get_dim_game(game.GameType)
+        assert len(db_game) == 1
+        assert db_game[0]['GameID'] > 1
+        assert db_game[0]['GameCategory'] == game.GameIdentifier
+        assert db_game[0]['DateCreated']
+        assert db_game[0]['MerchantID']
+        assert db_game[0]['GameName'] == game.GameType
+
+        # GameID = Column(Integer, primary_key=True)
+        # MerchantID = Column(Integer)
+        # GameName = Column(String(250))
+        # GameCategory = Column(String(250))
+        # DateCreated = Column(DateTime)
+        # self.GameType = game_type
+        # self.GameIdentifier = game_identifier
 
 
 @step("I click on freespin tab")
@@ -124,8 +149,13 @@ def upload_games_data(context):
 @step("the freespins are saved in the db")
 def assert_games_saved(context):
     for freespin in context.freespins:
-        #response = get_dim_game(freespin.GameType)
-        assert freespin
+        db_freespin = get_dim_freespin(freespin.Identifier, freespin.Value)
+        assert len(db_freespin) == 1
+        assert db_freespin[0]['FreeSpinID'] > 1
+        assert db_freespin[0]['Name'] == freespin.Identifier
+        assert db_freespin[0]['Value'] == int(freespin.Value)
+        assert db_freespin[0]['DateCreated']
+        assert db_freespin[0]['MerchantID']
 
 
 @step("I click on bonuses tab")
@@ -489,6 +519,19 @@ def assert_bonuses_saved(context):
         url = "http://{}/bonuses?customer_id={}".format(
             get_config().get("test_framework", "db"), bonus.player_id)
         assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("The dimension bonuses are saved in the db")
+def assert_dim_bonuses_saved(context):
+    for bonus in context.bonuses:
+        url = "http://{}/dim_bonuses?name={}&vertical_id={}".format(
+            get_config().get("test_framework", "db"), bonus.Identifier, bonus.ProductID)
+        db_bonus = get_until_not_empty(url, timeout=100)
+        assert len(db_bonus) == 1
+        assert db_bonus[0]['BonusID'] > 1
+        assert db_bonus[0]['MerchantID'] > 1
+        assert db_bonus[0]['Name'] == bonus.Identifier
+        assert db_bonus[0]['VerticalID'] == int(bonus.ProductID)
 
 
 @step("The free spins are saved in the db")
