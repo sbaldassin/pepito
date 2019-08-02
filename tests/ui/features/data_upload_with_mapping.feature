@@ -87,7 +87,7 @@ Feature: Data upload with mapping
         Then I am able to upload casino wagers fact data with mappings
         And The wagers are saved in the db
 
-    @PEPE
+
     Scenario: Users should be able to upload sports wagers facts data with mapping
         Given I have a csv with sports wagers facts data and mappings
         When I navigate to the home page
@@ -100,4 +100,20 @@ Feature: Data upload with mapping
         And I complete the mappings for sport wagers facts
         And I select the upload wagers sports data section
         Then I am able to upload sport wagers fact data with mappings
+        And The wagers are saved in the db
+
+
+    @PEPE
+    Scenario: Users should be able to upload lottery wagers facts data with mapping
+        Given I have a csv with lottery wagers facts data and mappings
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Lottery wagers tab
+        And I select the data mapping section
+        And I upload the lottery wager fact mappings
+        And I complete the mappings for lottery wagers facts
+        And I select the upload wagers lottery data section
+        Then I am able to upload lottery wagers fact data with mappings
         And The wagers are saved in the db

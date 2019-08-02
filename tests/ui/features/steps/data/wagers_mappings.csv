@@ -1,3 +1,3 @@
-currency,amount,sport,league,event,live,event_date,wager_date,count,channel,player_id
-EUR,54184,Football,Serie A,AC Milan vs Juventus FC,True,2018-08-02,2018-08-02,1,1,33485
-EUR,89774,Football,Serie A,AC Milan vs Juventus FC,True,2017-08-02,2017-08-02,1,1,22517
+currency,amount,name,category,draw_date,transaction_date,count,channel,player_id
+EUR,74139,Euro millions,EU based lottery,2017-08-02,2019-08-02,1,1,15074
+EUR,60189,Euro millions,EU based lottery,2018-08-02,2018-08-02,1,1,04441

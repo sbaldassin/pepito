@@ -128,6 +128,14 @@ class WagerLotteryFact:
         self.count = wager.Count
         self.channel = 1
 
+    @staticmethod
+    def get_headers():
+        return ["currency", "amount", "name", "category", "draw_date", "transaction_date", "count", "channel", "player_id"]
+
+    def to_csv_with_mappings(self):
+        return [self.currency, self.amount, self.name, self.category, self.draw_date,
+                self.transaction_date, self.count, self.channel, self.player_id]
+
     def to_csv(self):
         return [self.player_id, self.currency, self.amount, self.name, self.category,
                 self.draw_date, self.transaction_date, self.count, self.channel]
