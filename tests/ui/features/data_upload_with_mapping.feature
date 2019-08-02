@@ -42,3 +42,47 @@ Feature: Data upload with mapping
         And I click on data mapping section
         Then I am able to upload games data with mapping
         Then I am able to map games headers
+
+    Scenario: Users should be able to upload bonus facts data with mapping
+        Given I have a csv with bonus facts data and mappings
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Bonuses tab
+        And I select the data mapping section
+        And I upload the bonus fact mappings
+        And I complete the mappings for bonuses facts
+        And I select the upload bonuses data section
+        Then I am able to upload bonus fact data with mapping
+        And The bonuses are saved in the db
+
+
+    Scenario: Users should be able to upload free spins facts data with mapping
+        Given I have a csv with free spins facts data and mappings
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Free spins tab
+        And I select the data mapping section
+        And I upload the freespin fact mappings
+        And I complete the mappings for free spins facts
+        And I select the upload freespin data section
+        Then I am able to upload free spins fact data with mappings
+        And The free spins are saved in the db
+
+    @PEPE
+    Scenario: Users should be able to upload casino wagers facts data with mapping
+        Given I have a csv with casino wagers facts data and mappings
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the facts data page
+        And I select the Casino wagers tab
+        And I select the data mapping section
+        And I upload the casino wager fact mappings
+        And I complete the mappings for casino wagers facts
+        And I select the upload wagers casino data section
+        Then I am able to upload casino wagers fact data with mappings
+        And The wagers are saved in the db

@@ -13,6 +13,8 @@ from tests.factory.player_factory import create_random_player
 from tests.factory.revenue_factory import create_revenue_fact
 from tests.factory.wager_factory import create_casino_fact, create_sports_fact, create_lottery_fact
 from tests.factory.withdrawal_factory import create_withdrawal_fact
+from tests.models.facts import BonusFact, FreeSpinFact
+from tests.models.wager import WagerCasinoFact
 from tests.ui.page_objects.dimensions import DimensionsDataPage, FactsDataPage
 from tests.utils.api_utils import get_dim_freespin, get_dim_game
 from tests.utils.getters import get_until_not_empty
@@ -218,6 +220,42 @@ def create_bonus_csv(context):
     context.bonuses = bonuses
 
 
+@step("I have a csv with bonus facts data and mappings")
+def create_bonus_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "bonuses_facts_mapping.csv")
+    open(facts_file, 'w').close()
+    bonuses = [create_bonus_fact() for _ in range(2)]
+    csvData = [BonusFact.get_headers()] + [g.to_csv_with_mappings() for g in bonuses]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.bonuses = bonuses
+
+
+@step("I have a csv with casino wagers facts data and mappings")
+def create_wagers_facts_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "wagers_mappings.csv")
+    open(facts_file, 'w').close()
+    facts = [create_casino_fact() for _ in range(2)]
+    csvData = [WagerCasinoFact.get_headers()] + [g.to_csv_with_mappings() for g in facts]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.facts = facts
+
+
+@step("I have a csv with free spins facts data and mappings")
+def create_bonus_csv(context):
+    facts_file = join(dirname(abspath(__file__)), "data", "freespin_mapping.csv")
+    open(facts_file, 'w').close()
+    facts = [create_freespin_fact() for _ in range(2)]
+    csvData = [FreeSpinFact.get_headers()] + [g.to_csv_with_mappings() for g in facts]
+    with open(facts_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+    context.facts = facts
+
+
 @step("I have a csv with {payout_type} payouts facts data")
 def create_bonus_csv(context, payout_type):
     facts_file = join(dirname(abspath(__file__)), "data", "payouts.csv")
@@ -328,9 +366,176 @@ def upload_bonus_data(context):
         *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
 
 
+@step("I select the data mapping section")
+def select_data_mapping(context):
+    sleep(1)
+    tabs = context.browser.find_elements(*FactsDataPage.data_mapping_locator)
+    [t for t in tabs if t.is_displayed()][0].click()
+
+
+@step("I select the upload bonuses data section")
+def select_bonuses_data_mapping(context):
+    context.browser.find_element(*FactsDataPage.upload_bonuses_data_section_locator).click()
+
+
+@step("I select the upload wagers casino data section")
+def select_bonuses_data_mapping(context):
+    context.browser.find_element(*FactsDataPage.upload_casino_wagers_data_section_locator).click()
+
+
+@step("I select the upload freespin data section")
+def select_free_spin_data_mapping(context):
+    context.browser.find_element(*FactsDataPage.upload_freespin_data_section_locator).click()
+
+
+@step("I upload the bonus fact mappings")
+def select_data_mapping(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "bonuses_facts_mapping.csv")
+    sleep(2)
+    context.browser.find_element(*FactsDataPage.browse_bonuses_map_locator).send_keys(dimensions_file)
+
+
+@step("I upload the freespin fact mappings")
+def select_data_mapping(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "freespin_mapping.csv")
+    sleep(2)
+    context.browser.find_element(*FactsDataPage.browse_freespin_map_locator).send_keys(dimensions_file)
+
+
+@step("I upload the casino wager fact mappings")
+def select_data_mapping(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "wagers_mappings.csv")
+    sleep(2)
+    context.browser.find_element(*FactsDataPage.browse_casino_wager_map_locator).send_keys(dimensions_file)
+
+
+@step("I complete the mappings for casino wagers facts")
+def complete_freespin_mappings(context):
+    btns = context.browser.find_elements_by_tag_name("button")
+    bonus_description_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerPlayerID"][0]
+    bonus_description_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[3]/div[2]/div/div/ul/li[8]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerCurrency"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[4]/div[2]/div/div/ul/li[1]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerAmount"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[5]/div[2]/div/div/ul/li[2]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerName"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[6]/div[2]/div/div/ul/li[3]/a').click()
+
+    bonus_description_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerCategory"][0]
+    bonus_description_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[7]/div[2]/div/div/ul/li[4]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerDate"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[8]/div[2]/div/div/ul/li[5]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerCount"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[9]/div[2]/div/div/ul/li[6]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlWagerChannel"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group92"]/div/div[10]/div[2]/div/div/ul/li[7]/a').click()
+
+    context.browser.find_element_by_id("fileFactWagersCasinoMapSave").click()
+    sleep(2)
+
+
+@step("I complete the mappings for free spins facts")
+def complete_freespin_mappings(context):
+    btns = context.browser.find_elements_by_tag_name("button")
+    bonus_description_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlFreespinPlayerID"][0]
+    bonus_description_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group62"]/div/div[3]/div[2]/div/div/ul/li[4]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlFreespinDescription"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group62"]/div/div[4]/div[2]/div/div/ul/li[1]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlFreespinNumber"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group62"]/div/div[5]/div[2]/div/div/ul/li[2]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlFreespinTime"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group62"]/div/div[6]/div[2]/div/div/ul/li[3]/a').click()
+
+    context.browser.find_element_by_id("fileFactFreespinMapSave").click()
+    sleep(2)
+
+@step("I complete the mappings for bonuses facts")
+def complete_mappings(context):
+    btns = context.browser.find_elements_by_tag_name("button")
+    bonus_description_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusDescription"][0]
+    bonus_description_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[4]/div[2]/div/div/ul/li[1]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusPlayerID"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[3]/div[2]/div/div/ul/li[6]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusProductID"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[5]/div[2]/div/div/ul/li[2]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusCurrency"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[6]/div[2]/div/div/ul/li[3]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusValue"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[7]/div[2]/div/div/ul/li[4]/a').click()
+
+    bonus_btn = [btn for btn in btns if btn.get_attribute("data-id") == "ddlBonusTime"][0]
+    bonus_btn.click()
+    sleep(1)
+    context.browser.find_element_by_xpath('//*[@id="accordion-group52"]/div/div[8]/div[2]/div/div/ul/li[5]/a').click()
+
+    context.browser.find_element_by_id("fileFactBonusesMapSave").click()
+    sleep(2)
+
+
 @step("I am able to upload bonus fact data")
 def upload_bonus_data(context):
     dimensions_file = join(dirname(abspath(__file__)), "data", "bonus.csv")
+    context.browser.find_element(*FactsDataPage.browse_btn_locator).send_keys(dimensions_file)
+    context.browser.find_element(*FactsDataPage.upload_btn_locator).click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload bonus fact data with mapping")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "bonuses_facts_mapping.csv")
     context.browser.find_element(*FactsDataPage.browse_btn_locator).send_keys(dimensions_file)
     context.browser.find_element(*FactsDataPage.upload_btn_locator).click()
 
@@ -349,6 +554,44 @@ def upload_bonus_data(context):
     sleep(2)
 
     context.browser.find_element(*FactsDataPage.browse_free_spin_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload free spins fact data with mappings")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "freespin_mapping.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_free_spin_btn_locator).send_keys(dimensions_file)
+    upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
+
+    [btn for btn in upload_btns if btn.is_displayed()][0].click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I am able to upload casino wagers fact data with mappings")
+def upload_bonus_data(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "wagers_mappings.csv")
+
+    sleep(2)
+
+    context.browser.find_element(*FactsDataPage.browse_wager_casino_btn_locator).send_keys(dimensions_file)
     upload_btns = context.browser.find_elements(*FactsDataPage.upload_btn_locator)
 
     [btn for btn in upload_btns if btn.is_displayed()][0].click()
