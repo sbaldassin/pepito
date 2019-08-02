@@ -66,6 +66,14 @@ class WagerSportFact:
         return [self.player_id, self.currency, self.amount, self.sport, self.league,
                 self.event, self.live, self.event_date, self.wager_date, self.count, self.channel]
 
+    def to_csv_with_mappings(self):
+        return [self.currency, self.amount, self.sport, self.league, self.event, self.live,
+                self.event_date, self.wager_date, self.count, self.channel, self.player_id]
+
+    @staticmethod
+    def get_headers():
+        return ["currency", "amount", "sport", "league", "event", "live", "event_date", "wager_date", "count", "channel", "player_id"]
+
 
 class Bet:
 
