@@ -8,6 +8,11 @@ Feature: Data upload with mapping
         And I click on data mapping section
         Then I am able to upload customer data with mapping
         Then I am able to map customer headers
+        And I navigate to the dimensions data page
+        And I am able to upload customer with mapping data to be processed
+        Then the users are saved in the db
+        And I click on data mapping section
+        Then I clear the customer data mapping
 
     Scenario: Users should be able to upload freespin data with mapping
         Given I have a csv with 2 rows with freespin data with headers
@@ -19,6 +24,12 @@ Feature: Data upload with mapping
         And I click on data mapping section
         Then I am able to upload freespin data with mapping
         Then I am able to map freespin headers
+        And I navigate to the dimensions data page
+        And I click on freespin tab
+        And I am able to upload freespin with mapping data to be processed
+        And the freespins are saved in the db
+        And I click on data mapping section
+        Then I clear the freespin data mapping
 
     Scenario: Users should be able to upload bonuses data with mapping
         Given I have a csv with 2 rows with bonuses data with headers
@@ -30,7 +41,12 @@ Feature: Data upload with mapping
         And I click on data mapping section
         Then I am able to upload bonuses data with mapping
         Then I am able to map bonuses headers
-
+        And I navigate to the dimensions data page
+        And I click on bonuses tab
+        And I am able to upload bonuses with mapping data to be processed
+        And The dimension bonuses are saved in the db
+        And I click on data mapping section
+        Then I clear the bonuses data mapping
 
     Scenario: Users should be able to upload game data with mapping
         Given I have a csv with 2 rows with games data with headers
@@ -42,6 +58,12 @@ Feature: Data upload with mapping
         And I click on data mapping section
         Then I am able to upload games data with mapping
         Then I am able to map games headers
+        And I navigate to the dimensions data page
+        And I click on game tab
+        And I am able to upload games with mapping data to be processed
+        And the games are saved in the db
+        And I click on data mapping section
+        Then I clear the games data mapping
 
     Scenario: Users should be able to upload bonus facts data with mapping
         Given I have a csv with bonus facts data and mappings

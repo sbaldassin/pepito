@@ -108,14 +108,6 @@ def assert_games_saved(context):
         assert db_game[0]['MerchantID']
         assert db_game[0]['GameName'] == game.GameType
 
-        # GameID = Column(Integer, primary_key=True)
-        # MerchantID = Column(Integer)
-        # GameName = Column(String(250))
-        # GameCategory = Column(String(250))
-        # DateCreated = Column(DateTime)
-        # self.GameType = game_type
-        # self.GameIdentifier = game_identifier
-
 
 @step("I click on freespin tab")
 def navigate_to_freespin_tab(context):

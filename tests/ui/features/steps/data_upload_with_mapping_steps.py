@@ -90,13 +90,59 @@ def map_freespin_headers(context, section):
     if section == CUSTOMER_SECTION:
         context.browser.find_element(*DimensionsDataPage.customer_player_id_btn_locator).click()
         context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[0].click()
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_name_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[1])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_surname_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[2])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_zipcode_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[3])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_state_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[4])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_city_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[5])
         find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_country_btn_locator))
         find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[6])
 
         find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_email_btn_locator))
         find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[7])
-        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_sign_up_btn_locator))
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_date_of_birth_btn_locator))
         find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[8])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_mobile_phone_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[9])
+
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_sign_up_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[10])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_language_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[11])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_timezone_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[12])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_int_1_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[13])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_int_2_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[14])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_int_3_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[15])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_int_4_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[16])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_string_1_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[17])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_string_2_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[18])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_string_3_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[19])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_string_4_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[20])
+        find_element_and_click(context, context.browser.find_element(*DimensionsDataPage.customer_custom_btag_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[21])
+        find_element_and_click(context,
+                               context.browser.find_element(*DimensionsDataPage.customer_custom_optout_1_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[22])
+        find_element_and_click(context,
+                               context.browser.find_element(*DimensionsDataPage.customer_custom_optout_2_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[23])
+        find_element_and_click(context,
+                               context.browser.find_element(*DimensionsDataPage.customer_custom_optout_3_btn_locator))
+        find_element_and_click(context, context.browser.find_elements(*DimensionsDataPage.freespin_map_headers)[24])
         context.browser.find_element(*DimensionsDataPage.customer_map_save_btn_locator).click()
 
     if section == BONUSES_SECTION:
@@ -122,3 +168,46 @@ def assert_bonuses_saved(context):
         url = "http://{}/bonuses?customer_id={}".format(
             get_config().get("test_framework", "db"), bonus.player_id)
         assert get_until_not_empty(url, timeout=100) != []
+
+
+@step("I am able to upload {section} with mapping data to be processed")
+def upload_dimensions_data(context, section):
+    dimensions_file = join(dirname(abspath(__file__)), "data", '{}_mapping.csv'.format(section))
+
+    if section == CUSTOMER_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_btn_locator).click()
+
+    if section == FREESPIN_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_freespin_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_freespin_btn_locator).click()
+
+    if section == BONUSES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_bonuses_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_bonuses_btn_locator).click()
+
+    if section == GAMES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_game_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_game_btn_locator).click()
+
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
+    assert context.browser.find_element(
+        *DimensionsDataPage.notification_title_locator).text.split()[0].upper() == "SUCCESS"
+
+
+@step("I clear the {section} data mapping")
+def clear_mapping_data(context, section):
+    if section == CUSTOMER_SECTION:
+        context.browser.execute_script(DimensionsDataPage.clear_customer_map_btn_locator)
+    if section == FREESPIN_SECTION:
+        context.browser.execute_script(DimensionsDataPage.clear_freespin_map_btn_locator)
+    if section == BONUSES_SECTION:
+        context.browser.execute_script(DimensionsDataPage.clear_bonuses_map_btn_locator)
+    if section == GAMES_SECTION:
+        context.browser.execute_script(DimensionsDataPage.clear_game_map_btn_locator)
+    sleep(1)
+    context.browser.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+
