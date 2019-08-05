@@ -4,6 +4,9 @@ from time import sleep
 from behave import step
 from os.path import dirname, join, abspath
 
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from tests.config.config import get_config
 from tests.factory.bonus_factory import create_bonus, create_bonus_fact
 from tests.factory.freespin_factory import create_freespin, create_freespin_fact
@@ -18,6 +21,72 @@ from tests.models.wager import WagerCasinoFact, WagerSportFact, WagerLotteryFact
 from tests.ui.page_objects.dimensions import DimensionsDataPage, FactsDataPage
 from tests.utils.api_utils import get_dim_freespin, get_dim_game
 from tests.utils.getters import get_until_not_empty
+
+FREESPIN_SECTION = 'freespin'
+CUSTOMER_SECTION = 'customer'
+BONUSES_SECTION = 'bonuses'
+GAMES_SECTION = 'games'
+
+
+@step("I have a csv with invalid data")
+def create_users_csv(context):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "invalid.csv")
+    open(dimensions_file, 'w').close()
+    users = [create_random_player() for _ in range(5)]
+    data = [str(user) for user in users]
+    with open(dimensions_file, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(data)
+    context.users = users
+
+
+@step("I upload {section} data with an invalid csv")
+def upload_invalid_data(context, section):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "invalid.csv")
+    if section == CUSTOMER_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_btn_locator).click()
+
+    if section == FREESPIN_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_freespin_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_freespin_btn_locator).click()
+
+    if section == BONUSES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_bonuses_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_bonuses_btn_locator).click()
+
+    if section == GAMES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_game_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.upload_game_btn_locator).click()
+
+
+@step("I upload {section} data and remove it")
+def upload_invalid_data(context, section):
+    dimensions_file = join(dirname(abspath(__file__)), "data", "invalid.csv")
+    if section == CUSTOMER_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.customer_remove_btn_locator).click()
+
+    if section == FREESPIN_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_freespin_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.remove_freespin_btn_locator).click()
+
+    if section == BONUSES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_bonuses_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.remove_bonuses_btn_locator).click()
+
+    if section == GAMES_SECTION:
+        context.browser.find_element(*DimensionsDataPage.browse_game_btn_locator).send_keys(dimensions_file)
+        context.browser.find_element(*DimensionsDataPage.game_remove_btn_locator).click()
+
+
+@step("I get an error message")
+def get_error_message(context):
+    upload_confirmation_form = context.browser.find_element(*DimensionsDataPage.upload_confirmation_form_locator)
+    sleep(2)
+    upload_confirmation_form.find_element(*DimensionsDataPage.upload_confirmation_btn_locator).click()
+    wait = WebDriverWait(context.browser, 80)
+    wait.until(EC.text_to_be_present_in_element(DimensionsDataPage.notification_title_locator, "Error"))
 
 
 @step("I have a csv with 5 users")
