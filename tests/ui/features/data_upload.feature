@@ -280,3 +280,30 @@ Feature: Data upload
         And I am able to login
         Then I navigate to the dimensions data page
         And I upload customer data and remove it
+
+#  Scenario: Users should not be able to remove and uploaded csv file
+#      Given I have a csv with invalid data
+#      When I navigate to the home page
+#      And I complete the sign in form
+#      And I am able to login
+#      Then I navigate to the dimensions data page
+#      And I click on game tab
+#      And I upload games data and remove it
+#
+#  Scenario: Users should not be able to remove and uploaded csv file
+#        Given I have a csv with invalid data
+#        When I navigate to the home page
+#        And I complete the sign in form
+#        And I am able to login
+#        Then I navigate to the dimensions data page
+#        And I click on freespin tab
+#        And I upload freespin data and remove it
+#
+#  Scenario: Users should not be able to remove and uploaded csv file
+#        Given I have a csv with invalid data
+#        When I navigate to the home page
+#        And I complete the sign in form
+#        And I am able to login
+#        Then I navigate to the dimensions data page
+#        And I click on bonuses tab
+#        And I upload bonuses data and remove it
