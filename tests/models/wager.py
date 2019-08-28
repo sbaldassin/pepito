@@ -26,6 +26,12 @@ class WagerCasinoFact:
     def to_csv(self):
         return [self.player_id, self.currency, self.amount, self.name, self.cateory, self.date, self.count, self.channel]
 
+    def to_csv_with_mappings(self):
+        return [self.currency, self.amount, self.name, self.cateory, self.date, self.count, self.channel, self.player_id]
+
+    @staticmethod
+    def get_headers():
+        return ["currency", "amount", "name", "cateory", "date", "count", "channel", "player_id"]
 
 class Sport:
 
@@ -59,6 +65,14 @@ class WagerSportFact:
     def to_csv(self):
         return [self.player_id, self.currency, self.amount, self.sport, self.league,
                 self.event, self.live, self.event_date, self.wager_date, self.count, self.channel]
+
+    def to_csv_with_mappings(self):
+        return [self.currency, self.amount, self.sport, self.league, self.event, self.live,
+                self.event_date, self.wager_date, self.count, self.channel, self.player_id]
+
+    @staticmethod
+    def get_headers():
+        return ["currency", "amount", "sport", "league", "event", "live", "event_date", "wager_date", "count", "channel", "player_id"]
 
 
 class Bet:
@@ -113,6 +127,14 @@ class WagerLotteryFact:
         self.transaction_date = wager.TransactionDate
         self.count = wager.Count
         self.channel = 1
+
+    @staticmethod
+    def get_headers():
+        return ["currency", "amount", "name", "category", "draw_date", "transaction_date", "count", "channel", "player_id"]
+
+    def to_csv_with_mappings(self):
+        return [self.currency, self.amount, self.name, self.category, self.draw_date,
+                self.transaction_date, self.count, self.channel, self.player_id]
 
     def to_csv(self):
         return [self.player_id, self.currency, self.amount, self.name, self.category,

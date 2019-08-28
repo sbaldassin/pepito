@@ -13,6 +13,13 @@ class BonusFact:
     def to_csv(self):
         return [self.player_id, self.description, self.product_id, self.currency, self.value, self.activity_time]
 
+    def to_csv_with_mappings(self):
+        return [self.description, self.product_id, self.currency, self.value, self.activity_time, self.player_id]
+
+    @staticmethod
+    def get_headers():
+        return ["description", "product_id", "currency", "value", "activity_time", "player_id"]
+
 
 class FreeSpinFact:
 
@@ -22,5 +29,12 @@ class FreeSpinFact:
         self.number_of_free_spin = free_spin.Value
         self.activity_date = free_spin.TransactionDate
 
+    def to_csv_with_mappings(self):
+        return [self.description, self.number_of_free_spin, self.activity_date, self.player_id]
+
     def to_csv(self):
         return [self.player_id, self.description, self.number_of_free_spin, self.activity_date]
+
+    @staticmethod
+    def get_headers():
+        return ["description", "free_spin_number", "activity_time", "player_id"]

@@ -1,6 +1,5 @@
 Feature: Data upload
 
-
     Scenario: Users should be able to upload users dimensions data
         Given I have a csv with 5 users
         When I navigate to the home page
@@ -218,3 +217,93 @@ Feature: Data upload
         And I select the Payouts tab
         Then I am able to upload payouts fact data
         And The payouts are saved in the db
+
+    Scenario: Users should not be able to upload customer data using invalid csv
+        Given I have a csv with invalid data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the dimensions data page
+        And I upload customer data with an invalid csv
+        And I get an error message
+        And I click in integration errors button
+        Then I verify the page title
+        Then I click on delete all button
+        When I click on confirm button
+
+    Scenario: Users should not be able to upload game data using invalid csv
+        Given I have a csv with invalid data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the dimensions data page
+        And I click on game tab
+        And I upload games data with an invalid csv
+        And I get an error message
+        And I click in integration errors button
+        Then I verify the page title
+        Then I click on delete all button
+        When I click on confirm button
+
+    Scenario: Users should not be able to upload freespin data using invalid csv
+        Given I have a csv with invalid data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the dimensions data page
+        And I click on freespin tab
+        And I upload freespin data with an invalid csv
+        And I get an error message
+        And I click in integration errors button
+        Then I verify the page title
+        Then I click on delete all button
+        When I click on confirm button
+
+   Scenario: Users should not be able to upload bonus data using invalid csv
+        Given I have a csv with invalid data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        And I navigate to the dimensions data page
+        And I click on bonuses tab
+        And I upload bonuses data with an invalid csv
+        And I get an error message
+        And I click in integration errors button
+        Then I verify the page title
+        Then I click on delete all button
+        When I click on confirm button
+
+  Scenario: Users should not be able to remove and uploaded csv file
+        Given I have a csv with invalid data
+        When I navigate to the home page
+        And I complete the sign in form
+        And I am able to login
+        Then I navigate to the dimensions data page
+        And I upload customer data and remove it
+
+#  Scenario: Users should not be able to remove and uploaded csv file
+#      Given I have a csv with invalid data
+#      When I navigate to the home page
+#      And I complete the sign in form
+#      And I am able to login
+#      Then I navigate to the dimensions data page
+#      And I click on game tab
+#      And I upload games data and remove it
+#
+#  Scenario: Users should not be able to remove and uploaded csv file
+#        Given I have a csv with invalid data
+#        When I navigate to the home page
+#        And I complete the sign in form
+#        And I am able to login
+#        Then I navigate to the dimensions data page
+#        And I click on freespin tab
+#        And I upload freespin data and remove it
+#
+#  Scenario: Users should not be able to remove and uploaded csv file
+#        Given I have a csv with invalid data
+#        When I navigate to the home page
+#        And I complete the sign in form
+#        And I am able to login
+#        Then I navigate to the dimensions data page
+#        And I click on bonuses tab
+#        And I upload bonuses data and remove it
